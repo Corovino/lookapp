@@ -1,0 +1,113 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>            
+            {{estudio.name}}
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content>
+    <ion-card>
+        <div class="content-hidden">
+            <img [src]="estudio.img"/>
+        </div> 
+        <ion-card-content padding class="ion-content-card">
+            <ion-row >
+                <h4 style="width: 100%; text-align: center; margin: 6px">
+                    <b>PAGO:</b> <span style="color: red">{{estudio.price_by_task | number}} COP</span>
+                </h4>
+                <hr>
+
+                <h4 style="font-weight: bold; margin: 8px 0px;">Descripción de la tarea</h4>
+                <div text-left>
+                    <p> {{estudio.description}} </p>
+                </div>
+                <hr>
+                
+                <h4 style="font-weight: bold; margin: 8px 0px;">Dónde y cúando</h4>
+                <div text-left>
+                    <ion-item >
+                        <ion-avatar item-left style="width: 44px" >
+                            <img src="assets/imgs/ubication.svg" width="33px" />
+                        </ion-avatar>
+                        <span>
+                            <div *ngIf="estudio.type_ubication == 1">
+                                <p>Listado de ciudades donde se <br> pueden realizar</p>
+                            </div>
+            
+                            <div *ngIf="estudio.type_ubication == 2">
+                                <p>Camina por el mapa hasta encontrar <br> el lugar</p>
+                            </div>
+            
+                            <div *ngIf="estudio.type_ubication == 3">
+                                <p>Ingresa al mapa y encuentra el <br> listado de puntos que puedes visitar</p>
+                            </div>
+                        </span>
+                    </ion-item>
+                </div>
+                <hr>
+                <h4 style="font-weight: bold; margin: 8px 0px;">Tiempo</h4>
+                <div text-left>
+                    <ion-item >
+                        <ion-avatar item-left style="width: 44px">
+                            <img src="assets/imgs/time.svg" width="33px" />
+                        </ion-avatar>
+                        <p>
+                            Tienes una hora para realizar esta <br> tarea.
+                        </p>
+                    </ion-item>
+                </div>
+            </ion-row>
+            <!-- <h4>Dónde y cúando</h4> -->
+        </ion-card-content>
+        <ion-row>
+            <ion-col>
+                <button ion-button icon-start clear full (click)="start_task(estudio)">
+                    Aceptar tarea
+                </button>
+            </ion-col>
+        </ion-row>
+    </ion-card>
+</ion-content>
+
+<style>
+    .card-md {
+        width: 100% !important;
+        margin: 0px;
+    }
+
+    h2, h3, h4, h5 {
+        width: 100%;
+
+    }
+    ion-card img {
+        display: block;
+        width: 100%;
+        /* height: 200px; */
+        overflow: hidden;
+    }
+
+    .content-hidden {
+        height: 50vw;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    hr {
+        width: 100%;
+        margin: 7px 0px 12px 0px;
+        background: #0006;
+    }
+
+    .ion-content-card {
+        padding: 15px 25px !important;
+        margin: 0px 9px;
+        box-shadow: 0px 2px 2px #000000b3;
+    }
+
+    [item-left] {
+        margin: 4px 3px 3px 0 !important;
+    }
+
+
+</style>
+        

@@ -1,0 +1,18 @@
+page-perfil {
+    ion-card img {
+        // display: block ;
+        // border-radius: 50%;
+        // width: 42vw !important;
+        // margin: 15vw 26vw 0px 26vw !important;
+        // padding: 10px !important;
+
+        display: block;
+        border-radius: 50%;
+        width: 42vw !important;
+        margin: 14vw 26vw 3px 26vw !important;
+        padding: 2px !important;
+        border: 7px solid color($colors, primary);
+
+    }
+
+}

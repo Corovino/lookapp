@@ -1,0 +1,101 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Mis tareas</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content >
+
+    <ion-refresher (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content 
+      pullingIcon="arrow-dropdown"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"></ion-refresher-content>
+    </ion-refresher>
+
+
+  <ion-segment [(ngModel)]="type_task">
+    <ion-segment-button value="Encurso">
+        En curso <b>({{lits_task.task_in_process.length }})</b>
+    </ion-segment-button>
+    <ion-segment-button value="Aprobadas">
+        Aprobadas <b>({{lits_task.task_approved.length}})</b>
+    </ion-segment-button>
+    <ion-segment-button value="Rechazadas">
+        Rechazadas <b>({{lits_task.task_rejected.length}})</b>
+    </ion-segment-button>
+  </ion-segment>
+
+  <div [ngSwitch]="type_task">
+    <div *ngSwitchCase="'Encurso'">
+        <ion-list *ngIf="lits_task.task_in_process.length > 0">
+          <ion-item *ngFor="let studio of lits_task.task_in_process " (click)="continue_task(studio)">
+            <ion-avatar item-left>
+              <img [src]="studio.img_studie">
+            </ion-avatar>
+            <h2>{{studio.name_studie}}</h2>
+            <p>{{studio.desc_studie}} </p>
+          </ion-item>
+        </ion-list>
+
+        <div *ngIf="lits_task.task_in_process.length == 0" >
+            <!-- <h3>Eres grandioso, no tienes ninguna tarea pendienete</h3> -->
+
+            <ion-card text-center style="padding: 51px 5px;" >
+              <img src="assets/imgs/encuesta.png" alt="Tareas en progreso" style="width: 43px; margin-left: 45%">
+              <p >
+                Revisa el listado de tareas y gana dinero con LookApp.
+              </p>
+            </ion-card>
+        </div>
+    </div>
+
+    <div *ngSwitchCase="'Aprobadas'">
+        <ion-list *ngIf="lits_task.task_approved.length > 0">
+          <ion-item *ngFor="let studio of lits_task.task_approved " (click)="view_datail(studio)">
+            <ion-avatar item-left>
+              <img [src]="studio.img_studie">
+            </ion-avatar>
+            <h2>{{studio.name_studie}}</h2>
+            <p>{{studio.desc_studie}} </p>
+          </ion-item>
+        </ion-list>
+
+        <div *ngIf="lits_task.task_approved.length == 0" >
+            <!-- <h3>Apurate a ser reconocido, haz muchas muchas tareas</h3> -->
+            <ion-card text-center style="padding: 51px 5px;" >
+              <img src="assets/imgs/rechazado.png" alt="Tareas en progreso" style="width: 53px; margin-left: 45%">
+              <p >
+                Upps!,No haz realizado tareas aún, te invitamos a tomar alguna. 
+              </p>
+            </ion-card>
+
+        </div>
+    </div>
+  
+    <div *ngSwitchCase="'Rechazadas'">
+        <ion-list *ngIf="lits_task.task_rejected.length > 0">
+          <ion-item *ngFor="let studio of lits_task.task_rejected " (click)="view_datail(studio)">
+            <ion-avatar item-left>
+              <img [src]="studio.img_studie">
+            </ion-avatar>
+            <h2>{{studio.name_studie}}</h2>
+            <p>{{studio.desc_studie}} </p>
+            <button ion-button clear item-end (click)="razon(studio)">Razón</button>
+          </ion-item>
+        </ion-list>
+
+        <div *ngIf="lits_task.task_rejected.length == 0" >
+          <ion-card text-center style="padding: 51px 5px;">
+            <img src="assets/imgs/like.png" alt="Tareas en progreso" style="width: 53px; margin-left: 45%">
+            <p >
+              ¡Muy buen trabajo! <br>
+              No tienes tareas rechazadas, sigue con tu racha ganadora.
+            </p>
+          </ion-card>
+
+        </div>
+    </div>
+
+  </div>
+</ion-content>

@@ -1,0 +1,21 @@
+page-home {
+    // #map_canvas {
+    //     height: 90%;
+    // }
+    .item-md {
+        padding-left: 0px !important;
+    }
+
+    .ion-avatar[item-left] {
+        margin: 0px !important;
+    }
+
+    .item-md ion-avatar img {
+
+        border-radius: 0%;
+        overflow: hidden;
+        width: 77px !important;
+        height: 77px;
+    
+    }
+}
