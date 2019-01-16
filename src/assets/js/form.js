@@ -32538,17 +32538,20 @@
                     }, [this.ce("button", {
                         class: "btn btn-primary",
                         onClick: function(t) {
-                            t.preventDefault(), n.getPicture(function(t) {
-                                console.log("ESTO ES LO QUE PUDO REGRESAR",  'background: #222; color: #bada55')
 
+
+                            t.preventDefault(), n.getPicture(function(t) {
 
                                 function toDataURL(url, callback) {
                                     var xhr = new XMLHttpRequest();
                                     xhr.onload = function() {
                                     var reader = new FileReader();
                                     reader.onloadend = function() {
+                                        console.log("JERRY LAGOS", reader, reader.result);
                                         callback(reader.result);
                                     }
+
+
                                     reader.readAsDataURL(xhr.response);
                                     };
                                     xhr.open('GET', url);
@@ -32556,12 +32559,13 @@
                                     xhr.send();
                                 }
 
-
+                                console.log("Jerry lagos");
                                 toDataURL(t, function(dataUrl) {
-                                    // console.log('RESULT:', dataUrl)
+                                    console.log('JERRY UNO', dataUrl);
+                                    console.log("JUAN DE TODO LO QUE PASA");
                                     var image = `data:image/jpeg;base64,${dataUrl}`;
                                     var image = dataUrl;
-                                    // console.log(" sdfsdf",image)
+                                    console.log("jERRY DOS", image)
                                     var arr = image.split(','), 
                                     mime = arr[0].match(/:(.*?);/)[1],
                                     bstr = atob(arr[1]),
@@ -32574,7 +32578,6 @@
                                     
                                     if (navigator.geolocation) {
                                         console.log(navigator.geolocation);
-
                                         // navigator.geolocation.getCurrentPosition(showPosition);
                                     } else {
                                         console.log("No se tiene soportado esa habilidad")
@@ -32627,63 +32630,51 @@
                         onClick: function(t) {
                             t.preventDefault(), n.getPicture(function(t) {
 
-                                console.log("CAMARA, ENSERIO ESTO ES LA CAMARA?")
+                                
                                 function toDataURL(url, callback) {
+
                                     var xhr = new XMLHttpRequest();
                                     xhr.onload = function() {
                                     var reader = new FileReader();
                                         reader.onloadend = function() {
-                                            callback(reader.result);
-                                        }
 
-                                        reader.readAsDataURL(xhr.response);
+                                            var urlimg = new Image();
+                                            urlimg.src = xhr.responseURL;
+                                            urlimg.onload = function() {
+
+                                                var canvas = document.createElement('canvas');
+                                                var ctx = canvas.getContext('2d');
+                                                var width = 300;
+                                                var height = 300;
+
+                                                canvas.width = width;
+                                                canvas.height = height;
+                                                ctx.drawImage(urlimg, 0,0, width,height);
+
+                                                var imgData = ctx.createImageData(width, height);
+                                                var data = imgData.data;
+                                                var pixels = ctx.getImageData(0, 0, width, height);
+                                                var dataurl = canvas.toDataURL("image/png");
+                                                
+                                                callback(dataurl);
+
+                                            }
+                                        }                                  
                                     };
+
                                     xhr.open('GET', url);
                                     xhr.responseType = 'blob';
                                     xhr.send();
-
                                 }
                                  
                                 if (navigator.geolocation) {
-                                    
-                                    
-                                   
-
-
                                     // console.log(navigator.geolocation.getCurrentPosition);
                                     // navigator.geolocation.getCurrentPosition(showPosition);
                                 } else {
                                     console.log("No se tiene soportado esa habilidad")
                                 }
-                                
-                                function showPosition(position) {
-                                    console.log("si esa ingresando");
-                                    console.log(position.coords);
-                                }
-
+                            
                                 toDataURL(t, function(dataUrl) {
-                                    var image = `data:image/jpeg;base64,${dataUrl}`;
-                                    var image = dataUrl;
-                                    // console.log(" sdfsdf",image)
-                                    var arr = image.split(','), 
-                                    mime = arr[0].match(/:(.*?);/)[1],
-                                    bstr = atob(arr[1]),
-                                    n = bstr.length,
-                                    u8arr = new Uint8Array(n);
-                                    
-                                    while(n--){
-                                        u8arr[n] = bstr.charCodeAt(n);
-                                    }
-    
-                                    var nana = new File([u8arr],  Date.now()+'_'+'imagen.png', {type:mime}); 
-
-                                    var xa = new XMLHttpRequest();
-                                    var app = new FormData;
-                                                                    
-                                    app.append('File', nana);
-                                    // xa.open("POST", "http://localhost:8080/api/v1/save_img_to_form", true );
-                                    xa.open("POST", "http://node-express-env.eifgkdzath.us-west-2.elasticbeanstalk.com/api/v1/save_img_to_form", true );
-                                    xa.send(app);
 
                                     var content = document.createElement("div");
                                     content.style.width = "100%";
@@ -32704,10 +32695,49 @@
                                     content.appendChild(spin)
                                     document.body.appendChild(content);
 
-                                    // console.log("Pon le mucha  atancioin jererawsy sal ");
-                                    // console.log(document.body);
-                                    // console.log(spin);
 
+
+                                    var image = `data:image/jpeg;base64,${dataUrl}`;
+                                    var image = dataUrl;
+                                
+                                    var arr = image.split(','), 
+                                    mime = arr[0].match(/:(.*?);/)[1],
+                                    bstr = atob(arr[1]),
+                                    n = bstr.length,
+                                    u8arr = new Uint8Array(n);
+                                    
+                                    while(n--){
+                                        u8arr[n] = bstr.charCodeAt(n);
+                                    }
+    
+                                    var nana = new File([u8arr],  Date.now()+'_'+'imagen.png', {type:mime}); 
+
+                                    var xa = new XMLHttpRequest();
+                                    var app = new FormData;
+                                                                    
+                                    app.append('File', nana);
+                                    // xa.open("POST", "http://localhost:8080/api/v1/save_img_to_form", true );
+                                    xa.open("POST", "http://node-express-env.eifgkdzath.us-west-2.elasticbeanstalk.com/api/v1/save_img_to_form", true );
+                                    xa.send(app);
+
+                                    // var content = document.createElement("div");
+                                    // content.style.width = "100%";
+                                    // content.style.height = "100%";
+                                    // content.style.background = "rgba(32, 33, 32, 0.73)";
+                                    // content.style.position = "fixed";
+                                    // content.style.display = "block";
+                                    // content.style.zIndex = 9999999999999;
+
+
+                                    // var spin = document.createElement("div");
+                                    // spin.style.background = "url('https://www.upbra.com/loading.gif')";
+                                    // spin.style.width = "150px";
+                                    // spin.style.height = "150px";
+                                    // spin.style.position = "relative";
+
+                                    // spin.style.margin = "66% 28%";
+                                    // content.appendChild(spin)
+                                    // document.body.appendChild(content);
 
 
                                     xa.onreadystatechange = function() {

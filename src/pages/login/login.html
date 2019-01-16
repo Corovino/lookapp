@@ -30,12 +30,10 @@
       
       <div *ngSwitchCase="'inicio'" padding>
         <ion-item>
-          <ion-label floating >usuario</ion-label>
-          <ion-input type="text" [(ngModel)]="forms.email" ></ion-input>
+          <ion-input type="text" [(ngModel)]="forms.email" placeholder="Correo electronico"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-label floating >Pass</ion-label>
-          <ion-input type="password" [(ngModel)]="forms.pass"></ion-input>
+          <ion-input type="password" [(ngModel)]="forms.pass" placeholder="Password"></ion-input>
         </ion-item>
         <button ion-button full (click)="saveSession()">Iniciar sesión</button>
       </div>
@@ -180,5 +178,14 @@
     </div>
   </ion-content>
 
-  
 
+
+<style>
+ 
+ /* [ion-input] {
+    border: 1px solid #0006 !important;
+    border-radius: 23px !important;
+ } */
+
+
+</style>

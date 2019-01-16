@@ -23,23 +23,24 @@
                 </div>
                 <hr>
                 
-                <h4 style="font-weight: bold; margin: 8px 0px;">Dónde y cúando</h4>
+                <h4 style="font-weight: bold; margin: 8px 0px;">Dónde</h4>
                 <div text-left>
                     <ion-item >
                         <ion-avatar item-left style="width: 44px" >
                             <img src="assets/imgs/ubication.svg" width="33px" />
                         </ion-avatar>
                         <span>
-                            <div *ngIf="estudio.type_ubication == 1">
-                                <p>Listado de ciudades donde se <br> pueden realizar</p>
-                            </div>
-            
-                            <div *ngIf="estudio.type_ubication == 2">
-                                <p>Camina por el mapa hasta encontrar <br> el lugar</p>
+                            <div *ngIf="estudio.type_ubication == 1 || estudio.type_ubication == 2 ">
+                                <!-- <p>Listado de ciudades donde se <br> pueden realizar</p> -->
+                                <div *ngFor="let item of estudio.detail_studie[0].ubicaciones" >
+                                    {{item.name}}
+                                </div> 
                             </div>
             
                             <div *ngIf="estudio.type_ubication == 3">
-                                <p>Ingresa al mapa y encuentra el <br> listado de puntos que puedes visitar</p>
+                                <div *ngFor="let item of estudio.detail_studie[0].ubicaciones" >
+                                    <b>Lugar:</b> {{item.ciudad}}
+                                </div>
                             </div>
                         </span>
                     </ion-item>

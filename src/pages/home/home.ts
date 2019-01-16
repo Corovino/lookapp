@@ -358,7 +358,7 @@ export class DetailTaskPage {
 
     this.estudio = this.params.data.data;
     console.log(this.estudio);
-    
+
   }
 
   // public nombre: string = "Esta informacion es imperativa";
@@ -439,8 +439,7 @@ export class DetailTaskPage {
           idstudie: data.id
         }).subscribe( (response: any) => {
           if(!response.error) {
-
-            console.log(data, "JERRY LAGOS DETALLE TAREA");
+            
             this.navCtrl.push(SkipsPage, {data: data, iduser: user.data.data._id})
             // this.navCtrl.push(ProgressInTaskPage, {data: data, iduser: user.data.data._id})
           } else {
