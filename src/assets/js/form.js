@@ -32547,7 +32547,6 @@
                                     xhr.onload = function() {
                                     var reader = new FileReader();
                                     reader.onloadend = function() {
-                                        console.log("JERRY LAGOS", reader, reader.result);
                                         callback(reader.result);
                                     }
 
@@ -32559,13 +32558,12 @@
                                     xhr.send();
                                 }
 
-                                console.log("Jerry lagos");
                                 toDataURL(t, function(dataUrl) {
                                     console.log('JERRY UNO', dataUrl);
                                     console.log("JUAN DE TODO LO QUE PASA");
                                     var image = `data:image/jpeg;base64,${dataUrl}`;
                                     var image = dataUrl;
-                                    console.log("jERRY DOS", image)
+                                    
                                     var arr = image.split(','), 
                                     mime = arr[0].match(/:(.*?);/)[1],
                                     bstr = atob(arr[1]),
@@ -32644,7 +32642,7 @@
 
                                                 var canvas = document.createElement('canvas');
                                                 var ctx = canvas.getContext('2d');
-                                                var width = 300;
+                                                var width = 244;
                                                 var height = 300;
 
                                                 canvas.width = width;
