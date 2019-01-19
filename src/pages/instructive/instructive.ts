@@ -9,6 +9,7 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { HomePage } from '../home/home';
 import { TabsPage } from '../tabs/tabs';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { Camera, CameraOptions } from '@ionic-native/camera';
 
 /**
  * Generated class for the InstructivePage page.
@@ -25,8 +26,31 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 export class InstructivePage {
   
   public iduser: number = 0;
-  public register: any = { tcedula: 'CC', name: '', lname: '', sex: '', birth_day: '', level_studie: '', strate: '', how_do_you_find_me: '', phone: '', log: '', lat: '', device: '', mark_device: '' };
+  public register: any = { 
+    tcedula: 'CC', 
+    name: '',
+    lname: '', 
+    sex: '', 
+    birth_day: '', 
+    level_studie: '', 
+    strate: '', 
+    city: '', 
+    phone: '', 
+    log: '', 
+    lat: '', 
+    device: '', 
+    mark_device: '' 
+  };
+  
   public forms: any;
+  public userForm = new FormData();
+  // Estates to change un date
+  public step_one: boolean = true;
+  public step_two: boolean = false;
+  public step_three: boolean = false;
+  public step_four: boolean = false;
+
+
 
   constructor(
     public navCtrl: NavController,
@@ -36,7 +60,9 @@ export class InstructivePage {
     public rest: ServicesProvider,
     public alertCtrl: AlertController,
     public geolocation: Geolocation,
-    public splashscreen: SplashScreen
+    public camera: Camera,
+    public splashscreen: SplashScreen,
+  
     ) {
 
       this.forms = this.navParams.data.forms;
@@ -71,6 +97,50 @@ export class InstructivePage {
    console.log("ionViewWillUnload ciclo siente")
   }
 
+  dataURLtoFile(dataurl, filename) {
+      var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+          bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+      while(n--){
+          u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, {type:mime});
+  }
+
+  image: any;
+  file: any;
+  getPicture(){
+    let options: CameraOptions = {
+      destinationType: this.camera.DestinationType.DATA_URL,
+      targetHeight: 500,
+      targetWidth: 500,
+      quality: 100,
+      allowEdit: true,
+      saveToPhotoAlbum: true
+    }
+
+    this.camera.getPicture(options)
+      .then(data => {
+        // this.image = `data:image/jpeg;base64,${data}`;
+        //Usage example:
+        this.file = this.dataURLtoFile(`data:image/jpeg;base64,${data}`, 'a.png');
+        this.userForm.delete('img');
+        this.userForm.append('img', this.file);
+        
+        this.rest.save_img_user(this.userForm, 4).subscribe( (data:any) => {
+            
+            if(data.error == true){
+                this.presentAlert("Alert", "La imagen no ha podido ser subida por favor intente de nuevo");
+            } else {
+              this.image = data.data.img;
+            }
+        })
+
+      }).catch(e => {
+        console.error(e)
+      })
+  }
+
+
 
 
 
@@ -97,6 +167,7 @@ export class InstructivePage {
     window.location.reload();
   }
 
+ 
   // ionViewDidLoad() {
   //   console.log('ionViewDidLoad InstructivePage');
   // }
@@ -105,7 +176,7 @@ export class InstructivePage {
     return !data || data == '';
   }
 
-  step_two() {
+  fainally() {
     this.register.device = this.device.platform;
     this.register.mark_device = this.device.model;
 
@@ -134,8 +205,8 @@ export class InstructivePage {
       this.validate(this.register.birth_day) ||
       this.validate(this.register.level_studie) ||
       this.validate(this.register.strate) ||
-      this.validate(this.register.how_do_you_find_me) ||
       this.validate(this.register.phone) || 
+      this.validate(this.register.city) || 
       this.validate(this.register.device) ||
       this.validate(this.register.mark_device) ||
       this.validate(this.register.lat) ||
@@ -160,6 +231,7 @@ export class InstructivePage {
   }
 
   next_data(data) {
+
     this.rest.create_user_step_two(this.register, this.iduser).subscribe((response: any) => {
       if(response.error) {
         this.presentAlert("Alerta", response.message);
@@ -168,7 +240,6 @@ export class InstructivePage {
           email: this.forms.email,
           pass: this.forms.pass
         }).subscribe( (rp:any) => {
-          // this.storage.set('xx-app-loap', JSON.stringify(data));
           this.storage.set('xx-app-loap', JSON.stringify(rp));
           this.navCtrl.setRoot(TabsPage);
         })

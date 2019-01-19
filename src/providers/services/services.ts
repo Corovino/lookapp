@@ -49,11 +49,21 @@ export class ServicesProvider {
   }
 
   create_user_step_two(data:any, id: number) {
+    // return this.http.put(`http://localhost:8080/api/v1/create_user_step_two/${id}`, data);
     return this.http.put(this.genUrl(`create_user_step_two/${id}`), data);
+  }
+
+  save_img_user(data:any, id: number) {
+    // return this.http.put(`http://localhost:8080/api/v1/update_img_to_user/${id}`, data);
+    return this.http.put(this.genUrl(`update_img_to_user/${id}`), data);
   }
 
   login_eyes(data) {
     return this.http.post(this.genUrl('login_eyes'), data);
+  }
+
+  connect_facebook(data) {
+    return this.http.post(this.genUrl('connect_facebook'), data);
   }
 
 

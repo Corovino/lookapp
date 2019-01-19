@@ -10,6 +10,8 @@ import { Storage } from '@ionic/storage';
 import { InstructivePage } from '../pages/instructive/instructive';
 import { TabsPage } from '../pages/tabs/tabs';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
+import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
+
 
 
 @Component({
@@ -32,8 +34,52 @@ export class MyApp {
     public statusBar: StatusBar, 
     public splashScreen: SplashScreen, 
     public storage: Storage,
-    public locationAccuracy: LocationAccuracy
+    public locationAccuracy: LocationAccuracy,
+    private fb: Facebook
   ) {
+
+
+ 
+
+
+    // this.fb.getLoginStatus().then(es => {
+    //   console.log(es, "ESTADA FACEBOOK");
+
+    // }).catch(e => {
+    //   console.log(e, "CONSOLE DE FACEBOOK")
+    // })
+    const permissions = ["public_profile", "email", "user_gender", "user_age_range", "user_birthday"];
+
+
+    this.fb.api("/me?fields=name,lname,email,picture,gender", permissions)
+			.then(user =>{
+        console.log("primero", user);
+      }).then(da => {
+        console.log("sEGUNDO",da)
+      }).catch(e => {
+        console.log("ERRO", e);
+      })
+
+
+    // this.fb.login(permissions)
+		// .then(response => {
+    //   let userId = response.authResponse.userID;
+    //   console.log("RESPONSE", response);
+		// 	//Getting name and gender properties
+		// 	this.fb.api("/me?fields=name,email", permissions)
+		// 	.then(user =>{
+    //     console.log("primero", user);
+    //   }).then(da => {
+    //     console.log("sEGUNDO",da)
+    //   }).catch(e => {
+    //     console.log("ERRO", e);
+    //   })
+		// }, error =>{
+    //   console.log(error);
+    // });
+    
+    
+
 
     this.locationAccuracy.canRequest().then((canRequest: boolean) => {
 
@@ -47,16 +93,19 @@ export class MyApp {
     
     });
 
-    this.storage.get('xx-loap-inst').then((instructive) => {
-      if(instructive){
-        this.storage.get('xx-app-loap').then((val) => {
-          console.log("INFORMACION DEL STORAGE CUANDO INGRESA", val);
-          this.rootPage = val ? TabsPage : LoginPage;
-          });
-        } else {
-          this.rootPage = InstructivePage;
-        }
-    })
+    // this.storage.get('xx-loap-inst').then((instructive) => {
+      // console.log(instructive, "INSTRUTIVE JERRY LAGOS");
+      // if(instructive){
+
+    this.storage.get('xx-app-loap').then((val) => {
+      // console.log("INFORMACION DEL STORAGE CUANDO INGRESA", val);
+      this.rootPage = val ? TabsPage : LoginPage;
+    });
+
+    //     } else {
+    //       this.rootPage = InstructivePage;
+    //     }
+    // })
 
 
     this.initializeApp();

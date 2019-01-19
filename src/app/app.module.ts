@@ -35,7 +35,7 @@ import { UtilitiesClass } from '../models/helper.models';
 import { MorePage } from '../pages/more/more';
 import { SkipsPage } from '../pages/skips/skips';
 
-
+import { Facebook } from '@ionic-native/facebook';
 
 @NgModule({
   declarations: [
@@ -88,6 +88,7 @@ import { SkipsPage } from '../pages/skips/skips';
     ServicesProvider,
     Camera,
     SMS,
+    Facebook,
     LocalNotifications,
     LocationAccuracy,
     HttpClient,

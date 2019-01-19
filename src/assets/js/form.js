@@ -32628,13 +32628,19 @@
                         onClick: function(t) {
                             t.preventDefault(), n.getPicture(function(t) {
 
+                                console.log("CONECTADO DESDE CAMARA ")
                                 
-                                function toDataURL(url, callback) {
+                                function toDataURLc(url, callback) {
 
+                                    console.log("JUAN NAVIDAD")
                                     var xhr = new XMLHttpRequest();
+                                    console.log(xhr);
+
                                     xhr.onload = function() {
                                     var reader = new FileReader();
                                         reader.onloadend = function() {
+                                            
+                                            console.log(xhr.responseURL);
 
                                             var urlimg = new Image();
                                             urlimg.src = xhr.responseURL;
@@ -32642,8 +32648,8 @@
 
                                                 var canvas = document.createElement('canvas');
                                                 var ctx = canvas.getContext('2d');
-                                                var width = 244;
-                                                var height = 300;
+                                                var width = 544;
+                                                var height = 600;
 
                                                 canvas.width = width;
                                                 canvas.height = height;
@@ -32672,26 +32678,26 @@
                                     console.log("No se tiene soportado esa habilidad")
                                 }
                             
-                                toDataURL(t, function(dataUrl) {
+                                toDataURLc(t, function(dataUrl) {
 
-                                    var content = document.createElement("div");
-                                    content.style.width = "100%";
-                                    content.style.height = "100%";
-                                    content.style.background = "rgba(32, 33, 32, 0.73)";
-                                    content.style.position = "fixed";
-                                    content.style.display = "block";
-                                    content.style.zIndex = 9999999999999;
+                                    // var content = document.createElement("div");
+                                    // content.style.width = "100%";
+                                    // content.style.height = "100%";
+                                    // content.style.background = "rgba(32, 33, 32, 0.73)";
+                                    // content.style.position = "fixed";
+                                    // content.style.display = "block";
+                                    // content.style.zIndex = 9999999999999;
 
 
-                                    var spin = document.createElement("div");
-                                    spin.style.background = "url('https://www.upbra.com/loading.gif')";
-                                    spin.style.width = "150px";
-                                    spin.style.height = "150px";
-                                    spin.style.position = "relative";
+                                    // var spin = document.createElement("div");
+                                    // spin.style.background = "url('https://www.upbra.com/loading.gif')";
+                                    // spin.style.width = "150px";
+                                    // spin.style.height = "150px";
+                                    // spin.style.position = "relative";
 
-                                    spin.style.margin = "66% 28%";
-                                    content.appendChild(spin)
-                                    document.body.appendChild(content);
+                                    // spin.style.margin = "66% 28%";
+                                    // content.appendChild(spin)
+                                    // document.body.appendChild(content);
 
 
 
@@ -32718,24 +32724,24 @@
                                     xa.open("POST", "http://node-express-env.eifgkdzath.us-west-2.elasticbeanstalk.com/api/v1/save_img_to_form", true );
                                     xa.send(app);
 
-                                    // var content = document.createElement("div");
-                                    // content.style.width = "100%";
-                                    // content.style.height = "100%";
-                                    // content.style.background = "rgba(32, 33, 32, 0.73)";
-                                    // content.style.position = "fixed";
-                                    // content.style.display = "block";
-                                    // content.style.zIndex = 9999999999999;
+                                    var content = document.createElement("div");
+                                    content.style.width = "100%";
+                                    content.style.height = "100%";
+                                    content.style.background = "rgba(32, 33, 32, 0.73)";
+                                    content.style.position = "fixed";
+                                    content.style.display = "block";
+                                    content.style.zIndex = 9999999999999;
 
 
-                                    // var spin = document.createElement("div");
-                                    // spin.style.background = "url('https://www.upbra.com/loading.gif')";
-                                    // spin.style.width = "150px";
-                                    // spin.style.height = "150px";
-                                    // spin.style.position = "relative";
+                                    var spin = document.createElement("div");
+                                    spin.style.background = "url('https://www.upbra.com/loading.gif')";
+                                    spin.style.width = "150px";
+                                    spin.style.height = "150px";
+                                    spin.style.position = "relative";
 
-                                    // spin.style.margin = "66% 28%";
-                                    // content.appendChild(spin)
-                                    // document.body.appendChild(content);
+                                    spin.style.margin = "66% 28%";
+                                    content.appendChild(spin)
+                                    document.body.appendChild(content);
 
 
                                     xa.onreadystatechange = function() {

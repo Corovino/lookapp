@@ -29,13 +29,46 @@
     <div [ngSwitch]="sesion">
       
       <div *ngSwitchCase="'inicio'" padding>
-        <ion-item>
-          <ion-input type="text" [(ngModel)]="forms.email" placeholder="Correo electronico"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-input type="password" [(ngModel)]="forms.pass" placeholder="Password"></ion-input>
-        </ion-item>
-        <button ion-button full (click)="saveSession()">Iniciar sesión</button>
+
+          <ion-title class="ion_title">
+            Inicia sesión con facebook
+          </ion-title>
+          
+          <button style="background: white; color: black" ion-button icon-left full (click)="getfacebook()" >
+            <ion-icon name="logo-facebook">
+                <img src="assets/img/logo.png" alt="" width="20px">
+            </ion-icon>
+            Ingresa con facebook
+          </button>
+  
+          <!-- <ion-button >Facebook</ion-button> -->
+          <ion-item>
+            <ion-label>Acepto <a href="http://lookapp.com.co/autorizacion-tratamiento-la-informacion/" target="_blank">términos y condiciones</a></ion-label>
+            <ion-checkbox color="magenta" [(ngModel)]="forms.check1f" checked="false" ></ion-checkbox>
+          </ion-item>
+  
+          <ion-item>
+            <ion-label>He leido y aceptado las <a href="http://lookapp.com.co/autorizacion-tratamiento-la-informacion/"> codiciones de tratamiento de datos </a> </ion-label>
+            <ion-checkbox color="magenta" [(ngModel)]="forms.check2f" checked="false" ></ion-checkbox>
+          </ion-item>
+          
+        <hr>
+          <ion-title class="ion_title">
+            Inicia sesión con tu correo
+          </ion-title>
+          
+  
+          <ion-item>
+            <ion-input type="text" [(ngModel)]="forms.email" placeholder="Correo electronico"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input type="password" [(ngModel)]="forms.pass" placeholder="Password"></ion-input>
+          </ion-item>
+  
+  
+          <button ion-button full (click)="saveSession()">Iniciar sesión</button>
+ 
+
       </div>
 
       <div *ngSwitchCase="'registro'" padding>
@@ -71,8 +104,9 @@
           <ion-title>
             Registrate con facebook
           </ion-title>
+          
 
-          <button style="background: white; color: black" ion-button icon-left full (click)="knowData()" >
+          <button style="background: white; color: black" ion-button icon-left full (click)="getfacebook()" >
             <ion-icon name="logo-facebook">
                 <img src="assets/img/logo.png" alt="" width="20px">
             </ion-icon>
@@ -89,86 +123,6 @@
             <ion-label>He leido y aceptado las <a href="http:81/lookapp.com.co/tyc.html"> codiciones de tratamiento de datos </a> </ion-label>
             <ion-checkbox color="magenta" [(ngModel)]="forms.check2f" checked="false" ></ion-checkbox>
           </ion-item>
-  
-
-<!--           
-          <ion-item>
-            <ion-label>Tipo de identificación</ion-label>
-            <ion-select [(ngModel)]="register.tcedula" multiple="false" >
-              <ion-option value="CC" >Cédula</ion-option>
-            </ion-select>
-          </ion-item>
-
-
-          <ion-item >
-              <ion-label floating >Nombre</ion-label>
-              <ion-input type="text" [(ngModel)]="register.name" ></ion-input>
-          </ion-item>
-
-          <ion-item>
-            <ion-label floating > Apellido</ion-label>
-            <ion-input type="text" [(ngModel)]="register.lname" ></ion-input>
-          </ion-item> -->
-
-          <!-- <ion-item>
-            <ion-label floating>Sexo</ion-label>
-            <ion-select  [(ngModel)]="register.sex" multiple="false" >
-              <ion-option value="M" >Masculino</ion-option>
-              <ion-option value="F" >Femenino</ion-option>
-            </ion-select>
-          </ion-item> -->
-
-          <!-- <ion-item>
-            <ion-label>Fecha de Nacimiento</ion-label>
-            <ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="register.birth_day"></ion-datetime>
-          </ion-item> -->
-
-          <!-- <ion-item>
-            <ion-label floating >Nivel de estudio</ion-label>
-            <ion-select [(ngModel)]="register.level_studie" multiple="false">
-              <ion-option value="Primaria" >Primaria</ion-option>
-              <ion-option value="Bachiller" >Bachiller</ion-option>
-              <ion-option value="tyt" >Técnico/Tecnólogo</ion-option>
-              <ion-option value="Profesional" >Profesional</ion-option>
-            </ion-select>
-          </ion-item> -->
-
-          <!-- <ion-item>
-            <ion-label floating>Estrato</ion-label>
-            <ion-select [(ngModel)]="register.strate" multiple="false">
-              <ion-option value="1">1</ion-option>
-              <ion-option value="2">2</ion-option>
-              <ion-option value="3">3</ion-option>
-              <ion-option value="4">4</ion-option>
-              <ion-option value="5">5</ion-option>
-              <ion-option value="6">6</ion-option>
-            </ion-select>
-          </ion-item> -->
-<!-- 
-          <ion-item>
-            <ion-label floating >Como te enteraste</ion-label>
-            <ion-select floating [(ngModel)]="register.how_do_you_find_me" multiple="false">
-              <ion-option value="1">Por Internet</ion-option>
-              <ion-option value="2">Por Facebook</ion-option>
-              <ion-option value="3">Por Instagram</ion-option>
-              <ion-option value="4">Por Youtube</ion-option>
-              <ion-option value="5">Por vaya publicitaria</ion-option>
-              <ion-option value="6">Otra forma</ion-option>
-            </ion-select>
-          </ion-item>
-
-          <ion-item>
-            <ion-label floating >Celular </ion-label>
-            <ion-input type="number" [(ngModel)]="register.phone"  ></ion-input>
-          </ion-item> -->
-
-
-          <!-- <button ion-button full (click)="step_two()" >Segundo</button> -->
-<!-- 
-          <ion-item>
-            <ion-label ></ion-label>
-            <ion-input type="" ></ion-input>
-          </ion-item> -->
 
         </ion-list>
 
@@ -182,6 +136,13 @@
 
 <style>
  
+  .ion_title {
+    box-shadow: 0px 3px 2px 0px #00000080;
+    padding: 3px;
+    margin: 10px 0px;
+    background: white;
+
+ }
  /* [ion-input] {
     border: 1px solid #0006 !important;
     border-radius: 23px !important;

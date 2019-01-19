@@ -13,6 +13,9 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { InstructivePage } from '../instructive/instructive';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
 
+import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
+
+
 
 
 /**
@@ -23,7 +26,7 @@ import { LocationAccuracy } from '@ionic-native/location-accuracy';
  * 
  */
 
-@IonicPage()
+// @IonicPage()
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',
@@ -54,9 +57,18 @@ export class LoginPage {
     public device: Device,
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
-    public locationAccuracy: LocationAccuracy
+    public locationAccuracy: LocationAccuracy,
+    public fb: Facebook
     ) {
-  
+      
+
+      this.fb.getLoginStatus().then(es => {
+        console.log(es, "ESTADA FACEBOOK");
+
+      }).catch(e => {
+        console.log(e, "CONSOLE DE FACEBOOK")
+      })
+
       let watch = this.geolocation.watchPosition({
         timeout: 4000 // frecuencia
       });
@@ -76,6 +88,43 @@ export class LoginPage {
 
   validate(data){
     return !data || data == '';
+  }
+
+  getfacebook() {
+
+    if(this.forms.check1f == false){
+      this.presentAlert("Alerta", "Para continuar debe aceptar términos y condiciones.");
+    } else if(this.forms.check2f == false) {
+      this.presentAlert("Alerta", "Para continuar debe aceptar Habbeas Data.");
+    } else {
+      
+      this.fb.login(['public_profile', 'user_friends', 'email'])
+      .then((res: FacebookLoginResponse) => {
+        
+        const permissions = ["public_profile", "email", "user_gender", "user_age_range", "user_birthday"];
+
+        this.fb.api("/me?fields=name,email,picture,gender", permissions)
+        .then(user =>{
+          this.rest.connect_facebook(user).subscribe((response:any) => {
+            console.log(response);
+          })
+          // console.log(user, "this is my usere")
+        }).then(da => {
+          console.log("sEGUNDO",da)
+        }).catch(e => {
+          console.log("ERRO", e);
+        })
+
+        
+        console.log('Logged into Facebook!', res);
+
+      })
+      .catch(e => {
+        console.log('Error logging into Facebook', e); 
+      });
+  
+    }
+
   }
 
   get_session(){
@@ -168,11 +217,8 @@ export class LoginPage {
     });
     alert.present();
   }
-
-
-
   // PROCESO PARA TOMAR INFORMACION DEL USUARIO ANTES DE QUE SE REGISTRE
-
-  
 }
+
+
 

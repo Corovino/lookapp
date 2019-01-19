@@ -14,79 +14,127 @@
 
 
 <ion-content padding>
-  <div padding style="text-align: center">
-    <img src="assets/imgs/logo.png" alt="logo de lookapp"> <br>
-    <p>
-     Queremos mostrarte lo facil que es ganar dinero, para empezar, puedes realizar tu primera tarea llengando el siguiente formulario.
-     y dando clic en Siguente
-    </p>
-  </div>
-  <ion-list>
-      <ion-item >
-          <ion-label floating >Nombre</ion-label>
-          <ion-input type="text" [(ngModel)]="register.name" ></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label floating > Apellido</ion-label>
-        <ion-input type="text" [(ngModel)]="register.lname" ></ion-input>
-      </ion-item>
-      
-      <ion-item>
-        <ion-label floating >Número de celular</ion-label>
-        <ion-input type="number" [(ngModel)]="register.phone"></ion-input>
-      </ion-item>
+ 
 
-      <ion-item>
-        <ion-label floating >Fecha de Nacimiento</ion-label>
-        <ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="register.birth_day"></ion-datetime>
-      </ion-item>
+    
+    <!-- STEP ONE  -->
+    <div *ngIf="step_one">
+        <div padding style="text-align: center">
+          <img src="assets/imgs/logo.png" alt="logo de lookapp"> <br>
+          <p>
+            Hacer tareas y ganar dinero con LookApp es muy fácil!
+            A continuación puedes hacer tu primera tarea respondiendo estas sencillas preguntas.
+          </p>
+        </div>
+        <ion-list>
+          <!-- MOC NOMBRE -->
+          <ion-item >
+            <ion-input placeholder="Nombre" type="text" [(ngModel)]="register.name" ></ion-input>
+          </ion-item>
+          <!-- MOC APELLIDO -->
+          <ion-item>
+            <ion-input placeholder="Apellido" type="text" [(ngModel)]="register.lname" ></ion-input>
+          </ion-item>
+          
+          <!-- <button ion-button  (click)="step_one == true"  >Atras</button> -->
+        </ion-list>
+        <button ion-button  (click)="step_two = true; step_one = false"  >Siguiente</button>
+    </div>
 
-      <ion-item>
-        <ion-label floating>Sexo</ion-label>
-        <ion-select  [(ngModel)]="register.sex" multiple="false" >
-          <ion-option value="M" >Masculino</ion-option>
-          <ion-option value="F" >Femenino</ion-option>
-        </ion-select>
-      </ion-item>
+    <!-- STEP TWO -->
+    <div *ngIf="step_two">
+      <div padding style="text-align: center">
+        <img src="assets/imgs/logo.png" alt="logo de lookapp"> <br>
+      </div>
+      <ion-list>
+        <!-- MOC FECHA DE NACIMIENTO -->
+        <ion-item>
+          <ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="register.birth_day" placeholder="Fecha de nacimiento"></ion-datetime>
+        </ion-item>
+        <!-- MOC SEXO -->
+        <ion-item>
+          <ion-select placeholder="Sexo" [(ngModel)]="register.sex" multiple="false" >
+            <ion-option value="M" >Masculino</ion-option>
+            <ion-option value="F" >Femenino</ion-option>
+          </ion-select>
+        </ion-item>
+        <!-- MOC ESTRATO -->
+        <ion-item>
+          <ion-select placeholder="Estrato" [(ngModel)]="register.strate" multiple="false">
+            <ion-option value="1">1</ion-option>
+            <ion-option value="2">2</ion-option>
+            <ion-option value="3">3</ion-option>
+            <ion-option value="4">4</ion-option>
+            <ion-option value="5">5</ion-option>
+            <ion-option value="6">6</ion-option>
+          </ion-select>
+        </ion-item>
+        <!-- MOC NIVEL DE ESTUDIO -->
+        <ion-item>
+          <ion-select placeholder="Nivel de estudio" [(ngModel)]="register.level_studie" multiple="false">
+            <ion-option value="Primaria" >Primaria</ion-option>
+            <ion-option value="Bachiller" >Bachiller</ion-option>
+            <ion-option value="tyt" >Técnico/Tecnólogo</ion-option>
+            <ion-option value="Profesional" >Profesional</ion-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+      <button ion-button  (click)="step_one = true; step_two = false"  >Atras</button>
+      <button ion-button  (click)="step_three = true; step_two = false"  >Siguiente</button>
+    </div>
 
-     
+    <div *ngIf="step_three">
+      <div padding style="text-align: center">
+        <img src="assets/imgs/logo.png" alt="logo de lookapp"> <br>
+      </div>
+      <ion-list>
 
-      <ion-item>
-        <ion-label floating>Estrato</ion-label>
-        <ion-select [(ngModel)]="register.strate" multiple="false">
-          <ion-option value="1">1</ion-option>
-          <ion-option value="2">2</ion-option>
-          <ion-option value="3">3</ion-option>
-          <ion-option value="4">4</ion-option>
-          <ion-option value="5">5</ion-option>
-          <ion-option value="6">6</ion-option>
-        </ion-select>
-      </ion-item>
+        <!-- MOC TOMAR FOTOGRAFIA -->
+        <img [src]="image" *ngIf="image"/>
+          <button ion-button full (click)="getPicture()">Tomar foto</button>
 
-      <ion-item>
-        <ion-label floating >Nivel de estudio</ion-label>
-        <ion-select [(ngModel)]="register.level_studie" multiple="false">
-          <ion-option value="Primaria" >Primaria</ion-option>
-          <ion-option value="Bachiller" >Bachiller</ion-option>
-          <ion-option value="tyt" >Técnico/Tecnólogo</ion-option>
-          <ion-option value="Profesional" >Profesional</ion-option>
-        </ion-select>
-      </ion-item>
+        <!-- MOC NUMERO DE CELULAR -->
+        <ion-item>
+          <ion-input type="number" [(ngModel)]="register.phone" placeholder="Número celular" ></ion-input>
+        </ion-item>
+        <!-- MOC CIUDAD EN LA QUE TE ENCUENTRAS -->
+        <ion-item>
+          <ion-input type="text" [(ngModel)]="register.city" placeholder="Ciudad"></ion-input>
+        </ion-item>
+      </ion-list>
+      <button ion-button  (click)="step_two = true; step_three = false"  >Atras</button>
+      <button ion-button  (click)="step_four = true; step_three = false"  >Finalizar</button>
+    </div>
 
-      <ion-item>
-        <ion-label floating >Como te enteraste</ion-label>
-        <ion-select floating [(ngModel)]="register.how_do_you_find_me" multiple="false">
-          <ion-option value="1">Por Internet</ion-option>
-          <ion-option value="2">Por Facebook</ion-option>
-          <ion-option value="3">Por Instagram</ion-option>
-          <ion-option value="4">Por Youtube</ion-option>
-          <ion-option value="5">Por vaya publicitaria</ion-option>
-          <ion-option value="6">Otra forma</ion-option>
-        </ion-select>
-      </ion-item>
 
-  </ion-list>
+    <div *ngIf="step_four">
+        <div text-center>
+            <div padding style="text-align: center">
 
-  <button ion-button full (click)="step_two()"> Siguiente </button>
+              <h2>¡FELICIDADES!</h2>
+              <img src="assets/imgs/logo.png" alt="logo de lookapp"> <br>
+              <br><br><br><br><br>
+              <p>Así de sencillo puedes ganar con Lookapp</p>
+            </div>
+        </div>
+        <button ion-button full (click)="fainally()"> Listo </button>
+    </div>
+    
+    
+  
   
 </ion-content>
+
+
+
+<!-- <ion-item>
+  <ion-label  >Como te enteraste</ion-label>
+  <ion-select  [(ngModel)]="register.how_do_you_find_me" multiple="false">
+    <ion-option value="1">Por Internet</ion-option>
+    <ion-option value="2">Por Facebook</ion-option>
+    <ion-option value="3">Por Instagram</ion-option>
+    <ion-option value="4">Por Youtube</ion-option>
+    <ion-option value="5">Por vaya publicitaria</ion-option>
+    <ion-option value="6">Otra forma</ion-option>
+  </ion-select>
+</ion-item> -->

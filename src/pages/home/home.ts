@@ -1,6 +1,6 @@
 import { ProgressInTaskPage } from './../progress-in-task/progress-in-task';
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { NavController, NavParams, NavPopAnchor, AlertController } from 'ionic-angular';
+import { NavController, NavParams, NavPopAnchor, AlertController, LoadingController } from 'ionic-angular';
 import { Storage } from '@ionic/storage'
 import { GoogleMaps, GoogleMap, Marker, GoogleMapsEvent, ILatLng, Polygon, Poly, LatLng, CameraPosition, MarkerOptions } from '@ionic-native/google-maps'
 // import { GoogleMaps, GoogleMap, GoogleMapOptions, Environment, Marker, GoogleMapsEvent, LocationService, MyLocation, MyLocationOptions, ILatLng, Polyline, Polygon, Poly, LatLng, CameraPosition, MarkerOptions, LatLngBounds} from '@ionic-native/google-maps'
@@ -27,20 +27,17 @@ declare var Formio;
 export class HomePage {
   
   @ViewChild('map') mapElement: ElementRef;
-
   map: GoogleMap;
 
-  
-  nombre: string = "Su nombre";
+  nombre: string = "";
   listp: any;
-  name: any = "Jerry";
+  name: any = "";
   
   changeName() {
-    this.nombre = "Otro nombre";
+    this.nombre = "";
   }
   
   bounds: any;
-  
   list_studies: any = [];
   repo: any;
   
@@ -53,90 +50,96 @@ export class HomePage {
     private _googleMaps: GoogleMaps,
     public localNoti: LocalNotifications,
     public sms: SMS,
-    public device: Device
+    public device: Device,
+    public loadingCtrl: LoadingController
     
     ) {
       
-      this.get_studies();
 
+      const loding = this.loadingCtrl.create({
+        content: 'Please wait...',
+        duration: 3000
+      })
+
+      loding.present();
+
+      this.get_studies();
 
       this.repo = new UtilitiesClass();
       let time = setInterval(() => {
         this.get_studies();
-      }, 30000);
+      }, 60000);
 
       if(time){
-        console.log(time);
+        // console.log(time);
       }
     }
 
-    get_studies(){
-      this.rest.get_studies_available()
-      .subscribe((response : any) => {
-        this.list_studies = response.data;
-      })
-    }
-    
+get_studies(){
+  this.rest.get_studies_available()
+  .subscribe((response : any) => {
+    this.list_studies = response.data;
+  })
+}
 
-    doRefresh(element){
-      this.get_studies();
-      setTimeout(() => {
-        element.complete();
-      }, 2500);
-      console.log("Proceso to refresh")
-    }
-    
 
-    take_taks(data: any) {
-      this.navCtrl.push(DetailTaskPage, {data: data});    
-    }
+doRefresh(element){
+  this.get_studies();
+  setTimeout(() => {
+    element.complete();
+  }, 2500);
+  console.log("Proceso to refresh")
+}
+
+
+take_taks(data: any) {
+  this.navCtrl.push(DetailTaskPage, {data: data});    
+}
     // 
     // 
     //  >>>>>>>>>>>>>>>>< PROCESO TO GET LOCAL  NOTIFICACON
     // 
     // 
     // 
-    getSMS() {
-      this.sms.send('3004862620', "Hola a todos, otro tema");
-      // this.sms.send('3003463203', "Hola a todos, toma tu link  https://www.classmarker.com/online-test/start/?quiz=ngk5bb77097d61c5 ");
-    }
+getSMS() {
+  this.sms.send('3004862620', "Hola a todos, otro tema");
+  // this.sms.send('3003463203', "Hola a todos, toma tu link  https://www.classmarker.com/online-test/start/?quiz=ngk5bb77097d61c5 ");
+}
     // 
     // 
     //  >>>>>>>>>>>>>>>>< PROCESO TO GET LOCAL  NOTIFICACON
     // 
-  // 
-  // 
-  getNotification(){
-    this.localNoti.schedule({
-      id: 1,
-      text: 'Single ILocalNotification',
-      led: { color: '#FF00FF', on: 500, off: 500 },
-      vibrate: true,
-      actions: [
-        { id: 'yes', title: 'Yes' },
-        { id: 'no', title: 'No' }
-      ]
-      // sound: isAndroid ? 'file://sound.mp3' : 'file://beep.caf',
-      // data: { secret: key }
-    });
-  }
+    // 
+    // 
+getNotification(){
+  this.localNoti.schedule({
+    id: 1,
+    text: 'Single ILocalNotification',
+    led: { color: '#FF00FF', on: 500, off: 500 },
+    vibrate: true,
+    actions: [
+      { id: 'yes', title: 'Yes' },
+      { id: 'no', title: 'No' }
+    ]
+    // sound: isAndroid ? 'file://sound.mp3' : 'file://beep.caf',
+    // data: { secret: key }
+  });
+}
 
   
 
-  //   ///////////////// LOAD MAP
-  // 
-  // Load map
+/////////////////// LOAD MAP
+// 
+// Load map
 
 moveCamera(loc: LatLng){
   
   let options: CameraPosition<LatLng> = {
-      target: loc,
-      zoom: 20,
-      tilt: 100
-    }
-    this.map.moveCamera(options)
-
-    
+    target: loc,
+    zoom: 20,
+    tilt: 100
+  }
+  this.map.moveCamera(options)   
 }
 
 //Adds a marker to the map
@@ -194,100 +197,99 @@ create_a_marker(){
 }  
 
 
-  markers: any = [];
-  loadMap() {
-    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
-    //Add 'implements AfterViewInit' to the class.
-    let loc: LatLng;
-    this.initMap();            
+markers: any = [];
+loadMap() {
+  //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
+  //Add 'implements AfterViewInit' to the class.
+  let loc: LatLng;
+  this.initMap();            
 
-    //once the map is ready move
-    //camera into position
-    this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
+  //once the map is ready move
+  //camera into position
+  this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
+    
+    //Get User location
+    let watch = this.geolocation.watchPosition({
+      enableHighAccuracy: true, // HABILITAR ALTA PRECISION
+      timeout: 4000 // frecuencia
+    });
+
+    // let watch = this.geolocation.watchPosition();
+
+
+    let polygono_4: ILatLng[] = [
+        {"lat": 4.6724325744368, "lng": -74.06218524704866},
+        {"lat": 4.6747636839902365, "lng": -74.06169172058992},
+        {"lat": 4.6747636839902365, "lng": -74.06287189255647},
+        {"lat": 4.67186583562157, "lng": -74.0632903171628},
+        {"lat": 4.671320482744213, "lng": -74.06231399308137},
+        {"lat": 4.671673358183879, "lng": -74.06046863327913},
+        {"lat": 4.6743252648956055, "lng": -74.05941720734529},
+        {"lat": 4.674528434754058, "lng": -74.06090851555757},
+        {"lat": 4.67186583562157, "lng": -74.06176682244234}
+    ];
+    
+    let a = 0;
+    watch.subscribe((resp: any) => {
+      //Once location is gotten, we set the location on the camera.
       
-      //Get User location
-      let watch = this.geolocation.watchPosition({
-        enableHighAccuracy: true, // HABILITAR ALTA PRECISION
-        timeout: 4000 // frecuencia
+          
+      
+      loc = new LatLng(resp.coords.latitude, resp.coords.longitude);
+      this.moveCamera(loc);
+      let colorToPoly = Poly.containsLocation(loc, polygono_4) ? 'green' : 'blue';
+      
+      this.map.addPolygon({
+        points: polygono_4,
+        clickable: false,
+        strokeColor: '#AA00FF',
+        fillColor: 'red',
+        strokeWidth: 10
+      }).then((polyline: Polygon) => { 
+
+      })
+      a++;
+      this.createMarker(loc, "Me "+a , colorToPoly ).then((marker: Marker) => {
+        this.markers.push(marker);
+        marker.showInfoWindow();
+      }).catch(err => {
+        console.log(err);
       });
 
-      // let watch = this.geolocation.watchPosition();
+      if(a > 5) {
+        let b = a - 4;
+        this.markers[b].remove();
+      }
+    })
+    
+  });
 
+}
+mis_cordenandas: any = [];
+json_poligono : any;
+// loadMap(){
+//   // This lines are to run code in browser
+//   Environment.setEnv({
+//     'APY_KEY_FOR_BROWSER_RELEASE': '',
+//     'API_KEY_FOR_BROWSER_DEBUG':''
+//   })
 
-      let polygono_4: ILatLng[] = [
-          {"lat": 4.6724325744368, "lng": -74.06218524704866},
-          {"lat": 4.6747636839902365, "lng": -74.06169172058992},
-          {"lat": 4.6747636839902365, "lng": -74.06287189255647},
-          {"lat": 4.67186583562157, "lng": -74.0632903171628},
-          {"lat": 4.671320482744213, "lng": -74.06231399308137},
-          {"lat": 4.671673358183879, "lng": -74.06046863327913},
-          {"lat": 4.6743252648956055, "lng": -74.05941720734529},
-          {"lat": 4.674528434754058, "lng": -74.06090851555757},
-          {"lat": 4.67186583562157, "lng": -74.06176682244234}
-      ];
-      
-      let a = 0;
-      watch.subscribe((resp: any) => {
-        //Once location is gotten, we set the location on the camera.
-        
-            
-        
-        loc = new LatLng(resp.coords.latitude, resp.coords.longitude);
-        this.moveCamera(loc);
-        let colorToPoly = Poly.containsLocation(loc, polygono_4) ? 'green' : 'blue';
-        
-        this.map.addPolygon({
-          points: polygono_4,
-          clickable: false,
-          strokeColor: '#AA00FF',
-          fillColor: 'red',
-          strokeWidth: 10
-        }).then((polyline: Polygon) => { 
-  
-        })
-        a++;
-        this.createMarker(loc, "Me "+a , colorToPoly ).then((marker: Marker) => {
-          this.markers.push(marker);
-          marker.showInfoWindow();
-        }).catch(err => {
-          console.log(err);
-        });
+// }
 
-        if(a > 5) {
-          let b = a - 4;
-          this.markers[b].remove();
-        }
-      })
-      
-    });
+onMarkerAdd(marker: Marker) {
+  marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
+    alert("Marker" + marker.getTitle() + "is ciclek")
+  });
+}
 
-  }
-  mis_cordenandas: any = [];
-  json_poligono : any;
-  // loadMap(){
-  //   // This lines are to run code in browser
-  //   Environment.setEnv({
-  //     'APY_KEY_FOR_BROWSER_RELEASE': '',
-  //     'API_KEY_FOR_BROWSER_DEBUG':''
-  //   })
+ionViewDidLoad(){
+  // Make Call to loadMap that get map
+  // this.loadMap();
+}
 
-  // }
-  
-  onMarkerAdd(marker: Marker) {
-    marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
-      alert("Marker" + marker.getTitle() + "is ciclek")
-    });
-  }
-  
-  ionViewDidLoad(){
-    // Make Call to loadMap that get map
-    // this.loadMap();
-  }
-
-  OnButtonCLick(){
-    // Meka call to loadMap that get Map 
-    this.loadMap();
-  }
+OnButtonCLick(){
+  this.loadMap();
+}
 
 
   // 
@@ -348,24 +350,267 @@ create_a_marker(){
 export class DetailTaskPage {
   public estudio: any;
 
+
+  @ViewChild('map') mapElement: ElementRef;
+
+  map: GoogleMap;
+
+
   constructor(
     public params: NavParams, 
     public navCtrl: NavController,
     public storage: Storage,
     public rest: ServicesProvider,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
+    public geolocation: Geolocation,
+    public camera: Camera,
+    private _googleMaps: GoogleMaps,
+    public localNoti: LocalNotifications,
+    public sms: SMS,
+    public device: Device,
+    public loadingCtrl: LoadingController
   ) {
 
+    // estamos trabajando para que tengas nuevas aventuras. 
+    
     this.estudio = this.params.data.data;
-    console.log(this.estudio);
-
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/////////////////// LOAD MAP
+// 
+// Load map
+
+moveCamera(loc: LatLng){
+  
+  let options: CameraPosition<LatLng> = {
+    target: loc,
+    zoom: 20,
+    tilt: 100
+  }
+  this.map.moveCamera(options)   
+}
+
+//Adds a marker to the map
+createMarker(loc: LatLng, title: string, color){
+    let markerOptions: MarkerOptions = {
+      position: loc,
+      icon: color,
+      title: title
+    };
+    return this.map.addMarker(markerOptions);
+}
+
+ //Load the map 
+initMap(){
+
+  
+  let controls: any = {compass: true, myLocationButton: false, indoorPicker: false, zoom: true, mapTypeControl: false, streetViewControl: false};
+  let element = this.mapElement.nativeElement;
+  this.map = this._googleMaps.create(element, {
+    'backgroundColor': 'white',
+      'controls': {
+        'compass': controls.compass,
+        'myLocationButton': controls.myLocationButton,
+        'indoorPicker': controls.indoorPicker,
+        'zoom': controls.zoom,
+        'mapTypeControl': controls.mapTypeControl,
+        'streetViewControl': controls.streetViewControl
+      },
+      'gestures': {
+        'scroll': true,
+        'tilt': true,
+        'rotate': true,
+        'zoom': true
+      },
+      zoom: 4,
+      center: {lat: 4.5876996, lng: -83.394205}
+    
+  })
+
+
+}
+
+
+mark: any = [];
+
+create_a_marker(){
+  let markerOptions: MarkerOptions = {
+    position: {"lat": 4.6724325744368, "lng": -74.06218524704866},
+    icon: 'red',
+    title: 'Jerry Lagos uno'
+  };
+  this.map.addMarker(markerOptions).then((marker: Marker) => {
+      this.mark.push(marker)
+  });
+}  
+
+
+markers: any = [];
+loadMap() {
+  //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
+  //Add 'implements AfterViewInit' to the class.
+  let loc: LatLng;
+  this.initMap();            
+
+  //once the map is ready move
+  //camera into position
+  this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
+    
+    //Get User location
+    let watch = this.geolocation.watchPosition({
+      enableHighAccuracy: true, // HABILITAR ALTA PRECISION
+      timeout: 4000 // frecuencia
+    });
+
+    // let watch = this.geolocation.watchPosition();
+
+
+    let polygono_4: ILatLng[] = [
+        {"lat": 4.6724325744368, "lng": -74.06218524704866},
+        {"lat": 4.6747636839902365, "lng": -74.06169172058992},
+        {"lat": 4.6747636839902365, "lng": -74.06287189255647},
+        {"lat": 4.67186583562157, "lng": -74.0632903171628},
+        {"lat": 4.671320482744213, "lng": -74.06231399308137},
+        {"lat": 4.671673358183879, "lng": -74.06046863327913},
+        {"lat": 4.6743252648956055, "lng": -74.05941720734529},
+        {"lat": 4.674528434754058, "lng": -74.06090851555757},
+        {"lat": 4.67186583562157, "lng": -74.06176682244234}
+    ];
+    
+    let a = 0;
+    watch.subscribe((resp: any) => {
+      //Once location is gotten, we set the location on the camera.
+      
+          
+      
+      loc = new LatLng(resp.coords.latitude, resp.coords.longitude);
+      this.moveCamera(loc);
+      let colorToPoly = Poly.containsLocation(loc, polygono_4) ? 'green' : 'blue';
+      
+      this.map.addPolygon({
+        points: polygono_4,
+        clickable: false,
+        strokeColor: '#AA00FF',
+        fillColor: 'red',
+        strokeWidth: 10
+      }).then((polyline: Polygon) => { 
+
+      })
+      a++;
+      this.createMarker(loc, "Me "+a , colorToPoly ).then((marker: Marker) => {
+        this.markers.push(marker);
+        marker.showInfoWindow();
+      }).catch(err => {
+        console.log(err);
+      });
+
+      if(a > 5) {
+        let b = a - 4;
+        this.markers[b].remove();
+      }
+    })
+    
+  });
+
+}
+mis_cordenandas: any = [];
+json_poligono : any;
+// loadMap(){
+//   // This lines are to run code in browser
+//   Environment.setEnv({
+//     'APY_KEY_FOR_BROWSER_RELEASE': '',
+//     'API_KEY_FOR_BROWSER_DEBUG':''
+//   })
+
+// }
+
+onMarkerAdd(marker: Marker) {
+  marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
+    alert("Marker" + marker.getTitle() + "is ciclek")
+  });
+}
+
+OnButtonCLick(){
+  this.loadMap();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   // public nombre: string = "Esta informacion es imperativa";
-  ionViewDidLoad(){
-
-    
-  }
+  ionViewDidLoad(){ 
+    this.loadMap();
+   }
 
   presentAlert(title:string, message: string) {
     let alert = this.alertCtrl.create({
@@ -383,13 +628,10 @@ export class DetailTaskPage {
      * La edad cuando no es "todos",
      */
 
-    
     if(data.detail_studie.length > 0) {
       data.detail_studie = data.detail_studie[0];
     }
     
-
-
     let rang_age = {
       rang_uno: data.detail_studie.ages.rang_1,
       rang_dos: data.detail_studie.ages.rang_2
@@ -421,7 +663,6 @@ export class DetailTaskPage {
     this.storage.get('xx-app-loap').then( (loap: any) => {
 
       let user = JSON.parse(loap);
-
       let segments = {
          level_studie: user.data.data.level_studie,
          age: user.data.data.birth_day,
@@ -430,8 +671,8 @@ export class DetailTaskPage {
       }
       
       if(level_studie == "Todos" || level_studie == segments.level_studie &&
-      estrata == "Todos" || estrata == segments.estrata &&
-      gender == "Todos" || gender == segments.gender
+        estrata == "Todos" || estrata == segments.estrata &&
+        gender == "Todos" || gender == segments.gender
       ) {
         
         this.rest.take_task({
@@ -457,8 +698,6 @@ export class DetailTaskPage {
      *  El usuario debe cumplir con la segmentacion requerida por parte del cliente}
      *  El usuario debe estar dentro del rango permitido para realizar la tarea
      */
-    // 
 
   }
-
 }
