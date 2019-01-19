@@ -32637,9 +32637,12 @@
                                     console.log(xhr);
 
                                     xhr.onload = function() {
-                                    var reader = new FileReader();
-                                        reader.onloadend = function() {
+                                        console.log("DATA UNO");
+                                        var reader = new FileReader();
+                                        console.log("DATA DDD", reader);
+                                        // reader.onloadend = function() {
                                             
+                                            console.log("DATA TRESS");
                                             console.log(xhr.responseURL);
 
                                             var urlimg = new Image();
@@ -32663,7 +32666,7 @@
                                                 callback(dataurl);
 
                                             }
-                                        }                                  
+                                        // }                                  
                                     };
 
                                     xhr.open('GET', url);
@@ -32680,27 +32683,7 @@
                             
                                 toDataURLc(t, function(dataUrl) {
 
-                                    // var content = document.createElement("div");
-                                    // content.style.width = "100%";
-                                    // content.style.height = "100%";
-                                    // content.style.background = "rgba(32, 33, 32, 0.73)";
-                                    // content.style.position = "fixed";
-                                    // content.style.display = "block";
-                                    // content.style.zIndex = 9999999999999;
-
-
-                                    // var spin = document.createElement("div");
-                                    // spin.style.background = "url('https://www.upbra.com/loading.gif')";
-                                    // spin.style.width = "150px";
-                                    // spin.style.height = "150px";
-                                    // spin.style.position = "relative";
-
-                                    // spin.style.margin = "66% 28%";
-                                    // content.appendChild(spin)
-                                    // document.body.appendChild(content);
-
-
-
+                                
                                     var image = `data:image/jpeg;base64,${dataUrl}`;
                                     var image = dataUrl;
                                 
