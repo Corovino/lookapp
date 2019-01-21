@@ -30,11 +30,23 @@
 
 
 
-.text-input-md, .cls-button {
-    border: 1px solid #0006 !important;
+.text-input-md, .cls-button, [input] {
+    // border: 1px solid #0006 !important;
+    border: 1px solid lightgray;
     border-radius: 23px !important;
     margin: 13px 8px;
     padding: 7px;
+    width: 90%;
+ }
+
+
+ion-select, .ion-select-md {
+    // border: 1px solid #0006 !important;
+    border: 1px solid lightgray;
+    border-radius: 23px !important;
+    margin: 13px 8px;
+    padding: 7px;
+    max-width: 100% !important;
  }
 
 

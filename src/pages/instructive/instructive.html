@@ -35,10 +35,13 @@
           <ion-item>
             <ion-input placeholder="Apellido" type="text" [(ngModel)]="register.lname" ></ion-input>
           </ion-item>
-          
+          <ion-grid>
+            <ion-row>
+              <button ion-button full (click)="step_two = true; step_one = false"  >Siguiente</button>
+            </ion-row>
+          </ion-grid>
           <!-- <button ion-button  (click)="step_one == true"  >Atras</button> -->
         </ion-list>
-        <button ion-button  (click)="step_two = true; step_one = false"  >Siguiente</button>
     </div>
 
     <!-- STEP TWO -->
@@ -79,20 +82,28 @@
           </ion-select>
         </ion-item>
       </ion-list>
-      <button ion-button  (click)="step_one = true; step_two = false"  >Atras</button>
-      <button ion-button  (click)="step_three = true; step_two = false"  >Siguiente</button>
+
+      <ion-grid>
+        <ion-row>
+            <ion-col width-50>
+              <button ion-button full (click)="step_one = true; step_two = false"  >Atras</button>
+            </ion-col>
+            <ion-col width-50>
+              <button ion-button full (click)="step_three = true; step_two = false"  >Siguiente</button>
+            </ion-col>
+        </ion-row>
+      </ion-grid>
     </div>
 
     <div *ngIf="step_three">
       <div padding style="text-align: center">
-        <img src="assets/imgs/logo.png" alt="logo de lookapp"> <br>
+        <img src="assets/imgs/logo.png" alt="logo de lookapp" > <br>
       </div>
-      <ion-list>
+      <ion-list style="margin: 3vw 0 16px;">
 
         <!-- MOC TOMAR FOTOGRAFIA -->
-        <img [src]="image" *ngIf="image"/>
-          <button ion-button full (click)="getPicture()">Tomar foto</button>
-
+        <img [src]="image"  class="avatar-img" *ngIf="image" (click)="getPicture()"/>
+  
         <!-- MOC NUMERO DE CELULAR -->
         <ion-item>
           <ion-input type="number" [(ngModel)]="register.phone" placeholder="Número celular" ></ion-input>
@@ -102,10 +113,17 @@
           <ion-input type="text" [(ngModel)]="register.city" placeholder="Ciudad"></ion-input>
         </ion-item>
       </ion-list>
-      <button ion-button  (click)="step_two = true; step_three = false"  >Atras</button>
-      <button ion-button  (click)="step_four = true; step_three = false"  >Finalizar</button>
+      <ion-grid>
+        <ion-row>
+          <ion-col width-50>
+            <button ion-button full (click)="step_two = true; step_three = false">Atras</button>
+          </ion-col>
+          <ion-col width-50>
+            <button ion-button full (click)="fainally();">Finalizar</button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </div>
-
 
     <div *ngIf="step_four">
         <div text-center>
@@ -117,7 +135,7 @@
               <p>Así de sencillo puedes ganar con Lookapp</p>
             </div>
         </div>
-        <button ion-button full (click)="fainally()"> Listo </button>
+        <button ion-button full (click)="start_session();"> Listo </button>
     </div>
     
     
@@ -125,7 +143,34 @@
   
 </ion-content>
 
+<style>
+  
+  .list-md {
+    margin: 20vw 0 16px;
 
+  }
+
+  .avatar-img {
+    
+    border-radius: 50%;
+    margin: 4vw 9vw;
+    width: 81%;
+  }
+
+
+  .grid {
+    /* position: absolute; */
+    /* bottom: 0px; */
+  }
+
+  .ion_title {
+    text-align: center;
+    padding: 3px;
+    margin: 10px 0px;
+    background: white;
+  }
+
+</style>
 
 <!-- <ion-item>
   <ion-label  >Como te enteraste</ion-label>

@@ -106,7 +106,7 @@ export class InstructivePage {
       return new File([u8arr], filename, {type:mime});
   }
 
-  image: any;
+  image: any = 'assets/imgs/icon.png';
   file: any;
   getPicture(){
     let options: CameraOptions = {
@@ -120,21 +120,11 @@ export class InstructivePage {
 
     this.camera.getPicture(options)
       .then(data => {
-        // this.image = `data:image/jpeg;base64,${data}`;
+        this.image = `data:image/jpeg;base64,${data}`;
         //Usage example:
         this.file = this.dataURLtoFile(`data:image/jpeg;base64,${data}`, 'a.png');
         this.userForm.delete('img');
         this.userForm.append('img', this.file);
-        
-        this.rest.save_img_user(this.userForm, 4).subscribe( (data:any) => {
-            
-            if(data.error == true){
-                this.presentAlert("Alert", "La imagen no ha podido ser subida por favor intente de nuevo");
-            } else {
-              this.image = data.data.img;
-            }
-        })
-
       }).catch(e => {
         console.error(e)
       })
@@ -236,14 +226,27 @@ export class InstructivePage {
       if(response.error) {
         this.presentAlert("Alerta", response.message);
       }else {
-        this.rest.login_eyes({
-          email: this.forms.email,
-          pass: this.forms.pass
-        }).subscribe( (rp:any) => {
-          this.storage.set('xx-app-loap', JSON.stringify(rp));
-          this.navCtrl.setRoot(TabsPage);
+        this.rest.save_img_user(this.userForm, this.iduser).subscribe( (data:any) => {    
+            if(data.error == true){
+                this.presentAlert("Alert", "La imagen no ha podido ser subida por favor intente de nuevo");
+            } else {
+              this.image = data.data.img;
+              this.step_four = true; 
+              this.step_three = false;
+            }
         })
       }
+    })
+  }
+
+
+  start_session(){
+    this.rest.login_eyes({
+      email: this.forms.email,
+      pass: this.forms.pass
+    }).subscribe( (rp:any) => {
+      this.storage.set('xx-app-loap', JSON.stringify(rp));
+      this.navCtrl.setRoot(TabsPage);
     })
   }
   
