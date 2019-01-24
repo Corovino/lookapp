@@ -33,8 +33,10 @@
             <ion-avatar item-left>
               <img [src]="studio.img_studie">
             </ion-avatar>
-            <h2>{{studio.name_studie}}</h2>
-            <p>{{studio.desc_studie}} </p>
+            <h2><b>#{{studio.id}}</b></h2>
+            <p>{{studio.name_studie}}</p>
+            <button class="btn-look" style="padding: 0 1.6em; margin: 3vw;" ion-button item-end (click)="razon(studio)">Retomar</button>
+
           </ion-item>
         </ion-list>
 
@@ -43,9 +45,7 @@
 
             <ion-card text-center style="padding: 51px 5px;" >
               <img src="assets/imgs/encuesta.png" alt="Tareas en progreso" style="width: 43px; margin-left: 45%">
-              <p >
-                Revisa el listado de tareas y gana dinero con LookApp.
-              </p>
+              <p> Revisa el listado de tareas y gana dinero con LookApp. </p>
             </ion-card>
         </div>
     </div>
@@ -81,7 +81,7 @@
             </ion-avatar>
             <h2>{{studio.name_studie}}</h2>
             <p>{{studio.desc_studie}} </p>
-            <button ion-button clear item-end (click)="razon(studio)">Razón</button>
+            <button class="btn-look" ion-button item-end (click)="razon(studio)">Razón</button>
           </ion-item>
         </ion-list>
 

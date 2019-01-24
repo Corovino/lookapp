@@ -58,11 +58,10 @@ export class HomePage {
 
       const loding = this.loadingCtrl.create({
         content: 'Please wait...',
-        duration: 3000
+        duration: 1500
       })
 
       loding.present();
-
       this.get_studies();
 
       this.repo = new UtilitiesClass();
@@ -70,233 +69,52 @@ export class HomePage {
         this.get_studies();
       }, 60000);
 
-      if(time){
-        // console.log(time);
-      }
+      // time;
     }
 
-get_studies(){
-  this.rest.get_studies_available()
-  .subscribe((response : any) => {
-    this.list_studies = response.data;
-  })
-}
-
-
-doRefresh(element){
-  this.get_studies();
-  setTimeout(() => {
-    element.complete();
-  }, 2500);
-  console.log("Proceso to refresh")
-}
-
-
-take_taks(data: any) {
-  this.navCtrl.push(DetailTaskPage, {data: data});    
-}
-    // 
-    // 
-    //  >>>>>>>>>>>>>>>>< PROCESO TO GET LOCAL  NOTIFICACON
-    // 
-    // 
-    // 
-getSMS() {
-  this.sms.send('3004862620', "Hola a todos, otro tema");
-  // this.sms.send('3003463203', "Hola a todos, toma tu link  https://www.classmarker.com/online-test/start/?quiz=ngk5bb77097d61c5 ");
-}
-    // 
-    // 
-    //  >>>>>>>>>>>>>>>>< PROCESO TO GET LOCAL  NOTIFICACON
-    // 
-    // 
-    // 
-getNotification(){
-  this.localNoti.schedule({
-    id: 1,
-    text: 'Single ILocalNotification',
-    led: { color: '#FF00FF', on: 500, off: 500 },
-    vibrate: true,
-    actions: [
-      { id: 'yes', title: 'Yes' },
-      { id: 'no', title: 'No' }
-    ]
-    // sound: isAndroid ? 'file://sound.mp3' : 'file://beep.caf',
-    // data: { secret: key }
-  });
-}
-
-  
-
-/////////////////// LOAD MAP
-// 
-// Load map
-
-moveCamera(loc: LatLng){
-  
-  let options: CameraPosition<LatLng> = {
-    target: loc,
-    zoom: 20,
-    tilt: 100
-  }
-  this.map.moveCamera(options)   
-}
-
-//Adds a marker to the map
-createMarker(loc: LatLng, title: string, color){
-    let markerOptions: MarkerOptions = {
-      position: loc,
-      icon: color,
-      title: title
-    };
-    return this.map.addMarker(markerOptions);
-}
-
- //Load the map 
-initMap(){
-
-  
-  let controls: any = {compass: true, myLocationButton: false, indoorPicker: false, zoom: true, mapTypeControl: false, streetViewControl: false};
-  let element = this.mapElement.nativeElement;
-  this.map = this._googleMaps.create(element, {
-    'backgroundColor': 'white',
-      'controls': {
-        'compass': controls.compass,
-        'myLocationButton': controls.myLocationButton,
-        'indoorPicker': controls.indoorPicker,
-        'zoom': controls.zoom,
-        'mapTypeControl': controls.mapTypeControl,
-        'streetViewControl': controls.streetViewControl
-      },
-      'gestures': {
-        'scroll': true,
-        'tilt': true,
-        'rotate': true,
-        'zoom': true
-      },
-      zoom: 4,
-      center: {lat: 4.5876996, lng: -83.394205}
-    
-  })
-
-
-}
-
-
-mark: any = [];
-
-create_a_marker(){
-  let markerOptions: MarkerOptions = {
-    position: {"lat": 4.6724325744368, "lng": -74.06218524704866},
-    icon: 'red',
-    title: 'Jerry Lagos uno'
-  };
-  this.map.addMarker(markerOptions).then((marker: Marker) => {
-      this.mark.push(marker)
-  });
-}  
-
-
-markers: any = [];
-loadMap() {
-  //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
-  //Add 'implements AfterViewInit' to the class.
-  let loc: LatLng;
-  this.initMap();            
-
-  //once the map is ready move
-  //camera into position
-  this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
-    
-    //Get User location
-    let watch = this.geolocation.watchPosition({
-      enableHighAccuracy: true, // HABILITAR ALTA PRECISION
-      timeout: 4000 // frecuencia
-    });
-
-    // let watch = this.geolocation.watchPosition();
-
-
-    let polygono_4: ILatLng[] = [
-        {"lat": 4.6724325744368, "lng": -74.06218524704866},
-        {"lat": 4.6747636839902365, "lng": -74.06169172058992},
-        {"lat": 4.6747636839902365, "lng": -74.06287189255647},
-        {"lat": 4.67186583562157, "lng": -74.0632903171628},
-        {"lat": 4.671320482744213, "lng": -74.06231399308137},
-        {"lat": 4.671673358183879, "lng": -74.06046863327913},
-        {"lat": 4.6743252648956055, "lng": -74.05941720734529},
-        {"lat": 4.674528434754058, "lng": -74.06090851555757},
-        {"lat": 4.67186583562157, "lng": -74.06176682244234}
-    ];
-    
-    let a = 0;
-    watch.subscribe((resp: any) => {
-      //Once location is gotten, we set the location on the camera.
-      
-          
-      
-      loc = new LatLng(resp.coords.latitude, resp.coords.longitude);
-      this.moveCamera(loc);
-      let colorToPoly = Poly.containsLocation(loc, polygono_4) ? 'green' : 'blue';
-      
-      this.map.addPolygon({
-        points: polygono_4,
-        clickable: false,
-        strokeColor: '#AA00FF',
-        fillColor: 'red',
-        strokeWidth: 10
-      }).then((polyline: Polygon) => { 
-
-      })
-      a++;
-      this.createMarker(loc, "Me "+a , colorToPoly ).then((marker: Marker) => {
-        this.markers.push(marker);
-        marker.showInfoWindow();
-      }).catch(err => {
-        console.log(err);
-      });
-
-      if(a > 5) {
-        let b = a - 4;
-        this.markers[b].remove();
-      }
+  get_studies(){
+    this.rest.get_studies_available()
+    .subscribe((response : any) => {
+      this.list_studies = response.data;
     })
-    
-  });
+  }
 
-}
-mis_cordenandas: any = [];
-json_poligono : any;
-// loadMap(){
-//   // This lines are to run code in browser
-//   Environment.setEnv({
-//     'APY_KEY_FOR_BROWSER_RELEASE': '',
-//     'API_KEY_FOR_BROWSER_DEBUG':''
-//   })
+  doRefresh(element){
+    this.get_studies();
+    setTimeout(() => {
+      element.complete();
+    }, 1500);
+  }
 
-// }
 
-onMarkerAdd(marker: Marker) {
-  marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
-    alert("Marker" + marker.getTitle() + "is ciclek")
-  });
-}
-
-ionViewDidLoad(){
-  // Make Call to loadMap that get map
-  // this.loadMap();
-}
-
-OnButtonCLick(){
-  this.loadMap();
-}
-
+  take_taks(data: any) {
+    this.navCtrl.push(DetailTaskPage, {data: data});    
+  }
 
   // 
-  // 
-  //   <<<<<<<<<<<<<<<<<<<<<<<<<<<<< BUTTON TO CAMERA
-  // 
-  // 
+  //  >>>>>>>>>>>>>>>>< PROCESO TO GET LOCAL  NOTIFICACON
+  //
+
+  getNotification(){
+    this.localNoti.schedule({
+      id: 1,
+      text: 'Single ILocalNotification',
+      led: { color: '#FF00FF', on: 500, off: 500 },
+      vibrate: true,
+      actions: [
+        { id: 'yes', title: 'Yes' },
+        { id: 'no', title: 'No' }
+      ]
+    });
+  }
+
+  
+
+  /////////////////// LOAD MAP
+  ionViewDidLoad(){
+
+  }
+
 
   urltoFile(url, filename, mimeType){
     mimeType = mimeType || (url.match(/^data:([^;]+);/)||'')[1];
@@ -330,9 +148,7 @@ OnButtonCLick(){
     this.camera.getPicture(options)
       .then(data => {
         this.image = `data:image/jpeg;base64,${data}`;
-        //Usage example:
         var file = this.dataURLtoFile(this.image, 'a.png');
-      
       }).catch(e => {
         console.error(e)
       })
@@ -340,6 +156,15 @@ OnButtonCLick(){
 
 
 }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -354,7 +179,7 @@ export class DetailTaskPage {
   @ViewChild('map') mapElement: ElementRef;
 
   map: GoogleMap;
-
+  showMapa: any = true;
 
   constructor(
     public params: NavParams, 
@@ -371,89 +196,32 @@ export class DetailTaskPage {
     public loadingCtrl: LoadingController
   ) {
 
-    // estamos trabajando para que tengas nuevas aventuras. 
-    
     this.estudio = this.params.data.data;
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /////////////////// LOAD MAP
 // 
 // Load map
 
+
+
 moveCamera(loc: LatLng){
   
   let options: CameraPosition<LatLng> = {
     target: loc,
-    zoom: 20,
+    zoom: 10,
     tilt: 100
   }
-  this.map.moveCamera(options)   
+  this.map.moveCamera(options);
+
 }
 
 //Adds a marker to the map
 createMarker(loc: LatLng, title: string, color){
     let markerOptions: MarkerOptions = {
       position: loc,
-      icon: color,
-      title: title
+      icon: color
+      // , title: title
     };
     return this.map.addMarker(markerOptions);
 }
@@ -461,7 +229,6 @@ createMarker(loc: LatLng, title: string, color){
  //Load the map 
 initMap(){
 
-  
   let controls: any = {compass: true, myLocationButton: false, indoorPicker: false, zoom: true, mapTypeControl: false, streetViewControl: false};
   let element = this.mapElement.nativeElement;
   this.map = this._googleMaps.create(element, {
@@ -480,8 +247,8 @@ initMap(){
         'rotate': true,
         'zoom': true
       },
-      zoom: 4,
-      center: {lat: 4.5876996, lng: -83.394205}
+      zoom: 2,
+      center: {lat: 4.6724325744368, lng: -74.06218524704866}
     
   })
 
@@ -491,20 +258,14 @@ initMap(){
 
 mark: any = [];
 
-create_a_marker(){
-  let markerOptions: MarkerOptions = {
-    position: {"lat": 4.6724325744368, "lng": -74.06218524704866},
-    icon: 'red',
-    title: 'Jerry Lagos uno'
-  };
-  this.map.addMarker(markerOptions).then((marker: Marker) => {
-      this.mark.push(marker)
-  });
-}  
 
 
 markers: any = [];
 loadMap() {
+
+  
+  this.showMapa = true;
+
   //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
   //Add 'implements AfterViewInit' to the class.
   let loc: LatLng;
@@ -513,7 +274,6 @@ loadMap() {
   //once the map is ready move
   //camera into position
   this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
-    
     //Get User location
     let watch = this.geolocation.watchPosition({
       enableHighAccuracy: true, // HABILITAR ALTA PRECISION
@@ -522,40 +282,213 @@ loadMap() {
 
     // let watch = this.geolocation.watchPosition();
 
-
-    let polygono_4: ILatLng[] = [
-        {"lat": 4.6724325744368, "lng": -74.06218524704866},
-        {"lat": 4.6747636839902365, "lng": -74.06169172058992},
-        {"lat": 4.6747636839902365, "lng": -74.06287189255647},
-        {"lat": 4.67186583562157, "lng": -74.0632903171628},
-        {"lat": 4.671320482744213, "lng": -74.06231399308137},
-        {"lat": 4.671673358183879, "lng": -74.06046863327913},
-        {"lat": 4.6743252648956055, "lng": -74.05941720734529},
-        {"lat": 4.674528434754058, "lng": -74.06090851555757},
-        {"lat": 4.67186583562157, "lng": -74.06176682244234}
-    ];
     
+
+    let polines = [];
+    this.estudio.ubicaciones.forEach( (element, key) => {
+      let pol: ILatLng = element.json_poligono;
+      polines.push(pol);
+    });
+
+    polines.forEach(element => {
+      this.map.addPolygon({
+        points: element,
+        clickable: false,
+        strokeColor: '#AA00FF',
+        fillColor: '#0006',
+        strokeWidth: 2
+      }).then((polyline: Polygon) => { 
+
+      })
+    })
+
+
+    let polygono_4: ILatLng[] =[
+      {
+        "lat": 3.731277348047509,
+        "lng": -74.4477621744598
+      },
+      {
+        "lat": 3.8025341983214003,
+        "lng": -74.4120566080536
+      },
+      {
+        "lat": 3.8463816473523447,
+        "lng": -74.3845907877411
+      },
+      {
+        "lat": 3.9395499543125516,
+        "lng": -74.34888522133485
+      },
+      {
+        "lat": 3.9861302110535775,
+        "lng": -74.37085787758485
+      },
+      {
+        "lat": 4.131333935853243,
+        "lng": -74.3214194010223
+      },
+      {
+        "lat": 4.092980779745195,
+        "lng": -74.2555014322723
+      },
+      {
+        "lat": 4.205295485475365,
+        "lng": -74.2390219400848
+      },
+      {
+        "lat": 4.257338301316041,
+        "lng": -74.2060629557098
+      },
+      {
+        "lat": 4.314855212747135,
+        "lng": -74.2170492838348
+      },
+      {
+        "lat": 4.41892232083655,
+        "lng": -74.208809537741
+      },
+      {
+        "lat": 4.492855884524157,
+        "lng": -74.1758505533661
+      },
+      {
+        "lat": 4.550354591495906,
+        "lng": -74.1758505533661
+      },
+      {
+        "lat": 4.589020754654356,
+        "lng": -74.1731435153580
+      },
+      {
+        "lat": 4.624610967614542,
+        "lng": -74.2253285739518
+      },
+      {
+        "lat": 4.6492492991173116,
+        "lng": -74.1923695895768
+      },
+      {
+        "lat": 4.725659649274205,
+        "lng": -74.1539692570736
+      },
+      {
+        "lat": 4.8241934260003205,
+        "lng": -74.08805128832364
+      },
+      {
+        "lat": 4.8241934260003205,
+        "lng": -74.03311964769864
+      },
+      {
+        "lat": 4.785876418280698,
+        "lng": -73.9946674992611
+      },
+      {
+        "lat": 4.698286657043532,
+        "lng": -74.0221333195736
+      },
+      {
+        "lat": 4.65448763645624,
+        "lng": -74.0331196476984
+      },
+      {
+        "lat": 4.616161256332369,
+        "lng": -73.9946674992611
+      },
+      {
+        "lat": 4.555929911633641,
+        "lng": -74.0221333195736
+      },
+      {
+        "lat": 4.490217237718187,
+        "lng": -74.0495991398861
+      },
+      {
+        "lat": 4.424498644782596,
+        "lng": -74.1210102726986
+      },
+      {
+        "lat": 4.36972869119289,
+        "lng": -74.1100239445734
+      },
+      {
+        "lat": 4.320432310686761,
+        "lng": -74.0880512883236
+      },
+      {
+        "lat": 4.260176830775868,
+        "lng": -74.1374897648861
+      },
+      {
+        "lat": 4.199916630116982,
+        "lng": -74.1265034367611
+      },
+      {
+        "lat": 4.156088102391799,
+        "lng": -74.1265034367611
+      },
+      {
+        "lat": 4.1177361411903215,
+        "lng": -74.07706496019864
+      },
+      {
+        "lat": 4.073903066236784,
+        "lng": -74.1374897648861
+      },
+      {
+        "lat": 4.024588003178662,
+        "lng": -74.1265034367611
+      },
+      {
+        "lat": 3.997189453091576,
+        "lng": -74.2253803898861
+      },
+      {
+        "lat": 3.8821056175010944,
+        "lng": -74.28580519457364
+      },
+      {
+        "lat": 3.876625039876091,
+        "lng": -74.3242573430111
+      },
+      {
+        "lat": 3.8163363523695004,
+        "lng": -74.28031203051114
+      },
+      {
+        "lat": 3.8108553517458894,
+        "lng": -74.34622999926114
+      },
+      {
+        "lat": 3.6793009740476634,
+        "lng": -74.42862746019864
+      }
+    ]
+
+
+ 
     let a = 0;
     watch.subscribe((resp: any) => {
       //Once location is gotten, we set the location on the camera.
       
-          
       
       loc = new LatLng(resp.coords.latitude, resp.coords.longitude);
       this.moveCamera(loc);
-      let colorToPoly = Poly.containsLocation(loc, polygono_4) ? 'green' : 'blue';
-      
-      this.map.addPolygon({
-        points: polygono_4,
-        clickable: false,
-        strokeColor: '#AA00FF',
-        fillColor: 'red',
-        strokeWidth: 10
-      }).then((polyline: Polygon) => { 
-
+      let color = 'green';
+      polines.forEach(element => {
+        
+        
+        // console.log(Poly.containsLocation(loc, element), element, "JERRY LAGOS");
+        color = Poly.containsLocation(loc, element) ? 'green' : 'red';
       })
+      // let colorr = Poly.containsLocation(loc, polines[2]) ? 'green' : 'red';
+      
+    
+
+
       a++;
-      this.createMarker(loc, "Me "+a , colorToPoly ).then((marker: Marker) => {
+      this.createMarker(loc, "Me "+a , color ).then((marker: Marker) => {
         this.markers.push(marker);
         marker.showInfoWindow();
       }).catch(err => {
@@ -563,7 +496,7 @@ loadMap() {
       });
 
       if(a > 5) {
-        let b = a - 4;
+        let b = a - 5;
         this.markers[b].remove();
       }
     })
@@ -609,8 +542,13 @@ OnButtonCLick(){
 
   // public nombre: string = "Esta informacion es imperativa";
   ionViewDidLoad(){ 
+    // this.loadMap();
+  }
+  
+  showMap(){
+
     this.loadMap();
-   }
+  }
 
   presentAlert(title:string, message: string) {
     let alert = this.alertCtrl.create({
@@ -680,9 +618,8 @@ OnButtonCLick(){
           idstudie: data.id
         }).subscribe( (response: any) => {
           if(!response.error) {
-            
-            this.navCtrl.push(SkipsPage, {data: data, iduser: user.data.data._id})
-            // this.navCtrl.push(ProgressInTaskPage, {data: data, iduser: user.data.data._id})
+            // this.navCtrl.push(SkipsPage, {data: data, iduser: user.data.data._id})
+            this.navCtrl.push(ProgressInTaskPage, {data: data, iduser: user.data.data._id})
           } else {
             this.presentAlert("Alert", "Ya haz tomado esta tarea.");    
           }

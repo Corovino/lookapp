@@ -26,11 +26,6 @@ export class SkipsPage {
   }
 
   send_to_task(){
-    // this.navCtrl.push(ProcessingInstruction, {data: data, iduser: user.data.data._id})
-
-    console.log("ESTO ES TODO LO QUE PUEEDE PASAR");
-    console.log(this.navParams.data.data);
-    console.log(this.navParams.data.iduser);
 
     this.navCtrl.push(ProgressInTaskPage, {
         data: this.navParams.data.data, 

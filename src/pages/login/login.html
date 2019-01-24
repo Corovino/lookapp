@@ -28,13 +28,15 @@
     <!-- SWITH CONTROL -->
     <div [ngSwitch]="sesion">
       
-      <div *ngSwitchCase="'inicio'" padding>
+      <div *ngSwitchCase="'inicio'" style="padding: 12vw">
 
-          <ion-title class="ion_title">
-            Inicia sesión con facebook
+          <ion-title class="cls-ion-title">
+            <small>
+              Inicia sesión con facebook
+            </small>
           </ion-title>
           
-          <button style="background: white; color: black" ion-button icon-left full (click)="getfacebook()" >
+          <button class="btn-facebook" ion-button icon-left full (click)="getfacebook()" >
             <ion-icon name="logo-facebook">
                 <img src="assets/img/logo.png" alt="" width="20px">
             </ion-icon>
@@ -43,18 +45,20 @@
   
           <!-- <ion-button >Facebook</ion-button> -->
           <ion-item>
-            <ion-label>Acepto <a href="http://lookapp.com.co/autorizacion-tratamiento-la-informacion/" target="_blank">términos y condiciones</a></ion-label>
+            <ion-label>Acepto <br> <a href="http://lookapp.com.co/autorizacion-tratamiento-la-informacion/" target="_blank">términos y condiciones</a></ion-label>
             <ion-checkbox color="magenta" [(ngModel)]="forms.check1f" checked="false" ></ion-checkbox>
           </ion-item>
   
           <ion-item>
-            <ion-label>He leido y aceptado las <a href="http://lookapp.com.co/autorizacion-tratamiento-la-informacion/"> codiciones de tratamiento de datos </a> </ion-label>
+            <ion-label>He leido y aceptado las <br> <a href="http://lookapp.com.co/autorizacion-tratamiento-la-informacion/"> codiciones de tratamiento de datos </a> </ion-label>
             <ion-checkbox color="magenta" [(ngModel)]="forms.check2f" checked="false" ></ion-checkbox>
           </ion-item>
           
-        <hr>
-          <ion-title class="ion_title">
-            Inicia sesión con tu correo
+          <hr>
+          <ion-title class="cls-ion-title" style="margin-top: 12vw;" >
+            <small>
+              Inicia sesión con tu correo
+            </small>
           </ion-title>
           
   
@@ -64,17 +68,55 @@
           <ion-item>
             <ion-input type="password" [(ngModel)]="forms.pass" placeholder="Password"></ion-input>
           </ion-item>
+
+          <ion-item>
+            <ion-label>Acepto <br> <a href="http://lookapp.com.co/autorizacion-tratamiento-la-informacion/" target="_blank">términos y condiciones</a></ion-label>
+            <ion-checkbox color="magenta" [(ngModel)]="forms.check1" checked="false" ></ion-checkbox>
+          </ion-item>
+  
+          <ion-item>
+            <ion-label>He leido y aceptado las <br> <a href="http://lookapp.com.co/autorizacion-tratamiento-la-informacion/"> codiciones de tratamiento de datos </a> </ion-label>
+            <ion-checkbox color="magenta" [(ngModel)]="forms.check2" checked="false" ></ion-checkbox>
+          </ion-item>
   
   
-          <button ion-button full (click)="saveSession()">Iniciar sesión</button>
+          <button class="btn-look" ion-button full (click)="saveSession()">Iniciar sesión</button>
  
 
       </div>
 
-      <div *ngSwitchCase="'registro'" padding>
+      <div *ngSwitchCase="'registro'" style="padding: 12vw">
 
-        <ion-title>
-          Registrate con tu correo
+        <ion-title class="cls-ion-title">
+          <small>
+            Registrate con facebook
+          </small>
+        </ion-title>
+
+        <button class="btn-facebook" ion-button icon-left full (click)="getfacebook()" >
+          <ion-icon name="logo-facebook" style="color:#4267b2 ">
+              <img src="assets/img/logo.png" alt="" width="20px">
+          </ion-icon>
+          Facebook
+        </button>
+        <ion-list>
+          <ion-item>
+            <ion-label>Acepto <a href="http:81/lookapp.com.co/tyc.html" target="_blank">términos y condiciones</a></ion-label>
+            <ion-checkbox color="magenta" [(ngModel)]="forms.check1f" checked="false" ></ion-checkbox>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>He leido y aceptado las <br> <a href="http:81/lookapp.com.co/tyc.html"> codiciones de tratamiento de datos </a> </ion-label>
+            <ion-checkbox color="magenta" [(ngModel)]="forms.check2f" checked="false" ></ion-checkbox>
+          </ion-item>
+        </ion-list>
+
+        <hr>
+
+        <ion-title class="cls-ion-title" style="margin-top: 12vw;" >
+          <small>
+            Registrate con tu correo
+          </small>
         </ion-title>
 
         <ion-list >
@@ -87,47 +129,19 @@
           <ion-item>
             <ion-input type="password" placeholder="Repita la contraseña" [(ngModel)]="forms.passed"></ion-input>
           </ion-item>
-
           <ion-item>
             <ion-label>Acepto <a href="http:81/lookapp.com.co/tyc.html" target="_blank">términos y condiciones</a></ion-label>
             <ion-checkbox color="magenta" [(ngModel)]="forms.check1" checked="false" ></ion-checkbox>
           </ion-item>
 
           <ion-item>
-            <ion-label>He leido y aceptado las <a href="http:81/lookapp.com.co/tyc.html"> codiciones de tratamiento de datos </a> </ion-label>
+            <ion-label>He leido y aceptado las <br> <a href="http:81/lookapp.com.co/tyc.html"> codiciones de tratamiento de datos </a> </ion-label>
             <ion-checkbox color="magenta" [(ngModel)]="forms.check2" checked="false" ></ion-checkbox>
           </ion-item>
 
-          <!-- {{forms | json}} -->
-          <button ion-button full   (click)="step_one()">Registrarse</button>
+          <button class="btn-look" ion-button full  (click)="step_one()">Registrarse</button>
 
-          <ion-title>
-            Registrate con facebook
-          </ion-title>
-          
-
-          <button style="background: white; color: black" ion-button icon-left full (click)="getfacebook()" >
-            <ion-icon name="logo-facebook">
-                <img src="assets/img/logo.png" alt="" width="20px">
-            </ion-icon>
-            Facebook
-          </button>
-
-          <!-- <ion-button >Facebook</ion-button> -->
-          <ion-item>
-            <ion-label>Acepto <a href="http:81/lookapp.com.co/tyc.html" target="_blank">términos y condiciones</a></ion-label>
-            <ion-checkbox color="magenta" [(ngModel)]="forms.check1f" checked="false" ></ion-checkbox>
-          </ion-item>
-
-          <ion-item>
-            <ion-label>He leido y aceptado las <a href="http:81/lookapp.com.co/tyc.html"> codiciones de tratamiento de datos </a> </ion-label>
-            <ion-checkbox color="magenta" [(ngModel)]="forms.check2f" checked="false" ></ion-checkbox>
-          </ion-item>
-
-        </ion-list>
-
-
-          
+        </ion-list>          
       </div>
     </div>
   </ion-content>
@@ -136,12 +150,40 @@
 
 <style>
  
-  .ion_title {
+  .cls-ion-title {
     text-align: center !important;
     padding: 3px;
     margin: 10px 0px;
     background: white;
- }
+    font-size: 1.8rem;
+  }
+
+  .btn-facebook {
+    background: white; color: black; border-radius: 50px;
+    border: 1px solid lightgray;
+  }
+
+
+  .toolbar-title-md {
+    padding: 0 12px;
+    font-size: 2.5rem !important;
+    font-weight: 500;
+    color: #424242;
+  }
+
+
+
+  .item.item-md .checkbox-md {
+    position: static;
+    display: block;
+    margin: 9px 6px 9px 4px;
+  }
+
+  small {
+    font-size: 70% !important;
+  }
+
+
  /* [ion-input] {
     border: 1px solid #0006 !important;
     border-radius: 23px !important;

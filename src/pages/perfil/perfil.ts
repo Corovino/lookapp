@@ -1,5 +1,6 @@
+import { Camera, CameraOptions } from '@ionic-native/camera';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { ServicesProvider } from '../../providers/services/services';
 import { Storage } from '@ionic/storage';
 
@@ -21,12 +22,17 @@ export class PerfilPage {
     public navCtrl: NavController, 
     public navParams: NavParams,
     public rest: ServicesProvider,
-    public storate: Storage) {
+    public storate: Storage,
+    public camera: Camera,
+    public alertCtrl: AlertController) {
   }
   info_user: any;
+  iduser: number;
+
   ionViewDidLoad() {
     this.storate.get('xx-app-loap').then((loap: any) => {
         let user = JSON.parse(loap);
+        this.iduser = user.data.data._id;
         this.rest.get_info_user(user.data.data._id).subscribe((response:any) => {
           
           this.info_user = response.data;
@@ -45,30 +51,72 @@ export class PerfilPage {
   //   console.log("ioncViewDidLoad ciclco dos")
   // }
 
-  ionViewWillEnter(){
-    console.log("ionViewWillEnter ciclo tres")
-  }
-
-  ionViewDidEnter(){
-    console.log("ionViewWillEnter ciclo cuatro")
-  }
-
-  ionViewCanLeave(){
-    console.log("ionViewCanleacer ciclo five")
-  }
-
-  ionViewDidLeave(){
-    console.log("ionViewDidLeave ciclo sis")
-  }
-
-  ionViewWillUnload(){
-   console.log("ionViewWillUnload ciclo siente")
-  }
-
-
-
   edit_perfil(){
 
   }
+
+  
+  dataURLtoFile(dataurl, filename) {
+      var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+          bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+      while(n--){
+          u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, {type:mime});
+  }
+
+
+  image: any = 'assets/imgs/icon.png';
+  file: any = false;
+  userForm: any = new FormData();
+  getPicture(){
+    let options: CameraOptions = {
+      destinationType: this.camera.DestinationType.DATA_URL,
+      targetHeight: 500,
+      targetWidth: 500,
+      quality: 100,
+      allowEdit: true,
+      saveToPhotoAlbum: true
+    }
+
+    this.camera.getPicture(options)
+      .then(data => {
+        this.image = `data:image/jpeg;base64,${data}`;
+        //Usage example:
+        this.file = this.dataURLtoFile(`data:image/jpeg;base64,${data}`, 'a.png');
+        this.userForm.delete('img');
+        this.userForm.append('img', this.file);
+      }).catch(e => {
+        console.error(e)
+      })
+  }
+
+  save_img(){
+
+    this.rest.save_img_user(this.userForm, this.iduser).subscribe( (data:any) => {    
+        if(data.error == true){
+            this.presentAlert("Alert", "La imagen no ha podido ser subida por favor intente de nuevo");
+        } else {
+          this.image = data.data.img;
+          
+        }
+    })
+  }
+
+
+
+    
+  presentAlert(title:string, message: string) {
+    let alert = this.alertCtrl.create({
+      title: title,
+      subTitle: message,
+      buttons: ['Aceptar']
+    });
+    alert.present();
+  }
+
+
+
+
 
 }

@@ -16,24 +16,30 @@
 <ion-content *ngIf="info_user">
   <ion-card class="card-background-page">
     
-    <img [src]="info_user.img"/>
+    <!-- <img [src]="info_user.img"/> -->
+
+    <img [src]="info_user.img"  class="avatar-img2" (click)="getPicture()"/>
+
+    <button *ngIf="file" ion-button full (click)="save_img()">Guardar</button>
+
+
     <div class="card-title" style="text-align: center">
-      <h4>{{info_user.name}}</h4>
+      <h1>{{info_user.name +' '+ info_user.lname}}</h1>
     </div>
     <div class="card-subtitle">
       <ion-item-divider>
-        <h4>Mis datos básicos</h4>
+        <h2>Mis datos básicos</h2>
       </ion-item-divider>
 
-      <ion-item >
-         <span> {{info_user.name}} </span> <br>
-         <span> {{info_user.tcedula +' '+ info_user.lname}} </span> <br>
-         <span> {{info_user.cedula == null ? 'Por ingresar' : info_user.cedula}} </span> <br>
-         <span> {{info_user.email}} </span> <br>
-         <span> {{info_user.birth_day | date:'dd/MMM/yyyy'}} </span> <br>
-         <span> {{info_user.sex == 'M' ? "Hombre": "Mujer"}} </span> <br>
-         <span> {{info_user.phone}} </span> <br>
-         <span> {{info_user.level_studie}} </span> <br>
+      <ion-item style="font-size: 2.0rem;">
+         <span> {{info_user.name}} </span> <br> <br>
+         <span> {{info_user.lname}} </span> <br> <br>
+         <span> {{info_user.cedula == null ? 'Por ingresar' : info_user.cedula}} </span> <br> <br>
+         <span> {{info_user.email}} </span> <br> <br>
+         <span> {{info_user.birth_day | date:'dd/MMM/yyyy'}} </span> <br> <br>
+         <span> {{info_user.sex == 'M' ? "Hombre": "Mujer"}} </span> <br> <br>
+         <span> {{info_user.phone}} </span> <br> <br>
+         <span> {{info_user.level_studie}} </span> <br> <br>
       </ion-item>
 
       <ion-item-divider>
@@ -41,8 +47,23 @@
       </ion-item-divider>
 
 
-      <button ion-button full (click)="edit_perfil()">EDITAR MI PERFIL</button>
+      <button class="btn-look" ion-button full (click)="edit_perfil()">EDITAR MI PERFIL</button>
   
     </div>
   </ion-card>
 </ion-content>
+
+<style>
+  
+  ion-item spam {
+    color: #8a8585;
+  }
+
+  .avatar-img2 {
+    border-radius: 50%;
+    margin: 18vw 25vw 2vw;
+    width: 48%;
+  }
+
+
+</style>

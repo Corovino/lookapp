@@ -15,27 +15,27 @@
 
 <ion-content padding>
 
-    <ion-slides pager>
-        <ion-slide *ngFor="let slide of loap_instructives">
-          <ion-toolbar>
-            <ion-buttons end>
-              <button ion-button color="primary">Saltar</button>
-            </ion-buttons>
-          </ion-toolbar>
-          <img [src]="slide.img" class="slide-image"/>
-          <h2 class="slide-title" [innerHTML]="slide.title"></h2>
-          <p [innerHTML]="slide.description"></p>
-        </ion-slide>
-        <ion-slide>
-          <ion-toolbar>
-          </ion-toolbar>
-          <img src="assets/imgs/like.png" class="slide-image"/>
-          <h2 class="slide-title">¿Estas listo para empezar?</h2>
-          <button ion-button large clear icon-end color="primary" (click)="send_to_task()">
-              Continuar
-            <ion-icon name="arrow-forward"></ion-icon>
-          </button>
-        </ion-slide>
-    </ion-slides>
+  <ion-slides pager>
+      <ion-slide *ngFor="let slide of loap_instructives">
+        <ion-toolbar>
+          <ion-buttons end>
+            <button ion-button color="primary">Saltar</button>
+          </ion-buttons>
+        </ion-toolbar>
+        <img [src]="slide.img" class="slide-image"/>
+        <h2 class="slide-title" [innerHTML]="slide.title"></h2>
+        <p [innerHTML]="slide.description"></p>
+      </ion-slide>
+      <ion-slide>
+        <ion-toolbar>
+        </ion-toolbar>
+        <img src="assets/imgs/like.png" class="slide-image"/>
+        <h2 class="slide-title">¿Estas listo para empezar?</h2>
+        <button ion-button large clear icon-end color="primary" (click)="send_to_task()">
+            Continuar
+          <ion-icon name="arrow-forward"></ion-icon>
+        </button>
+      </ion-slide>
+  </ion-slides>
 
 </ion-content>

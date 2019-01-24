@@ -40,7 +40,7 @@ export class MyTasksPage {
     this.get_task();
     let time = setInterval(() => {
       this.get_task();
-    }, 7000);
+    }, 60000);
 
   }
 

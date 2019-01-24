@@ -13,7 +13,7 @@
         <ion-card-content padding class="ion-content-card">
             <ion-row >
                 <h4 style="width: 100%; text-align: center; margin: 6px">
-                    <b>PAGO:</b> <span style="color: red">{{estudio.price_by_task | number}} COP</span>
+                    <b>PAGO:</b> <span style="color: #e5355b">{{estudio.price_by_task | number}} COP</span>
                 </h4>
                 <hr>
 
@@ -25,29 +25,27 @@
                 
                 <h4 style="font-weight: bold; margin: 8px 0px;">Dónde</h4>
                 <div text-left>
-                    <ion-item >
+                    <ion-item style="width: 72vw;">
                         <ion-avatar item-left style="width: 44px" >
                             <img src="assets/imgs/ubication.svg" width="33px" />
                         </ion-avatar>
-                        <span>
-                            <div *ngIf="estudio.type_ubication == 1 || estudio.type_ubication == 2 ">
-                                <div *ngFor="let item of estudio.detail_studie[0].ubicaciones" >
-                                    {{item.name}}
-
-                                </div> 
+                        
+                        <div *ngIf="estudio.type_ubication == 1 || estudio.type_ubication == 2 ">
+                            <div *ngFor="let item of estudio.ubicaciones" >
+                                {{item.name}}
+                            </div> 
+                        </div>
+                        
+                        <div *ngIf="estudio.type_ubication == 3">
+                            <div *ngFor="let item of estudio.ubicaciones" >
+                                <b>Lugar:</b> {{item.ciudad}}
                             </div>
-                            
-                            <div *ngIf="estudio.type_ubication == 3">
-                                <div *ngFor="let item of estudio.detail_studie[0].ubicaciones" >
-                                    <b>Lugar:</b> {{item.ciudad}}
-                                </div>
-                            </div>
-
-                            <button ion-button full (click)="showMap()"  >VER UBICACIONES</button>
-                        </span>
-
-
-
+                        </div>
+                        
+                        <button 
+                            style="height: 10vw; font-size: 1.4rem;" 
+                            class="btn-look" 
+                            ion-button full (click)="showMap();" >VER UBICACIONES</button>
                     </ion-item>
                 </div>
                 <hr>
@@ -67,23 +65,29 @@
         </ion-card-content>
         <ion-row>
             <ion-col>
-                <button ion-button icon-start clear full (click)="start_task(estudio)">
+                <button class="btn-look cls-ajs" ion-button full (click)="start_task(estudio)">
                     Aceptar tarea
                 </button>
             </ion-col>
         </ion-row>
     </ion-card>
-
-
-    <!-- <div #map id="map" style="height:100%"></div> -->
-
+    <div *ngIf="showMapa">
+        <div #map id="map" style="height:70vw"></div>
+    </div>
     
 </ion-content>
 
 <style>
 
+    .cls-ajs {
+
+        padding: 10px;
+        margin: 0px 5vw;
+        width: 90vw;
+    }
+
     #map {
-        height: 90%;
+        height: 60%;
     }
 
     .card-md {
@@ -102,9 +106,8 @@
     }
 
     .content-hidden {
-        height: 50vw;
+        height: auto;
         width: 100%;
-        overflow: hidden;
     }
 
     hr {

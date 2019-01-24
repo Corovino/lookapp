@@ -12,13 +12,18 @@ import { ServicesProvider } from '../../providers/services/services';
 declare var Formio;
 
 
+
 @IonicPage()
 @Component({
   selector: 'page-progress-in-task',
   templateUrl: 'progress-in-task.html',
 })
 export class ProgressInTaskPage {
+  
+  @ViewChild('idform') idform:any;
 
+
+  
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -26,11 +31,6 @@ export class ProgressInTaskPage {
     public alertCtrl: AlertController,
     public rest: ServicesProvider
   ) {
-  
-    
-    console.log("OTRA COSA DESDE EL CONTROLADOR")
-    console.log(this.navParams.data);
-
     
   }
   
@@ -43,14 +43,27 @@ export class ProgressInTaskPage {
     });
     alert.present();
   }
+  
+  
+  showInstructive: boolean = false ;
+  
+  gtFunction() {
+    this.showInstructive = false
+    this.loadForm(
+      this.navParams.data.data.form_studie, 
+      this.navParams.data.iduser,
+      this.navParams.data.data.id,
+      this.navParams.data.data.price_by_task
+    );
+  }
+
 
 
   name_studie: string;
+  loap_instructives: string;
   ionViewDidLoad() {
-    console.log("OTRA COSA ")
-    console.log(this.navParams.data);
 
-
+    this.loap_instructives = this.navParams.data.data.loap_instructives;
     this.name_studie = this.navParams.data.data.name;
 
     
@@ -64,10 +77,18 @@ export class ProgressInTaskPage {
   }
 
   loadForm(form_studie: any, iduser: number, idtask: number, price: any ){
+
+    console.log(document.getElementById('formio'), "sdsfsd sdf sdf ");
     form_studie.owner = '5bdc91b1851af95d8e5b537d';
     Formio.icons = 'fontawesome';
 
-    Formio.createForm(document.getElementById('formio'), 
+
+
+    console.log(this.idform.nativeElement);
+
+    var data = document.createElement('div');
+    // document.getElementById('formio')
+    Formio.createForm( this.idform.nativeElement,
     form_studie
     ).then(form => {
 

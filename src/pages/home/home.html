@@ -1,14 +1,9 @@
-<!-- <ion-header>
-  <ion-navbar>
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>Home</ion-title>
-  </ion-navbar>
-</ion-header> -->
-
-<ion-content padding>
-  
+<ion-header>
+    <ion-navbar>
+      <ion-title>Listado de tareas</ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content padding>  
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content 
     pullingIcon="arrow-dropdown"
@@ -17,49 +12,20 @@
   </ion-refresher>
       
   <ion-item  *ngFor="let studie of list_studies"  >
-    <ion-avatar item-left>
+    <ion-avatar item-left style="margin: 8px 3px 8px 0;">
       <img [src]="studie.img" (click)="take_taks(studie)" />
     </ion-avatar>
-        <h2>{{studie.name}}</h2>
-        <span>
-          <b>Pago:</b> <span style="color: red">{{studie.price_by_task | number}} </span> <br>
-
-          {{studie.description}} <br>
-        </span>
-        <button ion-button clear item-end (click)="take_taks(studie)">Ver</button>
+      <ion-title>
+        {{studie.name}}
+      </ion-title>
+      <p>
+        <b>Pago:</b> <span style="color: red">{{studie.price_by_task | number}} </span> <br>
+        <small style="color: gray">
+          {{studie.description}}
+        </small>
+      </p>
+      <button ion-button clear item-end (click)="take_taks(studie)">Ver</button>
   </ion-item>
-
-
-  <!-- <div id="idform"></div> -->
-  <!-- <div id="formio"></div> -->
-
-  <!-- <h3>Ionic Menu Starter</h3>
-  <h1>{{nombre}}</h1>
-  <h4>Estas son mis coordenada {{mis_cordenandas | json}}</h4> -->
-  <!-- <button ion-button (click)="changeName()">Cambiar</button> -->
-  <!-- <button ion-button full (click)="getPicture()">Tomar foto</button> -->
-  <!-- <img [src]="image" *ngIf="image"/> -->
-  <!-- <button ion-button full (click)="getSMS()">Mensaje</button> -->
-  <!-- <button ion-button full (click)="getNotification()">Get Notification</button> -->
-  <!-- <button ion-button full (click)="loadMap()">Cargar Mapa</button> -->
-  <!-- <button ion-button full (click)="loadForm()">Cargar Form</button> -->
-      <!-- <button ion-button (click)="create_a_marker()"> create_a_marker </button> -->
-      <!-- <button ion-button (click)="create_ad_marker()"> create_ad_marker </button> -->
-      <!-- <button ion-button (click)="conocer_markers()"> conocer_markers </button> -->
-      <!-- <button ion-button (click)="deleteMarker()"> deleteMarker </button> -->
-    
-  <!-- <button ion-button secondary menuToggle>Toggle Menu</button> -->
-  <!-- <div id="map_canvas">
-    <button mat-button (click)="OnButtonCLick($event)"> Star Demo</button>
-  </div> -->
-
-  <!-- <div #map id="map" style="height:100%"></div> -->
-  <!-- This is my name by this component -->
-  <!-- <ion-item> 
-    <ion-label >Nombre</ion-label>
-    <ion-input type="" [(ngModel)]="name" ></ion-input>
-  </ion-item>
-  <user nombre="{{name}}"></user> -->
   
 </ion-content>
 

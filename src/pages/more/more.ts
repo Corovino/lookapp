@@ -32,13 +32,13 @@ export class MorePage {
   }
   
   cerrarSesion(){
-    console.log(this.storage.remove('xx-app-loap'));
+    
     this.storage.remove('xx-app-loap');
-    // console.log(data, "asdasdf");
+    
     this.splashscreen.show();
     window.location.reload();
     
-    // this.navCtrl.setRoot(MyApp);
+    
   }
 
   action_click(option) {
@@ -47,7 +47,7 @@ export class MorePage {
           this.cerrarSesion();
         break;
 
-      case !5:
+      case 4:
           this.presentAlert("Alerta", "No se ha programado esta funcionalidad");
       break
     
