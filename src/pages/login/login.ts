@@ -93,9 +93,9 @@ export class LoginPage {
   getfacebook() {
 
     if(this.forms.check1f == false){
-      this.presentAlert("Alerta", "Para continuar debe aceptar términos y condiciones.");
+      this.presentAlert("", "Para continuar debe aceptar términos y condiciones.");
     } else if(this.forms.check2f == false) {
-      this.presentAlert("Alerta", "Para continuar debe aceptar Habbeas Data.");
+      this.presentAlert("", "Para continuar debe aceptar Habbeas Data.");
     } else {
       
       this.fb.login(['public_profile', 'user_friends', 'email'])
@@ -105,19 +105,23 @@ export class LoginPage {
 
         this.fb.api("/me?fields=name,email,picture,gender", permissions)
         .then(user =>{
+
           this.rest.connect_facebook(user).subscribe((response:any) => {
-            console.log(response);
+
+            let iduser = response.data == null ? '' : response.data
+            this.navCtrl.setRoot(InstructivePage, {
+              userfacebook: user,
+              iduser: iduser
+            });
+
           })
           // console.log(user, "this is my usere")
         }).then(da => {
-          console.log("sEGUNDO",da)
+          console.log("Segundo",da)
         }).catch(e => {
-          console.log("ERRO", e);
-        })
-
-        
+          console.log("Error no connecto with facebook", e);
+        })        
         console.log('Logged into Facebook!', res);
-
       })
       .catch(e => {
         console.log('Error logging into Facebook', e); 
@@ -167,7 +171,7 @@ export class LoginPage {
             },
             error => {
               this.presentAlert("Información", "Es necesario tener la geolocalización activa para realizar el registro");
-              console.log('Error requesting location permissions', error)
+              
             }
           );
         }
@@ -184,13 +188,39 @@ export class LoginPage {
   ionViewDidLoad() {
   }
 
+  reset: any = {
+    code: '',
+    pass: '',
+    repass: ''
+  }; 
+
+  recuperacuenta: boolean = false;
+  changePass() {
+    this.forms.pass = '';
+    if(this.reset.code == '' || this.reset.pass == '' || this.reset.repass == '') {
+      this.presentAlert("", "Es necesario que ingreses los datos necesarios");
+    } else {
+      this.rest.changepass(this.reset).subscribe((resp: any) => {
+          if(resp.error) {
+            this.presentAlert("", resp.message)
+          } else {
+            this.presentAlert("", "Se ha guardado de forma correcta");
+            this.recuperacuenta = false;
+
+          }
+      })
+    }
+  }
+
   saveSession(){
     
     if(this.validate(this.forms.email) || this.validate(this.forms.pass)) {
       this.presentAlert("Alerta", "Usuario y contraseña requeridos")
     } else {
       this.rest.login_eyes(this.forms).subscribe((response: any) => {
-        if(response.error){
+        if(response.error == "mail"){
+          this.recuperacuenta = true;
+        } else if(response.error) {
           this.presentAlert("Error", response.message);
         }else {
           this.storage.set('xx-app-loap', JSON.stringify(response));

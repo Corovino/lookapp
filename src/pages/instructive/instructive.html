@@ -33,9 +33,18 @@
           <ion-item>
             <ion-input placeholder="Apellido" type="text" [(ngModel)]="register.lname" ></ion-input>
           </ion-item>
+
+
+          <!-- MOC PARA CORREO -->
+          <ion-item *ngIf="this.userfacebook">
+            <ion-input placeholder="Correo  electronico" type="text" [(ngModel)]="register.email"></ion-input>
+          </ion-item>
+          <ion-item *ngIf="this.userfacebook">
+            <ion-input placeholder="Contraseña" type="password" [(ngModel)]="register.pass"></ion-input>
+          </ion-item>
           <ion-grid>
             <ion-row>
-              <button ion-button full (click)="step_two = true; step_one = false"  >Siguiente</button>
+              <button class="btn-look btn-width-look" ion-button full (click)="step_two = true; step_one = false"  >Siguiente</button>
             </ion-row>
           </ion-grid>
           <!-- <button ion-button  (click)="step_one == true"  >Atras</button> -->
@@ -50,7 +59,7 @@
       <ion-list>
         <!-- MOC FECHA DE NACIMIENTO -->
         <ion-item>
-          <ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="register.birth_day" placeholder="Fecha de nacimiento"></ion-datetime>
+          <ion-datetime class="btn-birthday" displayFormat="MM/DD/YYYY" [(ngModel)]="register.birth_day" placeholder="Fecha de nacimiento"></ion-datetime>
         </ion-item>
         <!-- MOC SEXO -->
         <ion-item>
@@ -79,18 +88,21 @@
             <ion-option value="Profesional" >Profesional</ion-option>
           </ion-select>
         </ion-item>
+
+        <ion-item>
+          <ion-grid>
+            <ion-row>
+                <ion-col width-50>
+                  <button class="btn-look btn-width-look" ion-button full (click)="step_one = true; step_two = false"  >Atras</button>
+                </ion-col>
+                <ion-col width-50>
+                  <button class="btn-look btn-width-look" ion-button full (click)="step_three = true; step_two = false"  >Siguiente</button>
+                </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
       </ion-list>
 
-      <ion-grid>
-        <ion-row>
-            <ion-col width-50>
-              <button ion-button full (click)="step_one = true; step_two = false"  >Atras</button>
-            </ion-col>
-            <ion-col width-50>
-              <button ion-button full (click)="step_three = true; step_two = false"  >Siguiente</button>
-            </ion-col>
-        </ion-row>
-      </ion-grid>
     </div>
 
     <div *ngIf="step_three">
@@ -114,10 +126,10 @@
       <ion-grid>
         <ion-row>
           <ion-col width-50>
-            <button ion-button full (click)="step_two = true; step_three = false">Atras</button>
+            <button class="btn-look btn-width-look" ion-button full (click)="step_two = true; step_three = false">Atras</button>
           </ion-col>
           <ion-col width-50>
-            <button ion-button full (click)="fainally();">Finalizar</button>
+            <button class="btn-look btn-width-look" ion-button full (click)="fainally();">Finalizar</button>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -133,7 +145,7 @@
               <p>Así de sencillo puedes ganar con Lookapp</p>
             </div>
         </div>
-        <button ion-button full (click)="start_session();"> Listo </button>
+        <button class="btn-look btn-width-look" ion-button full (click)="start_session();"> Listo </button>
     </div>
     
     
@@ -161,6 +173,17 @@
     margin: 10px 0px;
     background: white;
   }
+
+
+  .btn-birthday {
+    border: 1px solid lightgray;
+    border-radius: 28px;
+    width: 77vw;
+    margin-left: 2vw;
+    padding-left: 19px;
+    margin-bottom: 11px;
+  }
+
 
 </style>
 

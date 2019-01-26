@@ -30,6 +30,7 @@
       
       <div *ngSwitchCase="'inicio'" style="padding: 12vw">
 
+        <div *ngIf="!recuperacuenta">
           <ion-title class="cls-ion-title">
             <small>
               Inicia sesión con facebook
@@ -66,7 +67,7 @@
             <ion-input type="text" [(ngModel)]="forms.email" placeholder="Correo electronico"></ion-input>
           </ion-item>
           <ion-item>
-            <ion-input type="password" [(ngModel)]="forms.pass" placeholder="Password"></ion-input>
+            <ion-input type="password" [(ngModel)]="forms.pass" placeholder="Contraseña"></ion-input>
           </ion-item>
 
           <ion-item>
@@ -79,18 +80,33 @@
             <ion-checkbox color="magenta" [(ngModel)]="forms.check2" checked="false" ></ion-checkbox>
           </ion-item>
   
-  
           <button class="btn-look" ion-button full (click)="saveSession()">Iniciar sesión</button>
- 
+        </div>
+
+        <div *ngIf="recuperacuenta">
+            <p>
+              Por tu seguridad debes cambiar tu contraseña, hemos enviado un código de verificación a tu correo electrónico, por favor ingresa en los siguentes campos tu código seguido de tu nueva contraseña.
+            </p>
+            <ion-item>
+              <ion-input type="text" [(ngModel)]="reset.code" placeholder="Código de verificación"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input type="password" [(ngModel)]="reset.pass" placeholder="Nueva contraseña"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input type="password" [(ngModel)]="reset.repass" placeholder="Repita la contraseña"></ion-input>
+            </ion-item>
+
+            <button class="btn-look" ion-button full (click)="changePass()">Cambiar contraseña</button> <br>
+            <p text-center> <a href="#" (click)="recuperacuenta = false">Volver atras</a></p>
+        </div>
 
       </div>
 
       <div *ngSwitchCase="'registro'" style="padding: 12vw">
 
         <ion-title class="cls-ion-title">
-          <small>
-            Registrate con facebook
-          </small>
+          <small> Registrate con facebook </small>
         </ion-title>
 
         <button class="btn-facebook" ion-button icon-left full (click)="getfacebook()" >
@@ -182,12 +198,6 @@
   small {
     font-size: 70% !important;
   }
-
-
- /* [ion-input] {
-    border: 1px solid #0006 !important;
-    border-radius: 23px !important;
- } */
 
 
 </style>

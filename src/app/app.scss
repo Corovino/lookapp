@@ -28,6 +28,14 @@
     border-radius: .25em;
 }
 
+.item-md.item-input.ng-valid.item-input-has-value:not(.input-has-focus):not(.item-input-has-focus) .item-inner, .item-md.item-input.ng-valid.input-has-value:not(.input-has-focus):not(.item-input-has-focus) .item-inner {
+    border-bottom-color: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+
+
 
 
 // .text-input-md, .cls-button, [input] {
@@ -51,6 +59,10 @@
 
 .btn-look {
     border-radius: 23px;
+}
+
+.btn-width-look {
+    width: 37vw
 }
 
 

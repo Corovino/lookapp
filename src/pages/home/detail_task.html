@@ -7,6 +7,7 @@
 </ion-header>
 <ion-content>
     <ion-card>
+
         <div class="content-hidden">
             <img [src]="estudio.img"/>
         </div> 
@@ -25,28 +26,7 @@
                 
                 <h4 style="font-weight: bold; margin: 8px 0px;">Dónde</h4>
                 <div text-left>
-                    <ion-item style="width: 72vw;">
-                        <ion-avatar item-left style="width: 44px" >
-                            <img src="assets/imgs/ubication.svg" width="33px" />
-                        </ion-avatar>
-                        
-                        <div *ngIf="estudio.type_ubication == 1 || estudio.type_ubication == 2 ">
-                            <div *ngFor="let item of estudio.ubicaciones" >
-                                {{item.name}}
-                            </div> 
-                        </div>
-                        
-                        <div *ngIf="estudio.type_ubication == 3">
-                            <div *ngFor="let item of estudio.ubicaciones" >
-                                <b>Lugar:</b> {{item.ciudad}}
-                            </div>
-                        </div>
-                        
-                        <button 
-                            style="height: 10vw; font-size: 1.4rem;" 
-                            class="btn-look" 
-                            ion-button full (click)="showMap();" >VER UBICACIONES</button>
-                    </ion-item>
+                    <div #map id="map" style="height:70vw; width: 90vw"></div>
                 </div>
                 <hr>
                 <h4 style="font-weight: bold; margin: 8px 0px;">Tiempo</h4>
@@ -71,9 +51,9 @@
             </ion-col>
         </ion-row>
     </ion-card>
-    <div *ngIf="showMapa">
-        <div #map id="map" style="height:70vw"></div>
-    </div>
+    <!-- <div *ngIf="showMapa"> -->
+        <!-- <div #map id="map" style="height:70vw"></div> -->
+    <!-- </div> -->
     
 </ion-content>
 
@@ -82,7 +62,7 @@
     .cls-ajs {
 
         padding: 10px;
-        margin: 0px 5vw;
+        margin: 0px 8vw;
         width: 90vw;
     }
 

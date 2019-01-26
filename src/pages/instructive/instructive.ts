@@ -39,17 +39,24 @@ export class InstructivePage {
     log: '', 
     lat: '', 
     device: '', 
-    mark_device: '' 
+    mark_device: '',
+    idfacebook: '',
+    img: '',
+    userid: '',
+    email: '',
+    pass: ''
   };
   
   public forms: any;
+  public userfacebook: any; 
   public userForm = new FormData();
   // Estates to change un date
   public step_one: boolean = true;
   public step_two: boolean = false;
   public step_three: boolean = false;
   public step_four: boolean = false;
-
+  public image: any = 'assets/imgs/icon.png';
+  public file: any;
 
 
   constructor(
@@ -65,7 +72,31 @@ export class InstructivePage {
   
     ) {
 
+      this.userfacebook = this.navParams.data.userfacebook;
+
+      console.log(this.navParams);
+
       this.forms = this.navParams.data.forms;
+      
+      if(this.forms == undefined) {
+
+        this.register.email = this.userfacebook.email;
+        this.register.sex = this.userfacebook.gender == 'male' ? 'M' : 'F';
+        this.register.name = this.userfacebook.name;
+        this.register.idfacebook = this.userfacebook.id;
+
+        this.image = this.userfacebook.picture.data.url;
+        this.register.img = this.image;
+
+        this.register.userid = this.navParams.data.iduser;
+
+
+        // this.image = this.image.replace("height=50", "height=250");
+        // this.image = this.image.replace("width=50", "width=250");
+
+      }
+
+
       this.get_gelocalitation();
     }
   
@@ -106,8 +137,7 @@ export class InstructivePage {
       return new File([u8arr], filename, {type:mime});
   }
 
-  image: any = 'assets/imgs/icon.png';
-  file: any;
+
   getPicture(){
     let options: CameraOptions = {
       destinationType: this.camera.DestinationType.DATA_URL,
@@ -141,10 +171,8 @@ export class InstructivePage {
       timeout: 8000 // frecuencia
     });
     watch.subscribe((data: any) => {
-  
         this.register.log = data.coords.longitude;
         this.register.lat = data.coords.latitude;
-      
     });   
   }
 
@@ -204,29 +232,33 @@ export class InstructivePage {
     ) {
       this.presentAlert("Alert", "No se pueden tener datos incompletos")
     } else {
-    
-      if(this.iduser == 0){
-        this.rest.create_user_step_one(this.forms).subscribe((response: any ) => {
-          if(!response.error) {
-            this.iduser = response.data.id;
-            this.next_data(response);
-          } else {
-            this.presentAlert("Error", response.message);
-          }
-        })
+      
+      if(this.userfacebook == undefined){
+        if(this.iduser == 0){
+          this.rest.create_user_step_one(this.forms).subscribe((response: any ) => {
+            if(!response.error) {
+              this.iduser = response.data.id;
+              this.continue_register_with_email();
+            } else {
+              this.presentAlert("Error", response.message);
+            }
+          })
+        } else {
+          this.continue_register_with_email();
+        }
       } else {
-        // this.next_data();
+        // conectado con facebooks
+        this.continue_register_with_facebook();
       }
     }
   }
 
-  next_data(data) {
-
+  continue_register_with_email() {
     this.rest.create_user_step_two(this.register, this.iduser).subscribe((response: any) => {
       if(response.error) {
         this.presentAlert("Alerta", response.message);
       }else {
-        this.rest.save_img_user(this.userForm, this.iduser).subscribe( (data:any) => {    
+        this.rest.save_img_user(this.userForm, this.iduser).subscribe( (data:any) => {
             if(data.error == true){
                 this.presentAlert("Alert", "La imagen no ha podido ser subida por favor intente de nuevo");
             } else {
@@ -237,6 +269,16 @@ export class InstructivePage {
         })
       }
     })
+  }
+
+  continue_register_with_facebook(){
+    // when connect is with facebook, in back, the process is diferente, because need take idto facebook and email to genereate changes
+    // In this proccess dosent neceesary send email to reset password
+
+    this.rest.upload_data_to_facebook(this.register).subscribe((data: any) => {
+      this.storage.set('xx-app-loap', JSON.stringify(data));
+        this.navCtrl.setRoot(TabsPage);
+      })
   }
 
 

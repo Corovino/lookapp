@@ -32536,7 +32536,7 @@
                     return this.ce("div", {}, this.disabled || !this.component.multiple && 0 !== this.dataValue.length ? this.ce("div") : this.ce("div", {
                         class: "fileSelector"
                     }, [this.ce("button", {
-                        class: "btn btn-primary",
+                        class: "btn btn-primary hide",
                         onClick: function(t) {
 
 

@@ -12,7 +12,9 @@
 
 
 <ion-content padding>
-
+  
+    <div id="bar" class="cls-progress"  [ngStyle]="{'width': pg +'vw' }"></div>
+    <!-- {{ (this.timee / 60 ) | number }} min -->
     <ion-slides pager *ngIf="showInstructive">
         <ion-slide *ngFor="let slide of loap_instructives">
           <ion-toolbar>
@@ -36,11 +38,25 @@
         </ion-slide>
     </ion-slides>
 
-    <div *ngIf="!showInstructive">
-      <button class="btn-look" ion-button full (click)="showInstructive = true">VER INSTRUCTIVO</button>
-    </div>
+
+    <button class="btn-look" ion-button full (click)="showInstructive = true">VER INSTRUCTIVO</button>
+    
+
+    <div #map id="map" style="height:70vw; width: 90vw"></div>
+
     
     <div #idform id="formio"></div>
 
   <!-- <button ion-button (click)="conoce()" >Hola como vas</button> -->
 </ion-content>
+
+<style>
+  .cls-progress {
+    background: rgb(229, 53, 91) none repeat scroll 0% 0%;
+    height: 4px;
+    position: fixed;
+    margin: -15px -16px;
+  }
+
+  
+</style>

@@ -2,6 +2,8 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, DomController, AlertController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { ServicesProvider } from '../../providers/services/services';
+import { GoogleMaps, GoogleMap, Marker, GoogleMapsEvent, ILatLng, Polygon, Poly, LatLng, CameraPosition, MarkerOptions, Circle } from '@ionic-native/google-maps'
+
 
 /**
  * Generated class for the ProgressInTaskPage page.
@@ -23,17 +25,43 @@ export class ProgressInTaskPage {
   @ViewChild('idform') idform:any;
 
 
+  @ViewChild('map') mapElement: ElementRef;
+  map: GoogleMap;
+
   
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
     public geolocation: Geolocation,
     public alertCtrl: AlertController,
-    public rest: ServicesProvider
+    public rest: ServicesProvider,
+    private _googleMaps: GoogleMaps,
   ) {
     
+    this.timeOut();
   }
   
+
+  
+  public cnttime :any;
+  public timee : number = 3600; 
+  public pg: any;
+  timeOut(){
+    this.cnttime = setInterval(() => {
+      this.timee--;
+
+      this.pg = (this.timee * 100) / 3600;
+
+
+      if(this.timee == 0){
+        this.presentAlert("Fin tarea", "Se hagoto tu tiempo");
+        clearInterval(this.cnttime);
+      }
+    }, 1000);
+  }
+
+
+
   // Alert
   presentAlert(title:string, message: string) {
     let alert = this.alertCtrl.create({
@@ -59,14 +87,29 @@ export class ProgressInTaskPage {
 
 
 
+
+
   name_studie: string;
   loap_instructives: string;
+  pointesCreate: any;
+
+  list_points: any;
   ionViewDidLoad() {
 
     this.loap_instructives = this.navParams.data.data.loap_instructives;
     this.name_studie = this.navParams.data.data.name;
 
+    let type_studie = this.navParams.data.data.load_types_studie_id;
     
+    if(type_studie == 1) {
+      
+      this.getPoints();
+      this.pointesCreate = setInterval(() => {
+        this.getPoints();
+      }, 10000);
+      this.loadMap();
+    }      
+
     this.loadForm(
       this.navParams.data.data.form_studie, 
       this.navParams.data.iduser,
@@ -75,16 +118,88 @@ export class ProgressInTaskPage {
     );
 
   }
+  getPoints(){
+    this.rest.points_to_tasks(this.navParams.data.data.id).subscribe((resp:any) => {
+      this.list_points = resp.data;
+
+      console.log(this.list_points);
+
+    })
+  }
+  //Adds a marker to the map
+  createMarker(loc: LatLng, title: string, color){
+      let markerOptions: MarkerOptions = {
+        position: loc,
+        icon: color
+        // , title: title
+      };
+      return this.map.addMarker(markerOptions);
+  }
+  //Load the map 
+  initMap(){
+   
+    let element = this.mapElement.nativeElement;
+    this.map = this._googleMaps.create(element, {
+      'backgroundColor': 'white',
+        'gestures': {
+          'scroll': true,
+          'zoom': true
+        },
+        zoom: 10,
+        center: {lat: 4.6097538, lng: -83.3920573}
+    })
+  
+  
+  }
+  color: any = 'red';
+  
+  markers: any = [];
+  points: any = [];
+  loadMap() {
+  
+    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
+    //Add 'implements AfterViewInit' to the class.
+    let loc: LatLng;
+    this.initMap();
+  
+      this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
+      //Get User location
+      let watch = this.geolocation.watchPosition({
+        enableHighAccuracy: true, // HABILITAR ALTA PRECISION
+        timeout: 4000 // frecuencia
+      });
+
+        console.log(this.list_points, "JERRY LAGOS JAJAJAAJ ");
+
+
+        this.list_points.forEach(element => {
+          var loc = new LatLng(element.latitude, element.longitude);    
+          this.createMarker(loc, "Me", 'blue' ).then((marker: Marker) => {
+            this.points.push(marker); marker.showInfoWindow();
+          })  
+        });
+  
+        // watch.subscribe((resp: any) => {
+        //   loc = new LatLng(resp.coords.latitude, resp.coords.longitude);
+        //   this.createMarker(loc, "Me", 'assets/imgs/me.png' ).then((marker: Marker) => {
+        //     this.markers.push(marker); marker.showInfoWindow();
+        //   })
+        // })
+      
+    });
+  
+  }
+  
+  ionViewDidLeave(){
+    clearInterval(this.pointesCreate);
+  }
+
 
   loadForm(form_studie: any, iduser: number, idtask: number, price: any ){
 
-    console.log(document.getElementById('formio'), "sdsfsd sdf sdf ");
     form_studie.owner = '5bdc91b1851af95d8e5b537d';
     Formio.icons = 'fontawesome';
 
-
-
-    console.log(this.idform.nativeElement);
 
     var data = document.createElement('div');
     // document.getElementById('formio')
@@ -93,16 +208,12 @@ export class ProgressInTaskPage {
     ).then(form => {
 
       form.nosubmit = true;
-      // Triggered when they click the submit button.
-      
       
       this.geolocation.getCurrentPosition().then((resp) => {
         let state: any;
         form.on('submit', function(submission) {
             
             let response = [];
-            // console.log(form_studie.components);
-
             form_studie.components.forEach(element => {
               response.push({
                 type: element.type,
@@ -132,14 +243,13 @@ export class ProgressInTaskPage {
             .then( function(response) {
 
               window.location.reload();
-            
               form.emit('submitDone', submission);
+              
               return response.json();
             }).catch(function(err) {
               console.log(err);
             })
           }, function(estate){
-            console.log("JERRY ESTATE");
             // this.presentAlert()
           }) ;
           
