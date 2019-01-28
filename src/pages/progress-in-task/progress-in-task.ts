@@ -40,7 +40,18 @@ export class ProgressInTaskPage {
     
     this.timeOut();
   }
+
   
+  showLocation: any;
+  ionViewDidEnter(){
+    console.log("INGRESO SATISFACTORIAMENTE");
+  }
+
+  ionViewWillUnload(){
+    clearInterval(this.showLocation);
+    console.log("SALIO SATISFACTORIAMENTE")
+  }
+
 
   
   public cnttime :any;
@@ -54,7 +65,7 @@ export class ProgressInTaskPage {
 
 
       if(this.timee == 0){
-        this.presentAlert("Fin tarea", "Se hagoto tu tiempo");
+        this.presentAlert("", "Se hagoto tu tiempo");
         clearInterval(this.cnttime);
       }
     }, 1000);
@@ -76,12 +87,15 @@ export class ProgressInTaskPage {
   showInstructive: boolean = false ;
   
   gtFunction() {
-    this.showInstructive = false
+    this.showInstructive = false;
+
     this.loadForm(
       this.navParams.data.data.form_studie, 
       this.navParams.data.iduser,
       this.navParams.data.data.id,
-      this.navParams.data.data.price_by_task
+      this.navParams.data.data.price_by_task,
+      this.navParams.data.idt
+      
     );
   }
 
@@ -114,16 +128,14 @@ export class ProgressInTaskPage {
       this.navParams.data.data.form_studie, 
       this.navParams.data.iduser,
       this.navParams.data.data.id,
-      this.navParams.data.data.price_by_task
+      this.navParams.data.data.price_by_task,
+      this.navParams.data.idt
     );
 
   }
   getPoints(){
     this.rest.points_to_tasks(this.navParams.data.data.id).subscribe((resp:any) => {
       this.list_points = resp.data;
-
-      console.log(this.list_points);
-
     })
   }
   //Adds a marker to the map
@@ -131,7 +143,7 @@ export class ProgressInTaskPage {
       let markerOptions: MarkerOptions = {
         position: loc,
         icon: color
-        // , title: title
+        , title: title
       };
       return this.map.addMarker(markerOptions);
   }
@@ -155,6 +167,7 @@ export class ProgressInTaskPage {
   
   markers: any = [];
   points: any = [];
+  mypoint: any = [];
   loadMap() {
   
     //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
@@ -164,27 +177,37 @@ export class ProgressInTaskPage {
   
       this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
       //Get User location
-      let watch = this.geolocation.watchPosition({
-        enableHighAccuracy: true, // HABILITAR ALTA PRECISION
-        timeout: 4000 // frecuencia
-      });
+      let a = 0;
+      this.showLocation = setInterval(() => {
+        
+        this.geolocation.getCurrentPosition({
+          enableHighAccuracy: true, // HABILITAR ALTA PRECISION
+        }).then((resp) => { 
+        
+          let loc = new LatLng(resp.coords.latitude, resp.coords.longitude);
+          
+          this.createMarker(loc, 'Tu', 'green' ).then((marker: Marker) => {
 
-        console.log(this.list_points, "JERRY LAGOS JAJAJAAJ ");
+            this.mypoint.push(marker); marker.showInfoWindow();
+            for (let index = 0; index < this.mypoint.length; index++) {
+              this.mypoint[index-1].setMap(this.map);
+            }
+
+          }) 
+
+        })
+      }, 10000)
 
 
+
+     
         this.list_points.forEach(element => {
           var loc = new LatLng(element.latitude, element.longitude);    
-          this.createMarker(loc, "Me", 'blue' ).then((marker: Marker) => {
+          this.createMarker(loc, 'Tomado', 'red').then((marker: Marker) => {
             this.points.push(marker); marker.showInfoWindow();
-          })  
+          })
         });
   
-        // watch.subscribe((resp: any) => {
-        //   loc = new LatLng(resp.coords.latitude, resp.coords.longitude);
-        //   this.createMarker(loc, "Me", 'assets/imgs/me.png' ).then((marker: Marker) => {
-        //     this.markers.push(marker); marker.showInfoWindow();
-        //   })
-        // })
       
     });
   
@@ -195,13 +218,16 @@ export class ProgressInTaskPage {
   }
 
 
-  loadForm(form_studie: any, iduser: number, idtask: number, price: any ){
+  loadForm(form_studie: any, iduser: number, idtask: number, price: any, id: any ){
+
+
+    console.log(this.navParams, "PARAMS JERR");
+
 
     form_studie.owner = '5bdc91b1851af95d8e5b537d';
     Formio.icons = 'fontawesome';
 
 
-    var data = document.createElement('div');
     // document.getElementById('formio')
     Formio.createForm( this.idform.nativeElement,
     form_studie
@@ -232,7 +258,8 @@ export class ProgressInTaskPage {
                 "form_response": submission,
                 "price": price,
                 "longitude": resp.coords.longitude,
-                "latitude": resp.coords.latitude
+                "latitude": resp.coords.latitude,
+                "id": id
               }),
               headers: {
                 'content-type': 'application/json'

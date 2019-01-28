@@ -32,8 +32,8 @@ export class PerfilPage {
   ionViewDidLoad() {
     this.storate.get('xx-app-loap').then((loap: any) => {
         let user = JSON.parse(loap);
-        this.iduser = user.data.data._id;
-        this.rest.get_info_user(user.data.data._id).subscribe((response:any) => {
+        this.iduser = user.data.user._id;
+        this.rest.get_info_user(user.data.user._id).subscribe((response:any) => {
           
           this.info_user = response.data;
           this.info_user.img == null ? this.info_user.img = "assets/imgs/icon.png" : this.info_user.img;

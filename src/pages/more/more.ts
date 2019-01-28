@@ -35,8 +35,11 @@ export class MorePage {
     
     this.storage.remove('xx-app-loap');
     
-    this.splashscreen.show();
-    window.location.reload();
+    setTimeout(() => {
+      this.splashscreen.show();
+      window.location.reload();
+    }, 1000)
+
     
     
   }

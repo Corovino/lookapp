@@ -44,11 +44,14 @@ export class InstructivePage {
     img: '',
     userid: '',
     email: '',
-    pass: ''
+    pass: '',
+    repass: '',
+    code: '',
   };
   
   public forms: any;
   public userfacebook: any; 
+  public useremail : any;
   public userForm = new FormData();
   // Estates to change un date
   public step_one: boolean = true;
@@ -72,61 +75,89 @@ export class InstructivePage {
   
     ) {
 
+      console.log(this.navParams, "SUPER PARAMETROS");
+
+
       this.userfacebook = this.navParams.data.userfacebook;
-
-      console.log(this.navParams);
-
       this.forms = this.navParams.data.forms;
+      this.useremail = this.navParams.data.useremail;
       
-      if(this.forms == undefined) {
+      if(this.userfacebook != undefined) {
 
         this.register.email = this.userfacebook.email;
         this.register.sex = this.userfacebook.gender == 'male' ? 'M' : 'F';
         this.register.name = this.userfacebook.name;
         this.register.idfacebook = this.userfacebook.id;
 
-        this.image = this.userfacebook.picture.data.url;
-        this.register.img = this.image;
-
+        // this.image = this.userfacebook.picture.data.url;
+        // this.register.img = this.image;
         this.register.userid = this.navParams.data.iduser;
 
+      }
 
-        // this.image = this.image.replace("height=50", "height=250");
-        // this.image = this.image.replace("width=50", "width=250");
+      if(this.useremail != undefined) {
 
+        this.register.email = this.useremail.email;
+        this.register.sex = this.useremail.sex;
+        this.register.name = this.useremail.name;
+        this.register.userid = this.navParams.data.iduser;
+        
       }
 
 
       this.get_gelocalitation();
     }
   
-  ionViewCanEnter(){
-    console.log("ionViewVillEnter ciclo one");
+  valid_first_step_email(){
+    if(this.register.name == '' || this.register.lname == '') {
+      this.presentAlert("", "Por favor ingrese todos los campos")
+    } else {
+      this.step_two = true; 
+      this.step_one = false;
+    }
   }
 
-  ionViewDidLoad(){
-    console.log("ioncViewDidLoad ciclco dos")
+
+  valid_first_step_facebook() {
+    if(this.register.pass == '' || this.register.repass == '' || this.register.email == '' || this.register.name == '' || this.register.lname == '' ) {
+      this.presentAlert("", "Por favor ingrese todos los campos")
+    } else if(this.register.pass != this.register.repass) {
+      this.presentAlert("", "las constraseñas no coinciden");
+    } else {
+          this.step_two = true; 
+          this.step_one = false
+    }
   }
 
-  ionViewWillEnter(){
-    console.log("ionViewWillEnter ciclo tres")
+  valid_second_step() {
+    if(this.register.birth_day == '' || this.register.sex == '' || this.register.strate == '' || this.register.level_studie == '' ) {
+      this.presentAlert("", "Es necesario que completes todos los datos")
+    } else {
+      this.step_three = true; 
+      this.step_two = false
+    }
   }
 
-  ionViewDidEnter(){
-    console.log("ionViewWillEnter ciclo cuatro")
+  // VALIDAR CODIGO CUANDO ESTE ES ENVIADO AL CORREO
+  valid_code(){
+    if(this.register.code == '') {
+      this.presentAlert("", "Ingrese el código de verificación");
+    } else if(this.register.pass != this.register.repass) {
+      this.presentAlert("", "las contraseñas no coinciden");
+    } else if(this.register.pass == '' || this.register.repass == '' || this.register.email == '' || this.register.name == '' || this.register.lname == '' ) {
+      this.presentAlert("", "Por favor ingrese todos los campos")
+    } else {
+      this.rest.valid_code(this.register).subscribe((data:any)=> {
+        if(data.error){
+          this.presentAlert("", data.message)
+        }else {
+          this.step_two = true; 
+          this.step_one = false
+        }
+      })
+    }
   }
-
-  ionViewCanLeave(){
-    console.log("ionViewCanleacer ciclo five")
-  }
-
-  ionViewDidLeave(){
-    console.log("ionViewDidLeave ciclo sis")
-  }
-
-  ionViewWillUnload(){
-   console.log("ionViewWillUnload ciclo siente")
-  }
+ 
 
   dataURLtoFile(dataurl, filename) {
       var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
@@ -233,7 +264,7 @@ export class InstructivePage {
       this.presentAlert("Alert", "No se pueden tener datos incompletos")
     } else {
       
-      if(this.userfacebook == undefined){
+      if(this.forms != undefined){
         if(this.iduser == 0){
           this.rest.create_user_step_one(this.forms).subscribe((response: any ) => {
             if(!response.error) {
@@ -246,9 +277,11 @@ export class InstructivePage {
         } else {
           this.continue_register_with_email();
         }
-      } else {
+      } else if(this.userfacebook != undefined) {
         // conectado con facebooks
         this.continue_register_with_facebook();
+      } else if(this.useremail != undefined) {
+        this.continue_session_with_email();
       }
     }
   }
@@ -258,40 +291,72 @@ export class InstructivePage {
       if(response.error) {
         this.presentAlert("Alerta", response.message);
       }else {
-        this.rest.save_img_user(this.userForm, this.iduser).subscribe( (data:any) => {
-            if(data.error == true){
-                this.presentAlert("Alert", "La imagen no ha podido ser subida por favor intente de nuevo");
-            } else {
-              this.image = data.data.img;
-              this.step_four = true; 
-              this.step_three = false;
-            }
-        })
+        this.save_img_in_server(this.iduser);
       }
     })
   }
 
+  
+
+  // METHOD TO NEXT WITH FACEBOOK
+  iFacebook: any;
   continue_register_with_facebook(){
     // when connect is with facebook, in back, the process is diferente, because need take idto facebook and email to genereate changes
     // In this proccess dosent neceesary send email to reset password
-
     this.rest.upload_data_to_facebook(this.register).subscribe((data: any) => {
-      this.storage.set('xx-app-loap', JSON.stringify(data));
-        this.navCtrl.setRoot(TabsPage);
-      })
+      this.iFacebook = data;
+      this.save_img_in_server(this.register.userid);
+    })
   }
 
+  // METODO TO NEXT WITH EMAIL TO SESSION 
+  iEmail: any;
+  continue_session_with_email(){
+    this.rest.upload_data_to_email(this.register).subscribe((data: any) => {
+        this.iEmail = data;
+        this.save_img_in_server(this.register.userid);
+    })
+  }
 
-  start_session(){
+  // when a user is register with email
+  ok_email() {
+    this.storage.set('xx-app-loap', JSON.stringify(this.iEmail));
+    this.splashscreen.show();
+    window.location.reload();
+  }
+  // when a user is registeer with facebook
+  ok_facebook(){
+    this.storage.set('xx-app-loap', JSON.stringify(this.iFacebook));
+    this.splashscreen.show();
+    window.location.reload();
+  }
+  // when a user is newe
+  ok_session(){
     this.rest.login_eyes({
       email: this.forms.email,
       pass: this.forms.pass
     }).subscribe( (rp:any) => {
       this.storage.set('xx-app-loap', JSON.stringify(rp));
-      this.navCtrl.setRoot(TabsPage);
+      this.splashscreen.show();
+      window.location.reload();
     })
   }
   
+  // save imagen
+  save_img_in_server(id){
+    if(this.image == 'assets/imgs/icon.png'){
+      this.presentAlert('', 'Es necesario tomar la tu imagen de portada')
+    } else {
+      this.rest.save_img_user(this.userForm, id).subscribe( (data:any) => {
+        this.step_four = true; 
+        this.step_three = false;
+          if(!data.error){
+            this.image = data.data.img;  
+          } 
+      })
+    } 
+  }
+
   presentAlert(title:string, message: string) {
     let alert = this.alertCtrl.create({
       title: title,

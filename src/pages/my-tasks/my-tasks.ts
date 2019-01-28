@@ -47,7 +47,7 @@ export class MyTasksPage {
   get_task(){
     this.storage.get('xx-app-loap').then( (loap: any) => {
       let user = JSON.parse(loap);
-      this.rest.get_states_task(user.data.data._id).subscribe((respons: any) => {
+      this.rest.get_states_task(user.data.user._id).subscribe((respons: any) => {
         if(respons.error) {
           
         } else {
@@ -60,16 +60,16 @@ export class MyTasksPage {
 
 
   continue_task(data: any) {
+    console.log(data, "DATA DESDDE MY TASK")
     this.storage.get('xx-app-loap').then( (loap: any) => {
       let user = JSON.parse(loap);
-      this.rest.get_studie(data.id_studie).subscribe((data: any) => {
-        this.navCtrl.push(ProgressInTaskPage, {data: data.data, iduser: user.data.data._id});
+      this.rest.get_studie(data.id_studie).subscribe((resp: any) => {
+        this.navCtrl.push(ProgressInTaskPage, {data: resp.data, iduser: user.data.user._id, idt: data.id});
       })
     })
   }
 
   razon(data: any) {
-    console.log("Esta es la razón del tema", data);
     this.presentAlert("Razón del rechazo", data.comments.observations)    
   }
 
@@ -80,7 +80,6 @@ export class MyTasksPage {
     setTimeout(() => {
       element.complete();
     }, 2500);
-    console.log("Proceso to refresh")
   }
   
   presentAlert(title:string, message: string) {

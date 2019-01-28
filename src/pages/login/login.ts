@@ -14,6 +14,7 @@ import { InstructivePage } from '../instructive/instructive';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
 
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
+import { SplashScreen } from '@ionic-native/splash-screen';
 
 
 
@@ -58,17 +59,10 @@ export class LoginPage {
     public toastCtrl: ToastController,
     public alertCtrl: AlertController,
     public locationAccuracy: LocationAccuracy,
+    public splashscreen: SplashScreen,
     public fb: Facebook
     ) {
-      
-
-      this.fb.getLoginStatus().then(es => {
-        console.log(es, "ESTADA FACEBOOK");
-
-      }).catch(e => {
-        console.log(e, "CONSOLE DE FACEBOOK")
-      })
-
+     
       let watch = this.geolocation.watchPosition({
         timeout: 4000 // frecuencia
       });
@@ -106,13 +100,23 @@ export class LoginPage {
         this.fb.api("/me?fields=name,email,picture,gender", permissions)
         .then(user =>{
 
+
           this.rest.connect_facebook(user).subscribe((response:any) => {
 
-            let iduser = response.data == null ? '' : response.data
-            this.navCtrl.setRoot(InstructivePage, {
-              userfacebook: user,
-              iduser: iduser
-            });
+            if(response.token){
+              this.storage.set('xx-app-loap', JSON.stringify(response));
+              setTimeout(() => {
+                this.splashscreen.show();
+                window.location.reload();
+              }, 1000)
+            } else {
+              let iduser = response.data == null ? '' : response.data.id;
+              this.navCtrl.setRoot(InstructivePage, {
+                userfacebook: user,
+                iduser: iduser
+              });
+            }
+
 
           })
           // console.log(user, "this is my usere")
@@ -219,12 +223,20 @@ export class LoginPage {
     } else {
       this.rest.login_eyes(this.forms).subscribe((response: any) => {
         if(response.error == "mail"){
-          this.recuperacuenta = true;
+          // this.recuperacuenta = true;
+
+          this.navCtrl.setRoot(InstructivePage, {
+            useremail: response.data,
+            iduser: response.data.id
+          });
+
+
         } else if(response.error) {
           this.presentAlert("Error", response.message);
         }else {
           this.storage.set('xx-app-loap', JSON.stringify(response));
-          this.navCtrl.setRoot(TabsPage);
+          this.splashscreen.show();
+          window.location.reload();
         }
       })
     }

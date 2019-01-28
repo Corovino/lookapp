@@ -2,7 +2,7 @@ import { ProgressInTaskPage } from './../progress-in-task/progress-in-task';
 import { Component, ElementRef, ViewChild, ɵConsole } from '@angular/core';
 import { NavController, NavParams, NavPopAnchor, AlertController, LoadingController } from 'ionic-angular';
 import { Storage } from '@ionic/storage'
-import { GoogleMaps, GoogleMap, Marker, GoogleMapsEvent, ILatLng, Polygon, Poly, LatLng, CameraPosition, MarkerOptions, Circle } from '@ionic-native/google-maps'
+import { GoogleMaps, GoogleMap, Marker, GoogleMapsEvent, ILatLng, Polygon, Poly, Encoding,  LatLng, CameraPosition, MarkerOptions, Circle } from '@ionic-native/google-maps'
 // import { GoogleMaps, GoogleMap, GoogleMapOptions, Environment, Marker, GoogleMapsEvent, LocationService, MyLocation, MyLocationOptions, ILatLng, Polyline, Polygon, Poly, LatLng, CameraPosition, MarkerOptions, LatLngBounds} from '@ionic-native/google-maps'
 import { ServicesProvider } from '../../providers/services/services';
 
@@ -11,7 +11,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
 import { SMS } from '@ionic-native/sms';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Device } from '@ionic-native/device';
-import { catchError, dematerialize } from 'rxjs/operators';
+import { catchError, dematerialize, timeInterval } from 'rxjs/operators';
 import { componentFactoryName } from '@angular/compiler';
 import { UtilitiesClass } from '../../models/helper.models';
 import { SkipsPage } from '../skips/skips';
@@ -202,37 +202,36 @@ export class DetailTaskPage {
     public sms: SMS,
     public device: Device,
     public loadingCtrl: LoadingController
-  ) {
-
+  ) { 
     this.estudio = this.params.data.data;
-    // this.info.nativeElement.style.heigth = 100;
-  }
+   }
 
 /////////////////// LOAD MAP
 // 
 // Load map
 
 
-
+showLocation: any;
 ionViewDidEnter(){
-  console.log("INGRESO SATISFACTORIAMENTE");
+
+  this.loadMap();
 }
 
 
-
-
-ionViewWillUnload(){
- console.log("SALIO SATISFACTORIAMENTE")
+ionViewDidLeave(){
+  clearInterval(this.showLocation);
+  this.estudio = '';
 }
-
 
 
 moveCamera(loc: LatLng){
   let options: CameraPosition<LatLng> = {
     target: loc,
     zoom: 17
-    // tilt: 10
+    ,tilt: 10
   }
+  this.map.moveCamera(options);
+
 }
 //Adds a marker to the map
 createMarker(loc: LatLng, title: string, color){
@@ -243,9 +242,36 @@ createMarker(loc: LatLng, title: string, color){
     };
     return this.map.addMarker(markerOptions);
 }
+// ADD polylines
+createPolilyne(element) {
+  this.map.addPolygon({
+    points: element,
+    clickable: false,
+    strokeColor: '#e5355b',
+    fillColor: '#21212166',
+    strokeWidth: 2
+  })
+}
+
+// know estate my ubication
+validPolilyne(polines, loc) {
+  let resuls = [];
+  // FUNCION QUE HACE PUSHEO DEL RESULTADO DE LA FUNCION
+  polines.forEach(element => {
+    resuls.push(Poly.containsLocation(loc, element));
+    console.log(Poly.containsLocation(loc, element), "jerrito");
+  }); 
+  // SE RETORNA CUANDO UNO DE LOS REUSLTADO ES IGUAL A TRUE
+  var resultobj = resuls.filter(obj => { return obj == true; });
+  // SE ASEGINA EL COLOR VERDE SI UNO DE LOS LUGARES ESTA TRUE
+  this.color = resultobj[0] ? 'assets/imgs/tomar.png' : 'red';
+}
+
+
+
 //Load the map 
 initMap(){
-  let controls: any = {compass: true, myLocationButton: true, indoorPicker: true, zoom: true, mapTypeControl: true, streetViewControl: true};
+  let controls: any = {compass: true, myLocationButton: true, indoorPicker: false, zoom: true, mapTypeControl: true, streetViewControl: false};
   let element = this.mapElement.nativeElement;
   this.map = this._googleMaps.create(element, {
     'backgroundColor': 'white',
@@ -263,9 +289,8 @@ initMap(){
         'rotate': true,
         'zoom': true
       },
-      zoom: 10,
+      zoom: 15,
       center: {lat: 4.6097538, lng: -83.3920573}
-      
   })
 
 
@@ -281,50 +306,70 @@ loadMap() {
   //Add 'implements AfterViewInit' to the class.
   let loc: LatLng;
   this.initMap();
-
   //once the map is ready move
   //camera into position
   this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
-    //Get User location
-    let watch = this.geolocation.watchPosition({
-      enableHighAccuracy: true, // HABILITAR ALTA PRECISION
-      timeout: 4000 // frecuencia
-    });
 
     if(this.estudio.type_ubication == 3) {
 
-      this.estudio.ubicaciones.forEach(element => {
-        var loc = new LatLng(element.latitud, element.longitud);    
-        this.createMarker(loc, "Me", 'green' ).then((marker: Marker) => {
+      
+    let triangleCoords = [];
+    this.estudio.ubicaciones.forEach(element => {
+      var loc = new LatLng(element.latitud, element.longitud); 
+      
+        var Tlat = element.latitud, Tlng = element.longitud;
+
+        var j = parseFloat(Tlat) - parseFloat("0.0009");
+        var p = parseFloat(Tlng) - parseFloat("0.0009");
+
+        triangleCoords.push([
+          {lat: parseFloat(Tlat), lng: parseFloat(Tlng)},
+          {lat: parseFloat(Tlat+0.0009) , lng: parseFloat(Tlng+0.0009)},
+          {lat: parseFloat(j.toString()) , lng: parseFloat(p.toString())},
+          {lat: parseFloat(Tlat+0.0009) , lng: parseFloat(p.toString())}
+        ])
+        
+        this.createMarker(loc, "", 'green').then((marker: Marker) => {
           this.points.push(marker); marker.showInfoWindow();
         })
-
-        // let circle: Circle = 
-        this.map.addCircleSync({
-          center: loc,
-          radius: 30,
-          strokeColor: '#AA00FF',
-          strokeWidth: 1,
-          fillColor: '#0006',
-        });
-
-
+        
       });
-
-      let a = 0;
-      watch.subscribe((resp: any) => {
-        loc = new LatLng(resp.coords.latitude, resp.coords.longitude);
-        a++;
-        
-        this.createMarker(loc, "Me", 'assets/imgs/me.png' ).then((marker: Marker) => {
-          this.markers.push(marker); marker.showInfoWindow();
-        })
-
-        if(a > 1) { a = a - 1;  this.markers[a].remove();  }
-        
-        
-        // this.moveCamera(loc);
+      
+      let ponies = [];
+      triangleCoords.forEach(element => {
+        let polw: ILatLng = element;
+        ponies.push(polw);
       })
+      
+      ponies.forEach(element => {
+        this.createPolilyne(element);
+      })
+      
+      this.showLocation = setInterval(() => {
+        
+        this.geolocation.getCurrentPosition({
+          enableHighAccuracy: true, // HABILITAR ALTA PRECISION
+        }).then((resp) => {
+          loc = new LatLng(resp.coords.latitude, resp.coords.longitude);
+          this.validPolilyne(triangleCoords, loc);
+          this.moveCamera(loc);
+  
+          this.createMarker(loc, "Me", this.color ).then((marker: Marker) => {
+            this.markers.push(marker); marker.showInfoWindow();
+            for (let index = 0; index < this.markers.length; index++) {
+              if(index > 1){
+                this.markers[index-1].remove();
+              }
+            }
+          })
+          
+         }).catch((error) => {
+           console.log('Error getting location', error);
+         });
+      }, 2500);
+
+      
+
 
 
     
@@ -337,41 +382,24 @@ loadMap() {
       });
 
       polines.forEach(element => {
-        this.map.addPolygon({
-          points: element,
-          clickable: false,
-          strokeColor: '#AA00FF',
-          fillColor: '#0006',
-          strokeWidth: 2
-        })
-
+        this.createPolilyne(element);
       })
   
       let a = 0;
-      watch.subscribe((resp: any) => {
-        //Once location is gotten, we set the location on the camera.
-        
-        loc = new LatLng(resp.coords.latitude, resp.coords.longitude);
-        this.moveCamera(loc);
-        
-        let resuls = [];
-        // FUNCION QUE HACE PUSHEO DEL RESULTADO DE LA FUNCION
-        polines.forEach(element => { resuls.push(Poly.containsLocation(loc, element)); }); 
-        // SE RETORNA CUANDO UNO DE LOS REUSLTADO ES IGUAL A TRUE
-        var resultobj = resuls.filter(obj => { return obj == true; });
-        // SE ASEGINA EL COLOR VERDE SI UNO DE LOS LUGARES ESTA TRUE
-        this.color = resultobj[0] ? 'green' : 'assets/imgs/me.png';
-
-        a++;
-        this.createMarker(loc, "Me", this.color ).then((marker: Marker) => {
-          this.markers.push(marker); marker.showInfoWindow();
+      this.showLocation = setInterval(() => {
+        this.geolocation.getCurrentPosition().then((resp) => {
+          loc = new LatLng(resp.coords.latitude, resp.coords.longitude);
+          this.moveCamera(loc);
+          this.validPolilyne(polines, loc);
+  
+          a++;
+          this.createMarker(loc, "Me", this.color ).then((marker: Marker) => {
+            this.markers.push(marker); marker.showInfoWindow();
+          })
+  
+          if(a > 1) { let b = a - 1;  this.markers[b].remove();  }
         })
-
-        if(a > 2) { let b = a - 2;  this.markers[b].remove();  }
-
-
-      })
-
+      }, 2500)
     }
 
     // loc = new LatLng(resp.coords.latitude, resp.coords.longitude);
@@ -390,10 +418,6 @@ onMarkerAdd(marker: Marker) {
   });
 }
 
-// public nombre: string = "Esta informacion es imperativa";
-ionViewDidLoad(){
-  this.loadMap();
-}
   
 
 
@@ -462,21 +486,21 @@ presentAlert(title:string, message: string) {
       ) {
         
 
-        // if(this.color == 'green') {
+        if(this.color == 'assets/imgs/tomar.png') {
           this.rest.take_task({
             iduser: user.data.user._id ,
             idstudie: data.id
           }).subscribe( (response: any) => {
             if(!response.error) {
               // this.navCtrl.push(SkipsPage, {data: data, iduser: user.data.data._id})
-              this.navCtrl.push(ProgressInTaskPage, {data: data, iduser: user.data.user._id})
+              this.navCtrl.push(ProgressInTaskPage, {data: data, iduser: user.data.user._id, idt:response.data.id })
             } else {
               this.presentAlert("", "Ya haz tomado esta tarea.");    
             }
           })
-        // } else {
-        //     this.presentAlert("", "No puedes realizar la tarea, asegurate de estar en el area permitida");    
-        // }
+        } else {
+            this.presentAlert("", "No puedes realizar la tarea, asegurate de estar en el area permitida");    
+        }
 
 
       } else {

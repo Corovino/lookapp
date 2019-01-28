@@ -19,14 +19,20 @@
     <div *ngIf="step_one">
         <div padding style="text-align: center">
           <img src="assets/imgs/logo.png" alt="logo de lookapp"> <br>
-          <p>
-            Hacer tareas y ganar dinero con LookApp es muy fácil!
+          <p class="cls-p" *ngIf="this.useremail">
+            Hemos realizado grandes cambios para ti, a tu correo hemos enviado un código de verificación para realizar el cambio de contraseña, 
+            hacer tareas y ganar dinero con LookApap es muy fácil! <br>
+            A continuación puedes hacer tu primera tarea ingresando los siguientes datos.
+          </p>
+
+          <p class="cls-p" *ngIf="this.userfacebook || this.forms">
+            Hemos realizado grandes cambios para ti, hacer tareas y ganar dinero con LookApap es muy fácil! <br>
             A continuación puedes hacer tu primera tarea respondiendo estas sencillas preguntas.
           </p>
         </div>
         <ion-list>
           <!-- MOC NOMBRE -->
-          <ion-item >
+          <ion-item>
             <ion-input placeholder="Nombre" type="text" [(ngModel)]="register.name" ></ion-input>
           </ion-item>
           <!-- MOC APELLIDO -->
@@ -36,24 +42,45 @@
 
 
           <!-- MOC PARA CORREO -->
-          <ion-item *ngIf="this.userfacebook">
+          <ion-item *ngIf="this.useremail">
+            <ion-input type="text" [(ngModel)]="register.code" placeholder="Código de verificación"></ion-input>
+          </ion-item>
+          
+          <ion-item *ngIf="this.userfacebook || this.useremail">
             <ion-input placeholder="Correo  electronico" type="text" [(ngModel)]="register.email"></ion-input>
           </ion-item>
-          <ion-item *ngIf="this.userfacebook">
+          <ion-item *ngIf="this.userfacebook || this.useremail">
             <ion-input placeholder="Contraseña" type="password" [(ngModel)]="register.pass"></ion-input>
           </ion-item>
+          <ion-item *ngIf="this.userfacebook || this.useremail">
+            <ion-input placeholder="Repita la contraseña" type="password" [(ngModel)]="register.repass" ></ion-input>
+          </ion-item>
+          
           <ion-grid>
             <ion-row>
-              <button class="btn-look btn-width-look" ion-button full (click)="step_two = true; step_one = false"  >Siguiente</button>
+              <!-- CUANDO ES UN REGISTRO -->
+              <ion-col class="cls-next" *ngIf="this.forms">
+                <button class="btn-look btn-width-look" ion-button full (click)="valid_first_step_email()"  >Siguiente</button>
+              </ion-col>
+              <!-- CUANDO ES UN REGISTRO POR FACEBOOK -->
+              <ion-col class="cls-next" *ngIf="this.userfacebook">
+                <button class="btn-look btn-width-look" ion-button full (click)="valid_first_step_facebook()"  >Siguiente</button>
+              </ion-col>
+              <!-- CUANDO ES CORREO REGISTRADO -->
+              <ion-col class="cls-next" *ngIf="this.useremail">
+                <button class="btn-look btn-width-look" ion-button full (click)="valid_code();"  >Siguiente</button>
+              </ion-col>
             </ion-row>
           </ion-grid>
+            
+            
           <!-- <button ion-button  (click)="step_one == true"  >Atras</button> -->
         </ion-list>
     </div>
 
     <!-- STEP TWO -->
     <div *ngIf="step_two">
-      <div padding style="text-align: center">
+      <div padding style="" class="cls-head-steps" >
         <img src="assets/imgs/logo.png" alt="logo de lookapp"> <br>
       </div>
       <ion-list>
@@ -96,7 +123,7 @@
                   <button class="btn-look btn-width-look" ion-button full (click)="step_one = true; step_two = false"  >Atras</button>
                 </ion-col>
                 <ion-col width-50>
-                  <button class="btn-look btn-width-look" ion-button full (click)="step_three = true; step_two = false"  >Siguiente</button>
+                  <button class="btn-look btn-width-look" ion-button full (click)="valid_second_step()"  >Siguiente</button>
                 </ion-col>
             </ion-row>
           </ion-grid>
@@ -138,14 +165,32 @@
     <div *ngIf="step_four">
         <div text-center>
             <div padding style="text-align: center">
-
               <h2>¡FELICIDADES!</h2>
               <img src="assets/imgs/logo.png" alt="logo de lookapp"> <br>
               <br><br><br><br><br>
               <p>Así de sencillo puedes ganar con Lookapp</p>
             </div>
         </div>
-        <button class="btn-look btn-width-look" ion-button full (click)="start_session();"> Listo </button>
+
+
+        <ion-grid>
+          <ion-row>
+            <ion-col class="cls-next" *ngIf="this.forms">
+              <button  class="btn-look btn-width-look" ion-button full (click)="ok_session();"> Listo </button>
+            </ion-col>
+
+            <ion-col class="cls-next" *ngIf="this.useremail">
+              <button  class="btn-look btn-width-look" ion-button full (click)="ok_email();"> Listo </button>
+            </ion-col>
+
+            <ion-col class="cls-next" *ngIf="this.userfacebook">
+              <button  class="btn-look btn-width-look" ion-button full (click)="ok_facebook();"> Listo </button>
+            </ion-col>
+  
+          </ion-row>
+        </ion-grid>
+
+
     </div>
     
     
@@ -156,17 +201,25 @@
 <style>
   
   .list-md {
-    margin: 20vw 0 16px;
-
+    margin: 11vw 0 16px;
   }
 
+  .cls-p {
+    margin: 15vw 0 0px;
+  }
+
+  .item-md {
+    padding-left: 2px !important;
+  }
 
 
   .grid {
-    /* position: absolute; */
-    /* bottom: 0px; */
+    margin-left: 17px !important;
   }
 
+  .cls-next {
+    left: 25vw;
+  }
   .ion_title {
     text-align: center;
     padding: 3px;
@@ -174,14 +227,17 @@
     background: white;
   }
 
-
+  .cls-head-steps {
+    text-align: center;
+    margin-top: 10vw;
+  }
   .btn-birthday {
     border: 1px solid lightgray;
     border-radius: 28px;
-    width: 77vw;
+    width: 85vw;
     margin-left: 2vw;
     padding-left: 19px;
-    margin-bottom: 11px;
+    margin-bottom: 6px;
   }
 
 

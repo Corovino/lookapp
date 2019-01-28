@@ -79,7 +79,7 @@
     border-radius: 23px !important;
     margin: 6px 8px;
     padding: 9px 12px;
-    width: 90%;
+    width: 94%;
 }
 
 
@@ -89,11 +89,15 @@
 }
 
 
+.select-md {
+    padding: 10px 8px 13px 16px;
+}
+
 ion-select, .ion-select-md {
     // border: 1px solid #0006 !important;
     border: 1px solid lightgray;
     border-radius: 23px !important;
-    margin: 13px 8px;
+    margin: 5px 8px;
     padding: 7px;
     max-width: 100% !important;
     width: 94%;

@@ -56,6 +56,11 @@ export class ServicesProvider {
     return this.http.put(`${this.endApi}/create_user_step_two/${id}`, data);
   }
 
+  // VALID CODE
+  valid_code(data){
+    return this.http.post(`${this.endApi}/valid_code`, data);
+  }
+
   save_img_user(data:any, id: number) {
     // return this.http.put(`http://localhost:8080/api/v1/update_img_to_user/${id}`, data);
     return this.http.put(`${this.endApi}/update_img_to_user/${id}`, data);
@@ -78,6 +83,11 @@ export class ServicesProvider {
   //  METHOD TO UPDATE INFO TO USER THAT INSIDE WITH FACEBOOKK
   upload_data_to_facebook(data){
     return this.http.post( `${this.endApi}/upload_data_to_facebook`, data);
+  }
+
+  //  METHOD TO UPDATE INFO TO USER THAT INSIDE WITH EMAIL AND ALREADY REGISTER IN SYSTEM
+  upload_data_to_email(data) {
+    return this.http.post(`${this.endApi}/upload_data_to_email`, data);
   }
   // PROCESO PARA TOMAR UNA TAREA
   take_task(data) {
