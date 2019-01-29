@@ -84,6 +84,7 @@ export class LoginPage {
     return !data || data == '';
   }
 
+
   getfacebook() {
 
     if(this.forms.check1f == false){
@@ -92,29 +93,33 @@ export class LoginPage {
       this.presentAlert("", "Para continuar debe aceptar Habbeas Data.");
     } else {
       
-      this.fb.login(['public_profile', 'user_friends', 'email'])
+      this.fb.login(['public_profile', 'email'])
       .then((res: FacebookLoginResponse) => {
         
         const permissions = ["public_profile", "email", "user_gender", "user_age_range", "user_birthday"];
 
         this.fb.api("/me?fields=name,email,picture,gender", permissions)
         .then(user =>{
-
-
           this.rest.connect_facebook(user).subscribe((response:any) => {
 
             if(response.token){
+              
               this.storage.set('xx-app-loap', JSON.stringify(response));
+              
               setTimeout(() => {
                 this.splashscreen.show();
                 window.location.reload();
               }, 1000)
+
             } else {
+
               let iduser = response.data == null ? '' : response.data.id;
-              this.navCtrl.setRoot(InstructivePage, {
+
+              this.navCtrl.push(InstructivePage, {
                 userfacebook: user,
                 iduser: iduser
               });
+
             }
 
 
@@ -150,7 +155,7 @@ export class LoginPage {
 
         this.rest.validata_user(this.forms).subscribe( (response: any) => {
           if(!response.error){
-            this.navCtrl.setRoot(InstructivePage, {
+            this.navCtrl.push(InstructivePage, {
               forms: this.forms
             });
           } else {
@@ -225,7 +230,7 @@ export class LoginPage {
         if(response.error == "mail"){
           // this.recuperacuenta = true;
 
-          this.navCtrl.setRoot(InstructivePage, {
+          this.navCtrl.push(InstructivePage, {
             useremail: response.data,
             iduser: response.data.id
           });
@@ -235,8 +240,10 @@ export class LoginPage {
           this.presentAlert("Error", response.message);
         }else {
           this.storage.set('xx-app-loap', JSON.stringify(response));
-          this.splashscreen.show();
-          window.location.reload();
+          setTimeout(() => {
+            this.splashscreen.show();
+            window.location.reload();
+          }, 1000)
         }
       })
     }

@@ -32651,8 +32651,8 @@
 
                                                 var canvas = document.createElement('canvas');
                                                 var ctx = canvas.getContext('2d');
-                                                var width = 544;
-                                                var height = 600;
+                                                var width = 244;
+                                                var height = 300;
 
                                                 canvas.width = width;
                                                 canvas.height = height;

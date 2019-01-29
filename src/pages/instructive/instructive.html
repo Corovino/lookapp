@@ -9,7 +9,6 @@
   <ion-navbar>
     <ion-title>Información necesaria</ion-title>
   </ion-navbar>
-
 </ion-header> -->
 
 
@@ -42,6 +41,9 @@
 
 
           <!-- MOC PARA CORREO -->
+          <div padding *ngIf="this.useremail">
+            <p text-left>Ingresa el código de verificación que hemos enviado a tu correo.</p>
+          </div> 
           <ion-item *ngIf="this.useremail">
             <ion-input type="text" [(ngModel)]="register.code" placeholder="Código de verificación"></ion-input>
           </ion-item>

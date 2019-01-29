@@ -7,7 +7,7 @@
 </ion-header>
 <ion-content>
     <ion-card>
-
+        
         <div class="content-hidden">
             <img [src]="estudio.img"/>
         </div> 
@@ -24,9 +24,12 @@
                 </div>
                 <hr>
                 
-                <h4 style="font-weight: bold; margin: 8px 0px;">Dónde</h4>
+                <h4 style="font-weight: bold; margin: 8px 0px;">Dónde 
+                    <b text-right *ngIf="stateLocation != 'false'">{{stateLocation}}</b></h4>
                 <div text-left>
-                    <div #map id="map" style="height:70vw; width: 90vw"></div>
+                    <div #map id="map" style="height:70vw; width: 90vw">
+                        <ion-fab top right><button color="light" ion-fab (click)="getMyLocation()"><ion-icon ios="ios-locate-outline" md="md-locate"></ion-icon></button></ion-fab>
+                    </div>
                 </div>
                 <hr>
                 <h4 style="font-weight: bold; margin: 8px 0px;">Tiempo</h4>

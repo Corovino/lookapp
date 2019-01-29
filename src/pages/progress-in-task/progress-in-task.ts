@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, PLATFORM_ID } from '@angular/core';
 import { IonicPage, NavController, NavParams, DomController, AlertController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { ServicesProvider } from '../../providers/services/services';
@@ -27,7 +27,7 @@ export class ProgressInTaskPage {
 
   @ViewChild('map') mapElement: ElementRef;
   map: GoogleMap;
-
+  value_heigth: number = 1;
   
   constructor(
     public navCtrl: NavController, 
@@ -37,7 +37,6 @@ export class ProgressInTaskPage {
     public rest: ServicesProvider,
     private _googleMaps: GoogleMaps,
   ) {
-    
     this.timeOut();
   }
 
@@ -60,9 +59,7 @@ export class ProgressInTaskPage {
   timeOut(){
     this.cnttime = setInterval(() => {
       this.timee--;
-
       this.pg = (this.timee * 100) / 3600;
-
 
       if(this.timee == 0){
         this.presentAlert("", "Se hagoto tu tiempo");
@@ -70,8 +67,6 @@ export class ProgressInTaskPage {
       }
     }, 1000);
   }
-
-
 
   // Alert
   presentAlert(title:string, message: string) {
@@ -82,9 +77,9 @@ export class ProgressInTaskPage {
     });
     alert.present();
   }
-  
-  
+
   showInstructive: boolean = false ;
+  
   
   gtFunction() {
     this.showInstructive = false;
@@ -112,18 +107,7 @@ export class ProgressInTaskPage {
 
     this.loap_instructives = this.navParams.data.data.loap_instructives;
     this.name_studie = this.navParams.data.data.name;
-
-    let type_studie = this.navParams.data.data.load_types_studie_id;
     
-    if(type_studie == 1) {
-      
-      this.getPoints();
-      this.pointesCreate = setInterval(() => {
-        this.getPoints();
-      }, 10000);
-      this.loadMap();
-    }      
-
     this.loadForm(
       this.navParams.data.data.form_studie, 
       this.navParams.data.iduser,
@@ -131,8 +115,10 @@ export class ProgressInTaskPage {
       this.navParams.data.data.price_by_task,
       this.navParams.data.idt
     );
-
+      
   }
+
+
   getPoints(){
     this.rest.points_to_tasks(this.navParams.data.data.id).subscribe((resp:any) => {
       this.list_points = resp.data;
@@ -148,67 +134,79 @@ export class ProgressInTaskPage {
       return this.map.addMarker(markerOptions);
   }
   //Load the map 
+
+  moveCamera(loc: LatLng){
+    let options: CameraPosition<LatLng> = {
+      target: loc,
+      zoom: 17
+      ,tilt: 10
+    }
+    this.map.moveCamera(options);
+  }
+
+  stateLocation: string = 'false';
+  getMyLocation() {
+    let locd: LatLng;
+    this.stateLocation = 'Buscado...';
+    this.geolocation.getCurrentPosition().then((resp) => {
+      locd = new LatLng(resp.coords.latitude, resp.coords.longitude);
+      this.stateLocation = 'false';
+      this.moveCamera(locd);
+      this.createMarker(locd, "", this.color ).then((marker: Marker) => {
+        this.markers.push(marker); marker.showInfoWindow();
+      })
+    }).catch(err => {
+      this.stateLocation = 'Activa tu geolocalización';
+    })
+  }
+
+
   initMap(){
-   
+    
+    var mapita = document.getElementById('map');
+    mapita.style.height = '60%';
+    mapita.style.width = '90vw';
+
+    let controls: any = {compass: true, myLocationButton: false, indoorPicker: false, zoom: true, mapTypeControl: true, streetViewControl: false};
     let element = this.mapElement.nativeElement;
     this.map = this._googleMaps.create(element, {
       'backgroundColor': 'white',
+        'controls': {
+          'compass': controls.compass,
+          'myLocationButton': controls.myLocationButton,
+          'indoorPicker': controls.indoorPicker,
+          'zoom': controls.zoom,
+          'mapTypeControl': controls.mapTypeControl,
+          'streetViewControl': controls.streetViewControl
+        },
         'gestures': {
           'scroll': true,
+          'tilt': true,
+          'rotate': true,
           'zoom': true
         },
-        zoom: 10,
+        zoom: 15,
         center: {lat: 4.6097538, lng: -83.3920573}
     })
-  
-  
   }
-  color: any = 'red';
+  color: any = 'assets/imgs/me.png';
   
   markers: any = [];
   points: any = [];
   mypoint: any = [];
+
   loadMap() {
   
-    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
-    //Add 'implements AfterViewInit' to the class.
     let loc: LatLng;
     this.initMap();
-  
-      this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
-      //Get User location
-      let a = 0;
-      this.showLocation = setInterval(() => {
-        
-        this.geolocation.getCurrentPosition({
-          enableHighAccuracy: true, // HABILITAR ALTA PRECISION
-        }).then((resp) => { 
-        
-          let loc = new LatLng(resp.coords.latitude, resp.coords.longitude);
-          
-          this.createMarker(loc, 'Tu', 'green' ).then((marker: Marker) => {
-
-            this.mypoint.push(marker); marker.showInfoWindow();
-            for (let index = 0; index < this.mypoint.length; index++) {
-              this.mypoint[index-1].setMap(this.map);
-            }
-
-          }) 
-
-        })
-      }, 10000)
-
-
-
-     
+    
+    this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
         this.list_points.forEach(element => {
-          var loc = new LatLng(element.latitude, element.longitude);    
-          this.createMarker(loc, 'Tomado', 'red').then((marker: Marker) => {
+          loc = new LatLng(element.latitude, element.longitude);    
+          this.createMarker(loc, 'Tomado', 'assets/imgs/notomar.png').then((marker: Marker) => {
             this.points.push(marker); marker.showInfoWindow();
           })
         });
-  
-      
     });
   
   }
@@ -221,12 +219,22 @@ export class ProgressInTaskPage {
   loadForm(form_studie: any, iduser: number, idtask: number, price: any, id: any ){
 
 
-    console.log(this.navParams, "PARAMS JERR");
+    let type_studie = this.navParams.data.data.load_types_studie_id;
+    // console.log(type_studie, "asdfadsf");
+    if(type_studie == 1) {
+      
+      this.getPoints();
+      this.pointesCreate = setInterval(() => {
+        this.getPoints();
+      }, 10000);
+      this.value_heigth = 70;
 
-
+      this.loadMap();
+      this.getMyLocation();
+    }   
+    
     form_studie.owner = '5bdc91b1851af95d8e5b537d';
     Formio.icons = 'fontawesome';
-
 
     // document.getElementById('formio')
     Formio.createForm( this.idform.nativeElement,

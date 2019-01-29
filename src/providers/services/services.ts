@@ -37,8 +37,17 @@ export class ServicesProvider {
     return this.http.post(`${this.endApi}/login_eyes`, data);
   }
 
+  // traer los estudios disponible para el sistema
   get_studies_available() {
     return this.http.get(`${this.endApi}/studies_available`);
+  }
+
+  get_studies_test(id) {
+    return this.http.get(`${this.endApi}/studies_test/${id}`);
+  }
+
+  get_dept_to_userpayment(id) {
+    return this.http.get(`${this.endApi}/get_dept_to_userpayment/${id}`);
   }
 
   // Proceso para consultar la existencia de un usuari 

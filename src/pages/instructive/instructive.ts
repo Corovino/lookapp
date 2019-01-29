@@ -75,13 +75,15 @@ export class InstructivePage {
   
     ) {
 
-      console.log(this.navParams, "SUPER PARAMETROS");
-
-
       this.userfacebook = this.navParams.data.userfacebook;
       this.forms = this.navParams.data.forms;
       this.useremail = this.navParams.data.useremail;
       
+      if(this.forms != undefined) {
+        this.register.email = this.forms.email;
+      }
+
+
       if(this.userfacebook != undefined) {
 
         this.register.email = this.userfacebook.email;
@@ -109,11 +111,21 @@ export class InstructivePage {
     }
   
   valid_first_step_email(){
+
+    // if(this.register.code == '') {
+    //   this.presentAlert("", "Ingrese el código de verificación");
+    // }else 
     if(this.register.name == '' || this.register.lname == '') {
       this.presentAlert("", "Por favor ingrese todos los campos")
     } else {
       this.step_two = true; 
-      this.step_one = false;
+      this.step_one = false
+      // this.rest.valid_code(this.register).subscribe((data:any)=> {
+      //   if(data.error){
+      //     this.presentAlert("", data.message)
+      //   }else {
+      //   }
+      // })
     }
   }
 
@@ -124,6 +136,7 @@ export class InstructivePage {
     } else if(this.register.pass != this.register.repass) {
       this.presentAlert("", "las constraseñas no coinciden");
     } else {
+      
           this.step_two = true; 
           this.step_one = false
     }
@@ -263,25 +276,28 @@ export class InstructivePage {
     ) {
       this.presentAlert("Alert", "No se pueden tener datos incompletos")
     } else {
-      
-      if(this.forms != undefined){
-        if(this.iduser == 0){
-          this.rest.create_user_step_one(this.forms).subscribe((response: any ) => {
-            if(!response.error) {
-              this.iduser = response.data.id;
-              this.continue_register_with_email();
-            } else {
-              this.presentAlert("Error", response.message);
-            }
-          })
-        } else {
-          this.continue_register_with_email();
+      if(this.image == 'assets/imgs/icon.png'){
+        this.presentAlert('', 'Es necesario tomar la tu imagen de portada')
+      } else {
+        if(this.forms != undefined){
+          if(this.iduser == 0){
+            this.rest.create_user_step_one(this.forms).subscribe((response: any ) => {
+              if(!response.error) {
+                this.iduser = response.data.id;
+                this.continue_register_with_email();
+              } else {
+                this.presentAlert("Error", response.message);
+              }
+            })
+          } else {
+            this.continue_register_with_email();
+          }
+        } else if(this.userfacebook != undefined) {
+          // conectado con facebooks
+          this.continue_register_with_facebook();
+        } else if(this.useremail != undefined) {
+          this.continue_session_with_email();
         }
-      } else if(this.userfacebook != undefined) {
-        // conectado con facebooks
-        this.continue_register_with_facebook();
-      } else if(this.useremail != undefined) {
-        this.continue_session_with_email();
       }
     }
   }
@@ -321,14 +337,18 @@ export class InstructivePage {
   // when a user is register with email
   ok_email() {
     this.storage.set('xx-app-loap', JSON.stringify(this.iEmail));
-    this.splashscreen.show();
-    window.location.reload();
+    setTimeout(() => {
+      this.splashscreen.show();
+      window.location.reload();
+    }, 1000)
   }
   // when a user is registeer with facebook
   ok_facebook(){
     this.storage.set('xx-app-loap', JSON.stringify(this.iFacebook));
-    this.splashscreen.show();
-    window.location.reload();
+    setTimeout(() => {
+      this.splashscreen.show();
+      window.location.reload();
+    }, 1000)
   }
   // when a user is newe
   ok_session(){
@@ -337,24 +357,22 @@ export class InstructivePage {
       pass: this.forms.pass
     }).subscribe( (rp:any) => {
       this.storage.set('xx-app-loap', JSON.stringify(rp));
-      this.splashscreen.show();
-      window.location.reload();
+      setTimeout(() => {
+        this.splashscreen.show();
+        window.location.reload();
+      }, 1000)
     })
   }
   
   // save imagen
   save_img_in_server(id){
-    if(this.image == 'assets/imgs/icon.png'){
-      this.presentAlert('', 'Es necesario tomar la tu imagen de portada')
-    } else {
-      this.rest.save_img_user(this.userForm, id).subscribe( (data:any) => {
-        this.step_four = true; 
-        this.step_three = false;
-          if(!data.error){
-            this.image = data.data.img;  
-          } 
-      })
-    } 
+    this.rest.save_img_user(this.userForm, id).subscribe( (data:any) => {
+      this.step_four = true; 
+      this.step_three = false;
+        if(!data.error){
+          this.image = data.data.img;  
+        } 
+    })
   }
 
   presentAlert(title:string, message: string) {

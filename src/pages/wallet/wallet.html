@@ -5,6 +5,38 @@
 </ion-header>
 
 
-<ion-content padding>
-  
+<ion-content padding >
+
+  <div *ngIf="list_wallet">
+
+
+    <ion-card>
+        <img src="assets/imgs/billetera.jpg"/>
+      <ion-card-content>
+        Estamos trabajando en tu billetera, no te preocupes, nada se ha perdido. 
+      </ion-card-content>
+    </ion-card>
+    <!-- <ion-card>  
+      <ion-card-content text-center>
+        <h2 style="font-size: 7vw;"> No te preocupes! </h2>
+        <p>
+          aunque LookApp ha evolucionado su plataforma digital, tu saldo en la billetera se mantiene intacto! <br>
+          Tu saldo en LookApp es de: $ {{list_wallet.last_debt[0].last_value | number}} <br>
+          Las tareas que hagas desde el 28 de enero de 2019 en adelante apareceran en la billetera de la app. <br>
+        </p>
+      </ion-card-content>
+    </ion-card>
+    
+    <ion-card>
+      <ion-card-content text-center>  
+        <h2> Saldo disponible </h2>
+        <span style="font-size: 25px; font-weight: bold">
+          $ {{list_wallet.available[0].valor == null ? 0 : (list_wallet.available[0].valor | number) }}
+        </span>
+        <hr>
+        Total Ganado: {{list_wallet.pay[0].valor == null ? 'Aun no has ganado con LookApp' : list_wallet.pay[0].valor }}    
+      </ion-card-content>
+    </ion-card> -->
+  </div>
+
 </ion-content>

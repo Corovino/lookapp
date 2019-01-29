@@ -40,6 +40,21 @@
           </ion-item>
         </ion-list>
 
+        
+        <ion-list *ngIf="lits_task.task_by_review.length > 0">
+          <hr>
+          <p padding>Tus tareas serán revisadas en un plazo de 24 horas hábiles</p>
+          <ion-item *ngFor="let studio of lits_task.task_by_review ">
+            <ion-avatar item-left>
+              <img [src]="studio.img_studie">
+            </ion-avatar>
+            <h2><b>#{{studio.id}}</b></h2>
+            <p>{{studio.name_studie}}</p>
+            <button class="btn-look" style="padding: 0 1.6em; margin: 3vw;" ion-button item-end>Enviada</button>
+          </ion-item>
+        </ion-list>
+
+
         <div *ngIf="lits_task.task_in_process.length == 0" >
             <!-- <h3>Eres grandioso, no tienes ninguna tarea pendienete</h3> -->
 

@@ -20,7 +20,7 @@ import { ServicesProvider } from '../providers/services/services';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Camera } from '@ionic-native/camera';
 import { UserComponent } from '../components/user/user';
-import { SMS } from '@ionic-native/sms';
+
 import { Geolocation } from '@ionic-native/geolocation';
 import { KeysToApiKeys } from '../clases/keys';
 import { Device } from '@ionic-native/device';
@@ -87,7 +87,6 @@ import { Facebook } from '@ionic-native/facebook';
     {provide: HTTP_INTERCEPTORS, useClass:TokenInterceptor, multi: true},
     ServicesProvider,
     Camera,
-    SMS,
     Facebook,
     LocalNotifications,
     LocationAccuracy,

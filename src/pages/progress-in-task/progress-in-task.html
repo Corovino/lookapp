@@ -12,7 +12,7 @@
 
 
 <ion-content padding>
-  
+    
     <div id="bar" class="cls-progress"  [ngStyle]="{'width': pg +'vw' }"></div>
     <!-- {{ (this.timee / 60 ) | number }} min -->
     <ion-slides pager *ngIf="showInstructive">
@@ -26,6 +26,8 @@
           <h2 class="slide-title" [innerHTML]="slide.title"></h2>
           <p [innerHTML]="slide.description"></p>
         </ion-slide>
+
+
         <ion-slide>
           <ion-toolbar>
           </ion-toolbar>
@@ -38,13 +40,19 @@
         </ion-slide>
     </ion-slides>
 
-
     <button class="btn-look" ion-button full (click)="showInstructive = true">VER INSTRUCTIVO</button>
     
+    <p *ngIf="value_heigth == 70">
+      Los puntos rojos ya han sido tomados
+    </p>
+    <!--  style="width: 90vw" -->
+    <div #map id="map" >
+      <ion-fab top right><button color="light" ion-fab (click)="getMyLocation()"><ion-icon ios="ios-locate-outline" md="md-locate"></ion-icon></button></ion-fab>
+    </div>
 
-    <div #map id="map" style="height:70vw; width: 90vw"></div>
+    <div *ngIf="value_heigth == 70">
+    </div>
 
-    
     <div #idform id="formio"></div>
 
   <!-- <button ion-button (click)="conoce()" >Hola como vas</button> -->
@@ -57,6 +65,9 @@
     position: fixed;
     margin: -15px -16px;
   }
-
-  
+/* 
+  #map {
+      height: 60vw;
+  }
+   */
 </style>
