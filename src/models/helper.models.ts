@@ -1,11 +1,7 @@
-import { IonicPage, NavController, NavParams, ToastController, AlertController  } from 'ionic-angular';
-import { ServicesProvider } from '../providers/services/services';
-import { Device } from '@ionic-native/device';
-
+import { ToastController, AlertController  } from 'ionic-angular';
 
 export class UtilitiesClass {
-
-
+  
     _toastCtrl: any;
     _alertCtrl: any;
   
@@ -16,7 +12,7 @@ export class UtilitiesClass {
     }
 
     ionViewDidLoad(){
-      this._toastCtrl =  ToastController;
+      this._toastCtrl = ToastController;
       this._alertCtrl = AlertController;
     }
     // FUNCTIONS UTILES

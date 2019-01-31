@@ -40,7 +40,7 @@
         </ion-slide>
     </ion-slides>
 
-    <button class="btn-look" ion-button full (click)="showInstructive = true">VER INSTRUCTIVO</button>
+    <button class="btn-look cls-i" ion-button full (click)="showInstructive = true">VER INSTRUCTIVO</button>
     
     <p *ngIf="value_heigth == 70">
       Los puntos rojos ya han sido tomados
@@ -64,6 +64,10 @@
     height: 4px;
     position: fixed;
     margin: -15px -16px;
+  }
+
+  .cls-i {
+    margin:11px 0px 22px;
   }
 /* 
   #map {

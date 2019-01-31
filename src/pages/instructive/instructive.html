@@ -16,7 +16,7 @@
 
     <!-- STEP ONE  -->
     <div *ngIf="step_one">
-        <div padding style="text-align: center">
+        <div padding text-center>
           <img src="assets/imgs/logo.png" alt="logo de lookapp"> <br>
           <p class="cls-p" *ngIf="this.useremail">
             Hemos realizado grandes cambios para ti, a tu correo hemos enviado un código de verificación para realizar el cambio de contraseña, 
@@ -82,7 +82,7 @@
 
     <!-- STEP TWO -->
     <div *ngIf="step_two">
-      <div padding style="" class="cls-head-steps" >
+      <div padding class="cls-head-steps" >
         <img src="assets/imgs/logo.png" alt="logo de lookapp"> <br>
       </div>
       <ion-list>
@@ -122,7 +122,7 @@
           <ion-grid>
             <ion-row>
                 <ion-col width-50>
-                  <button class="btn-look btn-width-look" ion-button full (click)="step_one = true; step_two = false"  >Atras</button>
+                  <button class="btn-look btn-width-look" ion-button full (click)="step_one = true; step_two = false">Atras</button>
                 </ion-col>
                 <ion-col width-50>
                   <button class="btn-look btn-width-look" ion-button full (click)="valid_second_step()"  >Siguiente</button>
@@ -135,10 +135,10 @@
     </div>
 
     <div *ngIf="step_three">
-      <div padding style="text-align: center">
+      <div padding text-center>
         <img src="assets/imgs/logo.png" alt="logo de lookapp" > <br>
       </div>
-      <ion-list style="margin: 3vw 0 16px;">
+      <ion-list class="cls-margin" >
 
         <!-- MOC TOMAR FOTOGRAFIA -->
         <img [src]="image"  class="avatar-img" *ngIf="image" (click)="getPicture()"/>
@@ -166,7 +166,7 @@
 
     <div *ngIf="step_four">
         <div text-center>
-            <div padding style="text-align: center">
+            <div padding text-center>
               <h2>¡FELICIDADES!</h2>
               <img src="assets/imgs/logo.png" alt="logo de lookapp"> <br>
               <br><br><br><br><br>
@@ -212,6 +212,10 @@
 
   .item-md {
     padding-left: 2px !important;
+  }
+
+  .cls-margin {
+    margin: 3vw 0 16px;
   }
 
 

@@ -1,9 +1,8 @@
 import { ProgressInTaskPage } from './../progress-in-task/progress-in-task';
-import { Component, ElementRef, ViewChild, ɵConsole } from '@angular/core';
-import { NavController, NavParams, NavPopAnchor, AlertController, LoadingController } from 'ionic-angular';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
 import { Storage } from '@ionic/storage'
-import { GoogleMaps, GoogleMap, Marker, GoogleMapsEvent, ILatLng, Polygon, Poly, Encoding,  LatLng, CameraPosition, MarkerOptions, Circle } from '@ionic-native/google-maps'
-// import { GoogleMaps, GoogleMap, GoogleMapOptions, Environment, Marker, GoogleMapsEvent, LocationService, MyLocation, MyLocationOptions, ILatLng, Polyline, Polygon, Poly, LatLng, CameraPosition, MarkerOptions, LatLngBounds} from '@ionic-native/google-maps'
+import { GoogleMaps, GoogleMap, Marker, GoogleMapsEvent, ILatLng, Poly,  LatLng, CameraPosition, MarkerOptions } from '@ionic-native/google-maps'
 import { ServicesProvider } from '../../providers/services/services';
 
 import { Camera, CameraOptions } from '@ionic-native/camera';
@@ -11,10 +10,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
 
 import { Geolocation } from '@ionic-native/geolocation';
 import { Device } from '@ionic-native/device';
-import { catchError, dematerialize, timeInterval } from 'rxjs/operators';
-import { componentFactoryName } from '@angular/compiler';
-import { UtilitiesClass } from '../../models/helper.models';
-import { SkipsPage } from '../skips/skips';
+
 
 declare var Formio;
 
@@ -58,9 +54,10 @@ export class HomePage {
       const loding = this.loadingCtrl.create({
         content: 'Please wait...',
         duration: 1500
-      })
+      });
 
       loding.present();
+      
       this.get_studies();
       
     }
@@ -132,12 +129,8 @@ export class HomePage {
     });
   }
 
-  
-
   /////////////////// LOAD MAP
-  ionViewDidLoad(){
-
-  }
+  ionViewDidLoad(){ }
 
 
   urltoFile(url, filename, mimeType){
@@ -197,16 +190,17 @@ export class HomePage {
   templateUrl: 'detail_task.html'
 })
 export class DetailTaskPage {
+  
   public estudio: any;
-
-
   @ViewChild('map') mapElement: ElementRef;
-
   @ViewChild('bar') info: ElementRef;
 
 
   map: GoogleMap;
   showMapa: any = true;
+  idPointToHide: number = 0;
+  stateTask: boolean = false; 
+
 
   constructor(
     public params: NavParams, 
@@ -231,7 +225,7 @@ export class DetailTaskPage {
 moveCamera(loc: LatLng){
   let options: CameraPosition<LatLng> = {
     target: loc,
-    zoom: 17
+    zoom: 5
     ,tilt: 10
   }
   this.map.moveCamera(options);
@@ -239,22 +233,40 @@ moveCamera(loc: LatLng){
 
 
 showLocation: any;
+points_available: any;
 ionViewDidEnter(){
+  
   this.loadMap();
+  this.get_points_availables();
+
 }
 
 
 ionViewDidLeave(){
   clearInterval(this.showLocation);
+  clearInterval(this.points_available);
+}
+
+//
+get_points_availables() {
+
+  this.points_available = setInterval(() => {
+    this.rest.get_points_available(this.estudio.id).subscribe((resp:any) => {
+      this.estudio.ubicaciones = resp.data
+    })
+  }, 60000)
+
 }
 
 //Adds a marker to the map
 createMarker(loc: LatLng, title: string, color){
+    
     let markerOptions: MarkerOptions = {
       position: loc,
       icon: color
     };
     return this.map.addMarker(markerOptions);
+
 }
 
 // ADD polylines
@@ -277,9 +289,6 @@ getMyLocation() {
     locd = new LatLng(resp.coords.latitude, resp.coords.longitude);
     this.stateLocation = 'false';
     this.moveCamera(locd);
-    this.createMarker(locd, "", this.color ).then((marker: Marker) => {
-      this.markers.push(marker); marker.showInfoWindow();
-    })
   }).catch(err => {
     this.stateLocation = 'Activa tu geolocalización';
   })
@@ -290,13 +299,19 @@ validPolilyne(polines, loc) {
   let resuls = [];
   // FUNCION QUE HACE PUSHEO DEL RESULTADO DE LA FUNCION
   polines.forEach(element => {
-    resuls.push(Poly.containsLocation(loc, element));
-    console.log(Poly.containsLocation(loc, element), "jerrito");
+    resuls.push({state: Poly.containsLocation(loc, element), id: element[0].id});
   }); 
   // SE RETORNA CUANDO UNO DE LOS REUSLTADO ES IGUAL A TRUE
-  var resultobj = resuls.filter(obj => { return obj == true; });
+  var resultobj = resuls.filter(obj => {  if(obj.state == true) { return obj; } });
+
   // SE ASEGINA EL COLOR VERDE SI UNO DE LOS LUGARES ESTA TRUE
-  this.color = resultobj[0] ? 'assets/imgs/tomar.png' : 'assets/imgs/me.png';
+  if(resultobj[0]){
+    // this.color = resultobj[0].state ? 'assets/imgs/tomar.png' : 'assets/imgs/me.png';
+    this.color = resultobj[0].state ? 'assets/imgs/me.png' : 'assets/imgs/me.png';
+    this.stateTask = true;
+    this.idPointToHide = resultobj[0].id;
+  }
+
 }
 
 
@@ -324,6 +339,11 @@ initMap(){
       zoom: 15,
       center: {lat: 4.6097538, lng: -83.3920573}
   })
+
+
+  this.getMyLocation();
+
+
 }
 
 
@@ -337,13 +357,14 @@ loadMap() {
 
   
 
-  this.getMyLocation();
-
-
+  
+  
   //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
   //Add 'implements AfterViewInit' to the class.
   let loc: LatLng;
   this.initMap();
+
+
   //once the map is ready move
   //camera into position
   this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
@@ -354,6 +375,7 @@ loadMap() {
     let triangleCoords = [];
     this.estudio.ubicaciones.forEach(element => {
       
+
       var loc = new LatLng(element.latitud, element.longitud); 
       var Tlat = element.latitud, Tlng = element.longitud;
 
@@ -361,7 +383,7 @@ loadMap() {
       var p = parseFloat(Tlng) - parseFloat("0.0009");
 
       triangleCoords.push([
-        {lat: parseFloat(Tlat), lng: parseFloat(Tlng)},
+        {lat: parseFloat(Tlat), lng: parseFloat(Tlng) , id: element.id},
         {lat: parseFloat(Tlat+0.0009) , lng: parseFloat(Tlng+0.0009)},
         {lat: parseFloat(j.toString()) , lng: parseFloat(p.toString())},
         {lat: parseFloat(Tlat+0.0009) , lng: parseFloat(p.toString())}
@@ -385,27 +407,23 @@ loadMap() {
       
       this.showLocation = setInterval(() => {
         
-        console.log("opcion censon")
         this.geolocation.getCurrentPosition({
           enableHighAccuracy: true, // HABILITAR ALTA PRECISION
         }).then((resp) => {
           loc = new LatLng(resp.coords.latitude, resp.coords.longitude);
 
-          console.log(resp.coords)
           this.validPolilyne(triangleCoords, loc);
           // this.moveCamera(loc);
   
           this.createMarker(loc, "Me", this.color ).then((marker: Marker) => {
             this.markers.push(marker); marker.showInfoWindow();
             for (let index = 0; index < this.markers.length; index++) {
-              if(index > 1){
-                this.markers[index-1].remove();
-              }
+              if(index > 1){ this.markers[index-1].remove(); } 
+              else if(index == 1) { this.markers[0].remove(); }
             }
           })
           
          }).catch((error) => {
-           console.log('Error getting location', error);
          });
       }, 1500);
 
@@ -413,8 +431,6 @@ loadMap() {
 
     
     } else {
-
-      console.log("OPCION NO IGUAL AL CENSO");
 
       let polines = [];
       this.estudio.ubicaciones.forEach( (element, key) => {
@@ -440,9 +456,8 @@ loadMap() {
 
             this.markers.push(marker); marker.showInfoWindow();
             for (let index = 0; index < this.markers.length; index++) {
-              if(index > 1){
-                this.markers[index-1].remove();
-              }
+              if(index > 1){ this.markers[index-1].remove(); } 
+              else if(index == 1) { this.markers[0].remove(); }
             }
 
           })
@@ -538,14 +553,26 @@ presentAlert(title:string, message: string) {
       ) {
         
 
-        if(this.color == 'assets/imgs/tomar.png') {
+        // if(this.color == 'assets/imgs/tomar.png') {
+        if(this.stateTask == true) {
           this.rest.take_task({
             iduser: user.data.user._id,
             idstudie: data.id
           }).subscribe( (response: any) => {
             if(!response.error) {
+              // cuando las ubicaciones son por excel
+              if(this.estudio.type_ubication == 3 && this.idPointToHide != 0){
+                this.rest.hide_point(this.idPointToHide).subscribe( (resp:any) => {
+                  if(resp.error){
+                    this.presentAlert("", resp.message);
+                  } else {
+                    this.navCtrl.setRoot(ProgressInTaskPage, {data: data, iduser: user.data.user._id, idt:response.data.id })
+                  }
+                })
+              } else {
+                this.navCtrl.setRoot(ProgressInTaskPage, {data: data, iduser: user.data.user._id, idt:response.data.id })
+              }
               // this.navCtrl.push(SkipsPage, {data: data, iduser: user.data.data._id})
-              this.navCtrl.setRoot(ProgressInTaskPage, {data: data, iduser: user.data.user._id, idt:response.data.id })
             } else {
               this.presentAlert("", "Ya haz tomado esta tarea.");    
             }

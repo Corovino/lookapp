@@ -1,8 +1,8 @@
-import { Component, ViewChild, ElementRef, PLATFORM_ID } from '@angular/core';
-import { IonicPage, NavController, NavParams, DomController, AlertController } from 'ionic-angular';
+import { Component, ViewChild, ElementRef } from '@angular/core';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { ServicesProvider } from '../../providers/services/services';
-import { GoogleMaps, GoogleMap, Marker, GoogleMapsEvent, ILatLng, Polygon, Poly, LatLng, CameraPosition, MarkerOptions, Circle } from '@ionic-native/google-maps'
+import { GoogleMaps, GoogleMap, Marker, GoogleMapsEvent, LatLng, CameraPosition, MarkerOptions } from '@ionic-native/google-maps'
 
 
 /**
@@ -138,7 +138,7 @@ export class ProgressInTaskPage {
   moveCamera(loc: LatLng){
     let options: CameraPosition<LatLng> = {
       target: loc,
-      zoom: 17
+      zoom: 5
       ,tilt: 10
     }
     this.map.moveCamera(options);
@@ -201,13 +201,19 @@ export class ProgressInTaskPage {
     this.initMap();
     
     this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
+    
         this.list_points.forEach(element => {
-          loc = new LatLng(element.latitude, element.longitude);    
-          this.createMarker(loc, 'Tomado', 'assets/imgs/notomar.png').then((marker: Marker) => {
-            this.points.push(marker); marker.showInfoWindow();
+    
+          loc = new LatLng(element.latitude, element.longitude);
+          this.createMarker(loc, '', 'assets/imgs/notomar.png').then((marker: Marker) => {
+            this.points.push(marker); 
+            marker.showInfoWindow();
           })
+    
         });
+    
     });
+
   
   }
   
@@ -217,7 +223,6 @@ export class ProgressInTaskPage {
 
 
   loadForm(form_studie: any, iduser: number, idtask: number, price: any, id: any ){
-
 
     let type_studie = this.navParams.data.data.load_types_studie_id;
     // console.log(type_studie, "asdfadsf");

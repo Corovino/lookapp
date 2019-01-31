@@ -1,7 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/timeout'; // Don't forget this import, otherwise not gonna work
-import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
@@ -27,8 +26,12 @@ export class ServicesProvider {
   // private endAuth = this.ends.FUNC_END_POINT_AUTHORIZATION();
   // private endAuth = 'Bearer {"id":"110546993488738742297","d":"2","user":1,"type":"iwgl","accesToken":{"code":0,"user":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1MzkxNDE5ODMsImV4cCI6MTU0MDE0MTk4MywiZGF0YSI6eyJpZCI6IjExMDU0Njk5MzQ4ODczODc0MjI5NyIsIm5hbWUiOiJqZXJyeSIsImxuYW1lIjoibGFnb3MiLCJjb3JyZW8iOiJqZXJyeXNlYmFzdGlhbmxhZ29zY0BnbWFpbC5jb20iLCJkb21haW4iOiIyIn19.Qogh9xlFk2Xn79jmjUUlKIbDAY51MX269H7BeyyJmQE"}}';
   
+  
+  get_points_available(id) {
+    return this.http.get(`${this.endApi}/get_points_available/${id}`);
+  }
+  
   // LAS PALABRA RESERVADA PARA HACER EL CONSUMO DELA API ES REST
-
   changepass(data: any) {
     return this.http.post(`${this.endApi}/resetpass`, data);
   }
@@ -49,6 +52,11 @@ export class ServicesProvider {
   get_dept_to_userpayment(id) {
     return this.http.get(`${this.endApi}/get_dept_to_userpayment/${id}`);
   }
+  //Proceso para quitar un punto del mapa que no ha sido equitado 
+  hide_point(id) {
+    return this.http.get(`${this.endApi}/hide_point/${id}`);
+  }
+
 
   // Proceso para consultar la existencia de un usuari 
   validata_user(data: any) {

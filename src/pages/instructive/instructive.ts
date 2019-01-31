@@ -173,15 +173,17 @@ export class InstructivePage {
  
 
   dataURLtoFile(dataurl, filename) {
+  
       var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
           bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
       while(n--){
           u8arr[n] = bstr.charCodeAt(n);
       }
       return new File([u8arr], filename, {type:mime});
+  
   }
 
-
+  
   getPicture(){
     let options: CameraOptions = {
       destinationType: this.camera.DestinationType.DATA_URL,
@@ -189,7 +191,7 @@ export class InstructivePage {
       targetWidth: 500,
       quality: 100,
       allowEdit: true,
-      saveToPhotoAlbum: true
+      saveToPhotoAlbum: false
     }
 
     this.camera.getPicture(options)
@@ -200,8 +202,10 @@ export class InstructivePage {
         this.userForm.delete('img');
         this.userForm.append('img', this.file);
       }).catch(e => {
-        console.error(e)
+        console.error(e);
       })
+
+
   }
 
 
@@ -277,7 +281,7 @@ export class InstructivePage {
       this.presentAlert("Alert", "No se pueden tener datos incompletos")
     } else {
       if(this.image == 'assets/imgs/icon.png'){
-        this.presentAlert('', 'Es necesario tomar la tu imagen de portada')
+        this.presentAlert('', 'Es necesario tomar tu imagen de portada')
       } else {
         if(this.forms != undefined){
           if(this.iduser == 0){
@@ -293,7 +297,6 @@ export class InstructivePage {
             this.continue_register_with_email();
           }
         } else if(this.userfacebook != undefined) {
-          // conectado con facebooks
           this.continue_register_with_facebook();
         } else if(this.useremail != undefined) {
           this.continue_session_with_email();
@@ -312,7 +315,6 @@ export class InstructivePage {
     })
   }
 
-  
 
   // METHOD TO NEXT WITH FACEBOOK
   iFacebook: any;
@@ -323,15 +325,18 @@ export class InstructivePage {
       this.iFacebook = data;
       this.save_img_in_server(this.register.userid);
     })
+  
   }
 
   // METODO TO NEXT WITH EMAIL TO SESSION 
   iEmail: any;
   continue_session_with_email(){
+    
     this.rest.upload_data_to_email(this.register).subscribe((data: any) => {
         this.iEmail = data;
         this.save_img_in_server(this.register.userid);
     })
+
   }
 
   // when a user is register with email
