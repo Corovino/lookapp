@@ -35,19 +35,18 @@
 }
 
 
+ion-header .toolbar-title-md {
+    text-align: center;
+}
 
-
-
-// .text-input-md, .cls-button, [input] {
-//     // border: 1px solid #0006 !important;
-//     border: 1px solid lightgray;
-//     border-radius: 23px !important;
-//     margin: 13px 8px;
-//     padding: 7px;
-//     width: 90%;
-//  }
-
-
+.btn-birthday {
+    border: 1px solid lightgray;
+    border-radius: 28px;
+    width: 85vw;
+    margin-left: 2vw;
+    padding-left: 19px;
+    margin-bottom: 6px;
+}
 
 .toolbar-title-md {
     padding: 0 0px;
@@ -59,10 +58,20 @@
 
 .btn-look {
     border-radius: 23px;
+    height: 13vw;
 }
 
 .btn-width-look {
-    width: 37vw
+    width: 37vw;
+}
+
+.item-md {
+    padding-left: 0px !important;
+ }
+
+.cls-width {
+    width: 94%;
+    margin-left: 3%;    
 }
 
 
@@ -70,6 +79,13 @@
     border-radius: 50%;
     margin: 16vw 16vw 3vw;
     width: 65%;
+}
+
+.avatar-img3 {
+    border-radius: 50%;
+    margin: 7vw 32.5vw 2vw;
+    width: 35%;
+    border: 3px solid #e5355b;
 }
 
 

@@ -257,6 +257,7 @@ export class InstructivePage {
           }
         ]
       });
+      
       alert.present();
 
       // this.presentAlert("Alert", "Es necesario activar tu geolocalización para el registro");

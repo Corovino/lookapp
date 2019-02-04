@@ -35,6 +35,7 @@ import { SkipsPage } from '../pages/skips/skips';
 import { EditPerfilPage } from '../pages/edit-perfil/edit-perfil'
 
 import { Facebook } from '@ionic-native/facebook';
+import { LetterPipe } from '../pipes/letter/letter';
 
 @NgModule({
   declarations: [
@@ -52,13 +53,17 @@ import { Facebook } from '@ionic-native/facebook';
     DetailTaskPage,
     MyTasksPage,
     MorePage,
-    SkipsPage
+    SkipsPage,
+    LetterPipe
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
-    HttpClientModule
+    HttpClientModule,
+  ],
+  exports: [
+    LetterPipe
   ],
   bootstrap: [IonicApp],
   entryComponents: [

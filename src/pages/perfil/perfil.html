@@ -5,49 +5,53 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
   <ion-navbar>
-    <ion-title>Perfil</ion-title>
+    <ion-title>PERFIL</ion-title>
   </ion-navbar>
-
 </ion-header>
 
 
-<ion-content *ngIf="info_user">
+<ion-content >
+  <div *ngIf="info_user">
+
+    <img [src]="info_user.img"  class="avatar-img3" (click)="getPicture()"/>
     
-    <!-- <img [src]="info_user.img"/> -->
-
-    <img [src]="info_user.img"  class="avatar-img2" (click)="getPicture()"/>
-
-    <button *ngIf="file" ion-button full (click)="save_img()">Guardar</button>
-
-
     <div class="card-title" style="text-align: center">
-      <h1>{{info_user.name +' '+ info_user.lname}}</h1>
+      <h1>{{info_user.name}}</h1>
     </div>
-
-
+    
     <ion-item-divider>
       <h1> <ion-icon name="person"></ion-icon> Mis datos básicos</h1>
     </ion-item-divider>
-
-    <ion-list>
-        <ion-item>
-
-          <span> {{info_user.name +' '+ info_user.lname}}  </span> <br> 
-          <span> {{info_user.sex == 'M' ? 'Masculino' : 'Femanino'}} </span> <br>
-          <span> {{info_user.cedula == null ? 'Por ingresar' : info_user.cedula}} </span> <br>
-          <span> {{info_user.email}} </span> <br>
-          <span> {{info_user.birth_day | date:'dd/MMM/yyyy'}} </span> <br>
-          <span> {{info_user.phone}} </span> <br>
-          <span> Nivel del estudio: {{info_user.level_studie}} </span> <br>
-          <span> Estrato: {{info_user.level_studie}}  </span> <br>
-          
-        </ion-item>
-  
-        <button class="btn-look" ion-button full (click)="edit_perfil()">EDITAR MI PERFIL</button>
-    </ion-list>
-
     
-  
+    <ion-list>
+      <ion-item>
+        
+        <span> {{info_user.name +' '+ info_user.lname}}  </span> 
+        <span> {{info_user.sex == 'M' ? 'Masculino' : 'Femanino'}} </span>
+        <span> {{info_user.cedula == null ? 'Por ingresar' : info_user.cedula}} </span>
+        <span> {{info_user.email}} </span>
+        <span> {{info_user.birth_day | date:'dd/MMM/yyyy'}} </span>
+        <span> {{info_user.phone}} </span>
+        <span> Nivel del estudio: {{info_user.level_studie}} </span>
+        <span> Estrato: {{info_user.level_studie}}  </span>
+        
+      </ion-item>
+      
+      <button class="btn-look cls-width" ion-button full (click)="edit_perfil()">EDITAR MI PERFIL</button>
+    </ion-list>
+      
+  </div>
 </ion-content>
+      
+<style>
+  
+  span  {
+    width: 93%;
+    margin: 2% 6%;
+    position: relative;
+    float: left;
+    color: gray;
+  }
+
+</style>

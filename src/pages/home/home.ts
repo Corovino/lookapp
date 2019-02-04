@@ -20,8 +20,7 @@ import { Device } from '@ionic-native/device';
 
 export class HomePage {
   
-
-  
+  rootPage:any = 'ionic-pipes-home';
   list_studies: any = [];
   repo: any;
   
@@ -108,10 +107,6 @@ export class HomePage {
 
 
 
-
-
-
-
 @Component({
   templateUrl: 'detail_task.html'
 })
@@ -119,7 +114,6 @@ export class DetailTaskPage {
   
   public estudio: any;
   @ViewChild('map') mapElement: ElementRef;
-  @ViewChild('bar') info: ElementRef;
 
 
   map: GoogleMap;

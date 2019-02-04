@@ -1,6 +1,6 @@
 <ion-header>
     <ion-navbar>
-      <ion-title>Listado de tareas</ion-title>
+      <ion-title>TAREAS</ion-title>
     </ion-navbar>
 </ion-header>
 <ion-content >  
@@ -10,23 +10,30 @@
     pullingText="Pull to refresh"
     refreshingSpinner="circles"></ion-refresher-content>
   </ion-refresher>
-      
-  <ion-list>
-    <ion-item  *ngFor="let studie of list_studies"  >
-      <ion-avatar item-left style="margin: 4px 2px 4px 0;">
-        <img [src]="studie.img" (click)="take_taks(studie)" />
-      </ion-avatar>
+  <!-- Contendor 100% -->
+  <div class="cls-list-img" *ngFor="let studie of list_studies">
+    <!-- contenedor imagen 30% -->
+    <div class="cls-img" (click)="take_taks(studie)">
+      <img [src]="studie.img" alt="{{studie.name}}">
+    </div>
+    <!-- contendor la descripcion 60 %-->
+    <div class="cls-desc">
         <ion-title>
-          {{studie.name}}
+          {{studie.name | letter:20}}
         </ion-title>
-        <b>Pago:</b> <span style="color: red">{{studie.price_by_task | number}} </span> <br>
+        <b>Pago:</b> <span style="color: red">$ {{studie.price_by_task | number}} COP </span> <br>
         <p style="color: gray; font-size: 10px">
-          {{studie.history}}
+          {{studie.history | letter:80 }}
         </p>
-        <button ion-button clear item-end (click)="take_taks(studie)">Ver</button>
-    </ion-item>
-  </ion-list>
+    </div>
+    <!-- contendor para  ver imagen 10% -->
+    <a (click)="take_taks(studie)" clear item-end >Ver</a>
+
+  </div>
   
+
+<style>
+</style>
   <ion-list *ngIf="!list_studies_test.error">
     <p>Estudios de prueba</p>
     <ion-item *ngFor="let studie of list_studies_test.data"  >

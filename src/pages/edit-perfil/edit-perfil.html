@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Editar perfil</ion-title>
+    <ion-title>EDITAR PERFIL</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -15,43 +15,45 @@
 
 <ion-content padding>
 
+    <img [src]="info_user.img"  class="avatar-img3" (click)="getPicture()"/>
+
     <ion-list>
       <!-- MOC PARA NOMBRES -->
+      <label>Nombres</label>
       <ion-item>
-        <ion-label >Nombres</ion-label>
         <ion-input type="text" [(ngModel)]="info_user.name" ></ion-input>
       </ion-item>
       <!-- MOC PARA APELLIDOS -->
+      <label>Apellidos</label>
       <ion-item>
-        <ion-label >Apellidos</ion-label>
         <ion-input type="text" [(ngModel)]="info_user.lname" ></ion-input>
       </ion-item>
       <!-- MOC PARA CEDULA -->
+      <label> Número de cedula</label>
       <ion-item>
-        <ion-label > label-text</ion-label>
         <ion-input type="number" [(ngModel)]="info_user.cedula" ></ion-input>
       </ion-item>
       <!-- MOC PARA NUMERO DE CELULAR -->
+      <label>Número de celular</label>
       <ion-item>
-        <ion-label  > label-text</ion-label>
         <ion-input type="number" [(ngModel)]="info_user.phone" ></ion-input>
       </ion-item>
       <!-- MOC FECHA DE NACIMIENTO -->
+      <label>Fecha de nacimiento</label>
       <ion-item>
-        <ion-label>Fecha de nacimiento</ion-label>
         <ion-datetime class="btn-birthday" displayFormat="MM/DD/YYYY" [(ngModel)]="info_user.birth_day" placeholder="Fecha de nacimiento"></ion-datetime>
       </ion-item>
       <!-- MOC SEXO -->
+      <label>Genero</label>
       <ion-item>
-        <ion-label>Genero</ion-label>
         <ion-select [(ngModel)]="info_user.sex" multiple="false" >
           <ion-option value="M" >Masculino</ion-option>
           <ion-option value="F" >Femenino</ion-option>
         </ion-select>
       </ion-item>
       <!-- MOC ESTRATO -->
+      <label>Estrato</label>
       <ion-item>
-        <ion-label>Estrato</ion-label>
         <ion-select [(ngModel)]="info_user.strate" multiple="false">
           <ion-option value="1">1</ion-option>
           <ion-option value="2">2</ion-option>
@@ -62,8 +64,8 @@
         </ion-select>
       </ion-item>
       <!-- MOC NIVEL DE ESTUDIO -->
+      <label>Nivel de estudio</label>
       <ion-item>
-        <ion-label>Nivel de estudio</ion-label>
         <ion-select [(ngModel)]="info_user.level_studie" multiple="false">
           <ion-option value="Primaria" >Primaria</ion-option>
           <ion-option value="Bachiller" >Bachiller</ion-option>
@@ -72,8 +74,19 @@
         </ion-select>
       </ion-item>
       
-      <button class="btn-look" ion-button full (click)="updateDate()" > Actualizar </button>
+      <button class="btn-look cls-width" ion-button (click)="updateDate()" > Actualizar </button>
     </ion-list>
 
     
 </ion-content>
+
+
+<style>
+
+  label {
+    position: relative;
+    left: 49px;
+    color: #0009;
+  }
+
+</style>

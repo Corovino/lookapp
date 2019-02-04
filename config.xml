@@ -18,7 +18,7 @@
     <preference name="FadeSplashScreenDuration" value="300" />
     <preference name="SplashShowOnlyFirstTime" value="false" />
     <preference name="SplashScreen" value="screen" />
-    <preference name="SplashScreenDelay" value="3000" />
+    <preference name="SplashScreenDelay" value="7500" />
     <platform name="android">
         <allow-intent href="market:*" />
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
@@ -102,11 +102,6 @@
     </plugin>
     <plugin name="cordova-plugin-device" spec="^2.0.2" />
     <plugin name="cordova-plugin-request-location-accuracy" spec="2.2.3" />
-    <plugin name="cordova-plugin-facebook4" spec="4.0.0">
-        <variable name="APP_ID" value="2100908989947473" />
-        <variable name="APP_NAME" value="lookapp2" />
-        <variable name="FACEBOOK_ANDROID_SDK_VERSION" value="4.38.1" />
-    </plugin>
     <plugin name="cordova-plugin-network-information" spec="2.0.1" />
     <engine name="browser" spec="5.0.4" />
     <engine name="android" spec="6.3.0" />

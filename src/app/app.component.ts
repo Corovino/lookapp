@@ -18,13 +18,6 @@ export class MyApp {
   rootPage: any;
   store: any;
 
-  user: any = {
-    user: 'None',
-    pass: 'None'
-  };
-  
-  pages: Array<{icon: string, component: any}>;
-  
   constructor(
     public platform: Platform, 
     public statusBar: StatusBar, 
@@ -45,40 +38,22 @@ export class MyApp {
       }
     });
 
-
     this.storage.get('xx-app-loap').then((val) => {
       this.rootPage = val ? TabsPage : LoginPage;
     });
-
-
-  }
-
-  
-
-  presentAlert(title:string, message: string) {
-    let alert = this.alertCtrl.create({
-      title: title,
-      subTitle: message,
-      buttons: ['Aceptar']
-    });
-    alert.present();
   }
 
 
   initializeApp() {
-
     this.platform.ready().then(() => {
       this.splashScreen.hide();
       this.statusBar.styleDefault();
     });
   }
 
-  // Cerrar sesiona 
-  logout() {
-  }
   openPage(page) {
-    // Reset the content nav to have just this page
-    // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
   }
+
+
 }
