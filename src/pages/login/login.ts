@@ -1,15 +1,11 @@
 
-import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController, AlertController, Alert  } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { NavController, NavParams, ToastController, AlertController} from 'ionic-angular';
 import { Storage } from '@ionic/storage';
-import { HomePage } from '../home/home';
-import { create_acount_interfaces, login_interfaces } from '../../models/user.models';
+import { create_acount_interfaces } from '../../models/user.models';
 import { Geolocation } from '@ionic-native/geolocation';
 import { ServicesProvider } from '../../providers/services/services';
-import { FormGroup } from '@angular/forms';
 import { Device } from '@ionic-native/device';
-import { TabsPage } from '../tabs/tabs';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { InstructivePage } from '../instructive/instructive';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
 
@@ -223,27 +219,33 @@ export class LoginPage {
 
   saveSession(){
     
-    if(this.validate(this.forms.email) || this.validate(this.forms.pass)) {
-      this.presentAlert("Alerta", "Usuario y contraseña requeridos")
+    if(this.forms.check1 == false){
+      this.presentAlert("Alerta", "Para continuar debe aceptar términos y condiciones.");
+    } else if(this.forms.check2 == false) {
+      this.presentAlert("Alerta", "Para continuar debe aceptar Habbeas Data.");
     } else {
+
       this.rest.login_eyes(this.forms).subscribe((response: any) => {
         if(response.error == "mail"){
-          // this.recuperacuenta = true;
 
           this.navCtrl.push(InstructivePage, {
             useremail: response.data,
             iduser: response.data.id
           });
 
-
         } else if(response.error) {
           this.presentAlert("Error", response.message);
         }else {
+          
           this.storage.set('xx-app-loap', JSON.stringify(response));
+          
           setTimeout(() => {
             this.splashscreen.show();
             window.location.reload();
-          }, 1000)
+          }, 1000);
+
+
+
         }
       })
     }

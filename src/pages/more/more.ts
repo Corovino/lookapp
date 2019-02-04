@@ -1,8 +1,6 @@
-import { MyApp } from './../../app/app.component';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
-import { LoginPage } from '../login/login';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 /**
@@ -28,7 +26,6 @@ export class MorePage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad MorePage');
   }
   
   cerrarSesion(){

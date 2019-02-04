@@ -1,17 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Nav, Platform, AlertController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-
-import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
 import { LoginPage } from '../pages/login/login';
 import { Storage } from '@ionic/storage';
-import { InstructivePage } from '../pages/instructive/instructive';
 import { TabsPage } from '../pages/tabs/tabs';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
-import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
-
 
 
 @Component({
@@ -37,7 +31,7 @@ export class MyApp {
     public splashScreen: SplashScreen, 
     public storage: Storage,
     public locationAccuracy: LocationAccuracy,
-    private fb: Facebook
+    public alertCtrl: AlertController
   ) {
 
     this.initializeApp();
@@ -57,8 +51,19 @@ export class MyApp {
     });
 
 
-  
   }
+
+  
+
+  presentAlert(title:string, message: string) {
+    let alert = this.alertCtrl.create({
+      title: title,
+      subTitle: message,
+      buttons: ['Aceptar']
+    });
+    alert.present();
+  }
+
 
   initializeApp() {
 

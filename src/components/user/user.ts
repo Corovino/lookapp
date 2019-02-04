@@ -16,7 +16,6 @@ export class UserComponent {
   @Input('nombre') nombre: string;
 
   constructor() {
-    console.log('Hello UserComponent Component');
     this.text = 'Hello World';
   }
 

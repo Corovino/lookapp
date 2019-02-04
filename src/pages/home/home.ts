@@ -5,14 +5,12 @@ import { Storage } from '@ionic/storage'
 import { GoogleMaps, GoogleMap, Marker, GoogleMapsEvent, ILatLng, Poly,  LatLng, CameraPosition, MarkerOptions } from '@ionic-native/google-maps'
 import { ServicesProvider } from '../../providers/services/services';
 
-import { Camera, CameraOptions } from '@ionic-native/camera';
+import { Camera } from '@ionic-native/camera';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 
 import { Geolocation } from '@ionic-native/geolocation';
 import { Device } from '@ionic-native/device';
 
-
-declare var Formio;
 
 @Component({
   selector: 'page-home',
@@ -22,18 +20,8 @@ declare var Formio;
 
 export class HomePage {
   
-  @ViewChild('map') mapElement: ElementRef;
-  map: GoogleMap;
 
-  nombre: string = "";
-  listp: any;
-  name: any = "";
   
-  changeName() {
-    this.nombre = "";
-  }
-  
-  bounds: any;
   list_studies: any = [];
   repo: any;
   
@@ -43,21 +31,18 @@ export class HomePage {
     public rest: ServicesProvider,
     public geolocation: Geolocation,
     public camera: Camera,
-    private _googleMaps: GoogleMaps,
     public localNoti: LocalNotifications,
     public device: Device,
     public loadingCtrl: LoadingController
     
     ) {
       
-
       const loding = this.loadingCtrl.create({
         content: 'Please wait...',
-        duration: 1500
+        duration: 1100
       });
 
       loding.present();
-      
       this.get_studies();
       
     }
@@ -73,20 +58,11 @@ export class HomePage {
     clearInterval(this.searchStudies);
   }
 
-  get_studies(){
-    this.rest.get_studies_available()
-    .subscribe((response : any) => {
-      this.list_studies = response.data;
-    })
-  }
-
   list_studies_test: any = {error: true, data: ''};
   get_studies_test(){
 
     this.storage.get('xx-app-loap').then( (loap: any) => {
-
       let user = JSON.parse(loap);
-
       this.rest.get_studies_test(user.data.user._id)
       .subscribe((resp: any) => {
           if(!resp.error) {
@@ -97,81 +73,31 @@ export class HomePage {
     })
   }
 
+
   doRefresh(element){
     this.get_studies();
     this.get_studies_test()
-
     setTimeout(() => {
       element.complete();
     }, 1000);
     
   }
 
+  get_studies(){
+    this.rest.get_studies_available()
+    .subscribe((response : any) => {
+      this.list_studies = response.data;
+    })
+  }
 
+
+  // FUNCION PARA VER UNA TAREA QUE SE PUEDE TOMAR
   take_taks(data: any) {
     this.navCtrl.push(DetailTaskPage, {data: data});    
   }
 
-  // 
-  //  >>>>>>>>>>>>>>>>< PROCESO TO GET LOCAL  NOTIFICACON
-  //
-
-  getNotification(){
-    this.localNoti.schedule({
-      id: 1,
-      text: 'Single ILocalNotification',
-      led: { color: '#FF00FF', on: 500, off: 500 },
-      vibrate: true,
-      actions: [
-        { id: 'yes', title: 'Yes' },
-        { id: 'no', title: 'No' }
-      ]
-    });
-  }
-
   /////////////////// LOAD MAP
   ionViewDidLoad(){ }
-
-
-  urltoFile(url, filename, mimeType){
-    mimeType = mimeType || (url.match(/^data:([^;]+);/)||'')[1];
-    return (fetch(url)
-        .then(function(res){return res.arrayBuffer();})
-        .then(function(buf){return new File([buf], filename, {type:mimeType});})
-    );
-  }
-
-  dataURLtoFile(dataurl, filename) {
-      var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-          bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-      while(n--){
-          u8arr[n] = bstr.charCodeAt(n);
-      }
-      return new File([u8arr], filename, {type:mime});
-  }
-
-
-  image: any;
-  getPicture(){
-    let options: CameraOptions = {
-      destinationType: this.camera.DestinationType.DATA_URL,
-      targetHeight: 500,
-      targetWidth: 500,
-      quality: 100,
-      allowEdit: true,
-      saveToPhotoAlbum: true
-    }
-
-    this.camera.getPicture(options)
-      .then(data => {
-        this.image = `data:image/jpeg;base64,${data}`;
-        var file = this.dataURLtoFile(this.image, 'a.png');
-      }).catch(e => {
-        console.error(e)
-      })
-  }
-
-
 }
 
 

@@ -28,7 +28,7 @@ export class MyTasksPage {
   }
 
   type_task: string = 'Encurso';
-
+  get_my_task: any;
   lits_task: any = {
     task_approved: [],
     task_by_correction: [],
@@ -38,10 +38,14 @@ export class MyTasksPage {
   };
   ionViewDidLoad() {
     this.get_task();
-    let time = setInterval(() => {
+    this.get_my_task = setInterval(() => {
       this.get_task();
     }, 60000);
 
+  }
+
+  ionViewCanLeave(){
+    clearInterval(this.get_my_task);
   }
 
   get_task(){

@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { ServicesProvider } from '../../providers/services/services';
 import { Storage } from '@ionic/storage';
+import { EditPerfilPage } from '../edit-perfil/edit-perfil';
 
 /**
  * Generated class for the PerfilPage page.
@@ -39,7 +40,6 @@ export class PerfilPage {
           this.info_user.img == null ? this.info_user.img = "assets/imgs/icon.png" : this.info_user.img;
 
         })
-  
     })
   }
 
@@ -52,7 +52,7 @@ export class PerfilPage {
   // }
 
   edit_perfil(){
-
+      this.navCtrl.push(EditPerfilPage, {data: this.info_user});
   }
 
   
@@ -115,8 +115,5 @@ export class PerfilPage {
     alert.present();
   }
 
-
-
-
-
 }
+

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
 import { HomePage } from '../home/home';
-import { ListPage } from '../list/list';
 import { MyTasksPage } from '../my-tasks/my-tasks';
 import { PerfilPage } from '../perfil/perfil';
 import { WalletPage } from '../wallet/wallet';

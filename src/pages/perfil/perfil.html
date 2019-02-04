@@ -14,7 +14,6 @@
 
 
 <ion-content *ngIf="info_user">
-  <ion-card class="card-background-page">
     
     <!-- <img [src]="info_user.img"/> -->
 
@@ -26,44 +25,29 @@
     <div class="card-title" style="text-align: center">
       <h1>{{info_user.name +' '+ info_user.lname}}</h1>
     </div>
-    <div class="card-subtitle">
-      <ion-item-divider>
-        <h2>Mis datos básicos</h2>
-      </ion-item-divider>
-
-      <ion-item style="font-size: 2.0rem;">
-         <span> {{info_user.name}} </span> <br> <br>
-         <span> {{info_user.lname}} </span> <br> <br>
-         <span> {{info_user.cedula == null ? 'Por ingresar' : info_user.cedula}} </span> <br> <br>
-         <span> {{info_user.email}} </span> <br> <br>
-         <span> {{info_user.birth_day | date:'dd/MMM/yyyy'}} </span> <br> <br>
-         <span> {{info_user.sex == 'M' ? "Hombre": "Mujer"}} </span> <br> <br>
-         <span> {{info_user.phone}} </span> <br> <br>
-         <span> {{info_user.level_studie}} </span> <br> <br>
-      </ion-item>
-
-      <ion-item-divider>
-          <h4>Tareas realizadas {{info_user.detail.count}}</h4>
-      </ion-item-divider>
 
 
-      <button class="btn-look" ion-button full (click)="edit_perfil()">EDITAR MI PERFIL</button>
+    <ion-item-divider>
+      <h1> <ion-icon name="person"></ion-icon> Mis datos básicos</h1>
+    </ion-item-divider>
+
+    <ion-list>
+        <ion-item>
+
+          <span> {{info_user.name +' '+ info_user.lname}}  </span> <br> 
+          <span> {{info_user.sex == 'M' ? 'Masculino' : 'Femanino'}} </span> <br>
+          <span> {{info_user.cedula == null ? 'Por ingresar' : info_user.cedula}} </span> <br>
+          <span> {{info_user.email}} </span> <br>
+          <span> {{info_user.birth_day | date:'dd/MMM/yyyy'}} </span> <br>
+          <span> {{info_user.phone}} </span> <br>
+          <span> Nivel del estudio: {{info_user.level_studie}} </span> <br>
+          <span> Estrato: {{info_user.level_studie}}  </span> <br>
+          
+        </ion-item>
   
-    </div>
-  </ion-card>
+        <button class="btn-look" ion-button full (click)="edit_perfil()">EDITAR MI PERFIL</button>
+    </ion-list>
+
+    
+  
 </ion-content>
-
-<style>
-  
-  ion-item spam {
-    color: #8a8585;
-  }
-
-  .avatar-img2 {
-    border-radius: 50%;
-    margin: 18vw 25vw 2vw;
-    width: 48%;
-  }
-
-
-</style>

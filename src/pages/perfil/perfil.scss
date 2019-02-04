@@ -15,4 +15,23 @@ page-perfil {
 
     }
 
+    ion-item spam {
+    color: #8a8585;
+    }
+
+    .avatar-img2 {
+    border-radius: 50%;
+    margin: 18vw 25vw 2vw;
+    width: 48%;
+    }
+
+
+    .label-md {
+        margin: 1px 8px 1px 0 !important;
+    }
+
+    ion-icon {
+        color: color($colors, primary);
+    }
+
 }

@@ -48,7 +48,6 @@ export class ProgressInTaskPage {
 
   ionViewWillUnload(){
     clearInterval(this.showLocation);
-    console.log("SALIO SATISFACTORIAMENTE")
   }
 
 
@@ -232,13 +231,15 @@ export class ProgressInTaskPage {
       this.pointesCreate = setInterval(() => {
         this.getPoints();
       }, 10000);
+
       this.value_heigth = 70;
 
       this.loadMap();
       this.getMyLocation();
+
     }   
     
-    form_studie.owner = '5bdc91b1851af95d8e5b537d';
+    form_studie.owner = '5c4a1e846faee6135dc859a3';
     Formio.icons = 'fontawesome';
 
     // document.getElementById('formio')
@@ -307,9 +308,6 @@ export class ProgressInTaskPage {
       // console.log("ERROR EN EL IO "+ err)
     });
   }
-
-
-  
 
   conoce(){
     this.presentAlert("Error", "El formulario no se ha encontrado");

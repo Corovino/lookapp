@@ -1,6 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/timeout'; // Don't forget this import, otherwise not gonna work
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
@@ -57,7 +56,10 @@ export class ServicesProvider {
     return this.http.get(`${this.endApi}/hide_point/${id}`);
   }
 
-
+  // METHOD TO UPUDATE INFO TO USER
+  update_user(data: any, id: number) {
+    return this.http.put(`${this.endApi}/update_user/${id}`, data);
+  }
   // Proceso para consultar la existencia de un usuari 
   validata_user(data: any) {
     return this.http.post(`${this.endApi}/validata_user`, data);

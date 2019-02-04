@@ -10,13 +10,13 @@
   <div *ngIf="list_wallet">
 
 
-    <ion-card>
+    <!-- <ion-card>
         <img src="assets/imgs/billetera.jpg"/>
       <ion-card-content>
         Estamos trabajando en tu billetera, no te preocupes, nada se ha perdido. 
       </ion-card-content>
-    </ion-card>
-    <!-- <ion-card>  
+    </ion-card> -->
+    <ion-card>  
       <ion-card-content text-center>
         <h2 style="font-size: 7vw;"> No te preocupes! </h2>
         <p>
@@ -36,7 +36,7 @@
         <hr>
         Total Ganado: {{list_wallet.pay[0].valor == null ? 'Aun no has ganado con LookApp' : list_wallet.pay[0].valor }}    
       </ion-card-content>
-    </ion-card> -->
+    </ion-card>
   </div>
 
 </ion-content>

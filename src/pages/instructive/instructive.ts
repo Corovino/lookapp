@@ -1,13 +1,10 @@
-import { Component, ɵConsole } from '@angular/core';
+import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
-import { create_acount_interfaces } from '../../models/user.models';
 import { LoginPage } from '../login/login';
 import { Storage } from '@ionic/storage';
 import { Device } from '@ionic-native/device';
 import { ServicesProvider } from '../../providers/services/services';
 import { Geolocation } from '@ionic-native/geolocation';
-import { HomePage } from '../home/home';
-import { TabsPage } from '../tabs/tabs';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 

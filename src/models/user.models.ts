@@ -1,4 +1,3 @@
-
 export interface login_interfaces {
     email: string,
     pass: string

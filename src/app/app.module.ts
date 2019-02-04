@@ -22,18 +22,17 @@ import { Camera } from '@ionic-native/camera';
 import { UserComponent } from '../components/user/user';
 
 import { Geolocation } from '@ionic-native/geolocation';
-import { KeysToApiKeys } from '../clases/keys';
 import { Device } from '@ionic-native/device';
 import { TokenInterceptor } from '../middleware/interceptor.middleware';
 import { InstructivePage } from '../pages/instructive/instructive';
 import { TabsPage } from '../pages/tabs/tabs';
 import { WalletPage } from '../pages/wallet/wallet';
-import { PerfilPage } from '../pages/perfil/perfil';
+import { PerfilPage, } from '../pages/perfil/perfil';
 import { MyTasksPage } from '../pages/my-tasks/my-tasks';
 import { ProgressInTaskPage } from '../pages/progress-in-task/progress-in-task';
-import { UtilitiesClass } from '../models/helper.models';
 import { MorePage } from '../pages/more/more';
 import { SkipsPage } from '../pages/skips/skips';
+import { EditPerfilPage } from '../pages/edit-perfil/edit-perfil'
 
 import { Facebook } from '@ionic-native/facebook';
 
@@ -47,6 +46,7 @@ import { Facebook } from '@ionic-native/facebook';
     TabsPage,
     WalletPage,
     PerfilPage,
+    EditPerfilPage,
     UserComponent,
     ProgressInTaskPage,
     DetailTaskPage,
@@ -71,12 +71,12 @@ import { Facebook } from '@ionic-native/facebook';
     TabsPage,
     WalletPage,
     PerfilPage,
+    EditPerfilPage,
     MyTasksPage,
     DetailTaskPage,
     ProgressInTaskPage,
     MorePage,
     SkipsPage
-
   ],
   providers: [
     StatusBar,

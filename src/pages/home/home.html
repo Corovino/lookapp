@@ -21,13 +21,14 @@
         </ion-title>
         <b>Pago:</b> <span style="color: red">{{studie.price_by_task | number}} </span> <br>
         <p style="color: gray; font-size: 10px">
-          {{studie.description}}
+          {{studie.history}}
         </p>
         <button ion-button clear item-end (click)="take_taks(studie)">Ver</button>
     </ion-item>
   </ion-list>
   
   <ion-list *ngIf="!list_studies_test.error">
+    <p>Estudios de prueba</p>
     <ion-item *ngFor="let studie of list_studies_test.data"  >
       <ion-avatar item-left style="margin: 4px 2px 4px 0;">
         <img [src]="studie.img" (click)="take_taks(studie)" />

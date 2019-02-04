@@ -1,0 +1,79 @@
+<!--
+  Generated template for the EditPerfilPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Editar perfil</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+    <ion-list>
+      <!-- MOC PARA NOMBRES -->
+      <ion-item>
+        <ion-label >Nombres</ion-label>
+        <ion-input type="text" [(ngModel)]="info_user.name" ></ion-input>
+      </ion-item>
+      <!-- MOC PARA APELLIDOS -->
+      <ion-item>
+        <ion-label >Apellidos</ion-label>
+        <ion-input type="text" [(ngModel)]="info_user.lname" ></ion-input>
+      </ion-item>
+      <!-- MOC PARA CEDULA -->
+      <ion-item>
+        <ion-label > label-text</ion-label>
+        <ion-input type="number" [(ngModel)]="info_user.cedula" ></ion-input>
+      </ion-item>
+      <!-- MOC PARA NUMERO DE CELULAR -->
+      <ion-item>
+        <ion-label  > label-text</ion-label>
+        <ion-input type="number" [(ngModel)]="info_user.phone" ></ion-input>
+      </ion-item>
+      <!-- MOC FECHA DE NACIMIENTO -->
+      <ion-item>
+        <ion-label>Fecha de nacimiento</ion-label>
+        <ion-datetime class="btn-birthday" displayFormat="MM/DD/YYYY" [(ngModel)]="info_user.birth_day" placeholder="Fecha de nacimiento"></ion-datetime>
+      </ion-item>
+      <!-- MOC SEXO -->
+      <ion-item>
+        <ion-label>Genero</ion-label>
+        <ion-select [(ngModel)]="info_user.sex" multiple="false" >
+          <ion-option value="M" >Masculino</ion-option>
+          <ion-option value="F" >Femenino</ion-option>
+        </ion-select>
+      </ion-item>
+      <!-- MOC ESTRATO -->
+      <ion-item>
+        <ion-label>Estrato</ion-label>
+        <ion-select [(ngModel)]="info_user.strate" multiple="false">
+          <ion-option value="1">1</ion-option>
+          <ion-option value="2">2</ion-option>
+          <ion-option value="3">3</ion-option>
+          <ion-option value="4">4</ion-option>
+          <ion-option value="5">5</ion-option>
+          <ion-option value="6">6</ion-option>
+        </ion-select>
+      </ion-item>
+      <!-- MOC NIVEL DE ESTUDIO -->
+      <ion-item>
+        <ion-label>Nivel de estudio</ion-label>
+        <ion-select [(ngModel)]="info_user.level_studie" multiple="false">
+          <ion-option value="Primaria" >Primaria</ion-option>
+          <ion-option value="Bachiller" >Bachiller</ion-option>
+          <ion-option value="tyt" >Técnico/Tecnólogo</ion-option>
+          <ion-option value="Profesional" >Profesional</ion-option>
+        </ion-select>
+      </ion-item>
+      
+      <button class="btn-look" ion-button full (click)="updateDate()" > Actualizar </button>
+    </ion-list>
+
+    
+</ion-content>
