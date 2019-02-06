@@ -3,6 +3,8 @@ import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angu
 import { Storage } from '@ionic/storage';
 import { ServicesProvider } from '../../providers/services/services';
 import { Camera, CameraOptions } from '@ionic-native/camera';
+import { FormGroup, FormBuilder } from '@angular/forms';
+
 
 /**
  * Generated class for the EditPerfilPage page.
@@ -18,7 +20,7 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 })
 export class EditPerfilPage {
   
-  public info_user: any;
+  public info_user: any = {name: '', lname: '', phone: '', cedula: ''};
   public iduser: any;
   constructor(
     public navCtrl: NavController, 
@@ -29,8 +31,8 @@ export class EditPerfilPage {
     public camera: Camera
 
   ) {
-    this.info_user = this.navParams.data.data;
 
+    this.info_user = this.navParams.data.data;
     this.storage.get('xx-app-loap').then( (loap: any) => {
       let user = JSON.parse(loap);
       this.iduser = user.data.user._id;
@@ -42,14 +44,24 @@ export class EditPerfilPage {
     console.log('ionViewDidLoad EditPerfilPage');
   }
   
+  validate_info(data) {
+      return data == '' || data == null || data == undefined ? true : false;
+  }
+
   updateDate() {
-    this.rest.update_user(this.info_user, this.iduser).subscribe( (resp:any) => {
-        if(resp.error) {
-          this.presentAlert("", resp.message)
-        } else {
-          this.presentAlert("", "Se ha actualizado de forma correcta"); 
-        }
-    })
+
+    if(this.validate_info(this.info_user.name) || this.validate_info(this.info_user.lname) || this.validate_info(this.info_user.phone) || this.validate_info(this.info_user.cedula)) {
+      this.presentAlert("", "Es necesario que la información este completa para poder realizar la actualización");
+    } else {
+      
+      this.rest.update_user(this.info_user, this.iduser).subscribe( (resp:any) => {
+          if(resp.error) {
+            this.presentAlert("", resp.message)
+          } else {
+            this.presentAlert("", "Se ha actualizado de forma correcta"); 
+          }
+      })
+    }
   }
 
   presentAlert(title:string, message: string) {
@@ -99,13 +111,11 @@ export class EditPerfilPage {
   }
 
   save_img(){
-
     this.rest.save_img_user(this.userForm, this.iduser).subscribe( (data:any) => {    
         if(data.error == true){
             this.presentAlert("Alert", "La imagen no ha podido ser subida por favor intente de nuevo");
         } else {
           this.image = data.data.img;
-          
         }
     })
   }

@@ -27,8 +27,9 @@
         </p>
     </div>
     <!-- contendor para  ver imagen 10% -->
-    <a (click)="take_taks(studie)" clear item-end >Ver</a>
-
+    <div class="cls-view">
+      <a (click)="take_taks(studie)" clear item-end >Ver</a>
+    </div>
   </div>
   
 
@@ -47,7 +48,8 @@
         <p style="color: gray; font-size: 10px">
           {{studie.description}}
         </p>
-        <button ion-button clear item-end (click)="take_taks(studie)">Ver</button>
+
+          <button ion-button clear item-end (click)="take_taks(studie)">Ver</button>
     </ion-item>
   </ion-list>
   

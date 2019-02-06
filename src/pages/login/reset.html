@@ -1,0 +1,55 @@
+<!--
+  Generated template for the LoginPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+
+<ion-header>
+    <ion-navbar>
+        <ion-title>RECUPERACIÓN DE CONTRASEÑA</ion-title>
+    </ion-navbar>
+</ion-header>
+      
+<ion-content >
+
+    <img style="margin: 13vw 40vw;" src="assets/imgs/logo.png" alt="" width="80px">
+    
+    <div *ngIf="!recuperacuenta">
+        <ion-card>
+            <ion-card-content>
+                <p> Ingresa tu correo electrónico </p>
+                <ion-list>
+                    <ion-item>
+                        <ion-input type="text" [(ngModel)]="form.email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" placeholder="Correo electrónico"></ion-input>
+                    </ion-item>
+                </ion-list>
+                <button ion-button class="btn-look cls-width" (click)="send_mail()" >Enviar</button>
+            </ion-card-content>
+        </ion-card>
+    </div>
+
+    <div *ngIf="recuperacuenta">
+        <ion-card>
+            <ion-card-content>
+                <ion-list>
+                    <p>
+                        Hemos enviado un código de verificación a tu correo electrónico, por favor ingresa el código seguido de tu nueva contraseña.
+                    </p>
+                    <ion-item>
+                        <ion-input type="text" [(ngModel)]="form.code" placeholder="Código de verificación"></ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-input type="password" [(ngModel)]="form.pass" placeholder="Nueva contraseña"></ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-input type="password" [(ngModel)]="form.repass" placeholder="Repita la contraseña"></ion-input>
+                    </ion-item>
+            
+                    <button class="btn-look" ion-button full (click)="changePass()">Cambiar contraseña</button> <br>
+                </ion-list>
+            </ion-card-content>
+        </ion-card>
+    </div>
+</ion-content>
+

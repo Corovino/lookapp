@@ -15,7 +15,7 @@ import { GoogleMaps } from '@ionic-native/google-maps';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 
 import { IonicStorageModule } from "@ionic/storage";
-import { LoginPage } from '../pages/login/login';
+import { LoginPage, ResetPage } from '../pages/login/login';
 import { ServicesProvider } from '../providers/services/services';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Camera } from '@ionic-native/camera';
@@ -34,7 +34,6 @@ import { MorePage } from '../pages/more/more';
 import { SkipsPage } from '../pages/skips/skips';
 import { EditPerfilPage } from '../pages/edit-perfil/edit-perfil'
 
-import { Facebook } from '@ionic-native/facebook';
 import { LetterPipe } from '../pipes/letter/letter';
 
 @NgModule({
@@ -43,6 +42,7 @@ import { LetterPipe } from '../pipes/letter/letter';
     HomePage,
     ListPage,
     LoginPage,
+    ResetPage,
     InstructivePage,
     TabsPage,
     WalletPage,
@@ -71,6 +71,7 @@ import { LetterPipe } from '../pipes/letter/letter';
     HomePage,
     ListPage,
     LoginPage,
+    ResetPage,
     InstructivePage,
     UserComponent,
     TabsPage,
@@ -92,7 +93,6 @@ import { LetterPipe } from '../pipes/letter/letter';
     {provide: HTTP_INTERCEPTORS, useClass:TokenInterceptor, multi: true},
     ServicesProvider,
     Camera,
-    Facebook,
     LocalNotifications,
     LocationAccuracy,
     HttpClient,

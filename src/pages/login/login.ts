@@ -9,7 +9,6 @@ import { Device } from '@ionic-native/device';
 import { InstructivePage } from '../instructive/instructive';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
 
-import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 
@@ -56,7 +55,6 @@ export class LoginPage {
     public alertCtrl: AlertController,
     public locationAccuracy: LocationAccuracy,
     public splashscreen: SplashScreen,
-    public fb: Facebook
     ) {
      
       let watch = this.geolocation.watchPosition({
@@ -78,62 +76,6 @@ export class LoginPage {
 
   validate(data){
     return !data || data == '';
-  }
-
-
-  getfacebook() {
-
-    if(this.forms.check1f == false){
-      this.presentAlert("", "Para continuar debe aceptar términos y condiciones.");
-    } else if(this.forms.check2f == false) {
-      this.presentAlert("", "Para continuar debe aceptar Habbeas Data.");
-    } else {
-      
-      this.fb.login(['public_profile', 'email'])
-      .then((res: FacebookLoginResponse) => {
-        
-        const permissions = ["public_profile", "email", "user_gender", "user_age_range", "user_birthday"];
-
-        this.fb.api("/me?fields=name,email,picture,gender", permissions)
-        .then(user =>{
-          this.rest.connect_facebook(user).subscribe((response:any) => {
-
-            if(response.token){
-              
-              this.storage.set('xx-app-loap', JSON.stringify(response));
-              
-              setTimeout(() => {
-                this.splashscreen.show();
-                window.location.reload();
-              }, 1000)
-
-            } else {
-
-              let iduser = response.data == null ? '' : response.data.id;
-
-              this.navCtrl.push(InstructivePage, {
-                userfacebook: user,
-                iduser: iduser
-              });
-
-            }
-
-
-          })
-          // console.log(user, "this is my usere")
-        }).then(da => {
-          console.log("Segundo",da)
-        }).catch(e => {
-          console.log("Error no connecto with facebook", e);
-        })        
-        console.log('Logged into Facebook!', res);
-      })
-      .catch(e => {
-        console.log('Error logging into Facebook', e); 
-      });
-  
-    }
-
   }
 
   get_session(){
@@ -162,6 +104,9 @@ export class LoginPage {
 
     }
   }
+
+
+
   // PROCESO PARA CREAR UN USUARIO
   step_one() {
     if(this.device.platform == 'Android' || this.device.platform == 'Ios'){
@@ -268,8 +213,104 @@ export class LoginPage {
     });
     alert.present();
   }
+
+
+  resetPass(){
+    this.navCtrl.push(ResetPage);
+  }
   // PROCESO PARA TOMAR INFORMACION DEL USUARIO ANTES DE QUE SE REGISTRE
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+@Component({
+  templateUrl: 'reset.html',
+})
+export class ResetPage {
+    
+    recuperacuenta: boolean = false;
+    form: any  = {email: '', code: '', pass: '', repass: ''};
+
+    constructor(
+      public navCtrl: NavController, 
+      public navParams: NavParams, 
+      public storage: Storage,
+      public geolocation: Geolocation,
+      public rest: ServicesProvider,
+      public device: Device,
+      public toastCtrl: ToastController,
+      public alertCtrl: AlertController,
+      public locationAccuracy: LocationAccuracy,
+      public splashscreen: SplashScreen,
+    ){
+      
+    }
+
+
+    send_mail() {
+      if(this.form.email == '' ) {
+        this.presentAlert("Por favor ingrese el correo electrónico");
+      } else {
+        this.rest.rend_mail_to_reset({email: this.form.email }).subscribe((resp :any)=> {
+
+          if(resp.error == true) {            
+            this.presentAlert(resp.message);      
+          } else if(resp.error == "mail") {
+
+            this.navCtrl.push(InstructivePage, {
+              useremail: resp.data,
+              iduser: resp.data.id
+            });
+
+          } else {
+            this.recuperacuenta = true;            
+          }
+        })
+      }
+    }
+
+
+
+    changePass() {
+      if(this.form.code == '' || this.form.pass == '' || this.form.repass == '') {
+        this.presentAlert("Es necesario que ingreses los datos necesarios");
+      } else if(this.form.pass != this.form.repass) {
+        this.presentAlert("Las contraseñas no son iguales");
+      } else  {
+        this.rest.changepass(this.form).subscribe((resp: any) => {
+
+            if(resp.error == false){
+              this.presentAlert("Se ha guardado de forma correcta");
+              this.navCtrl.push(LoginPage);         
+            } else if(resp.error == true) {
+              this.presentAlert(resp.message)
+            }
+        })
+      }
+    }
+
+    
+
+
+    presentAlert(message: string) {
+      let alert = this.alertCtrl.create({
+        subTitle: message,
+        buttons: ['Aceptar']
+      });
+      alert.present();
+    }
+
+
+
+}
 

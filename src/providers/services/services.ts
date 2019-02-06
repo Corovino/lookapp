@@ -20,6 +20,7 @@ export class ServicesProvider {
 
   // private endSite = this.ends.FUNC_END_POINT_TO_SITE();
   private endApi = "http://node-express-env.eifgkdzath.us-west-2.elasticbeanstalk.com/api/v1";
+  // private endApi = "http://localhost:8080/api/v1";
 
   // private endApi = this.ends.FUNC_END_POINT_TO_API();
   // private endAuth = this.ends.FUNC_END_POINT_AUTHORIZATION();
@@ -33,6 +34,11 @@ export class ServicesProvider {
   // LAS PALABRA RESERVADA PARA HACER EL CONSUMO DELA API ES REST
   changepass(data: any) {
     return this.http.post(`${this.endApi}/resetpass`, data);
+  }
+
+  // API PARA ENVIAR CORREO DE CAMBIO DE CONTRASEÑA
+  rend_mail_to_reset(data) {
+    return this.http.post(`${this.endApi}/send_mail`, data);
   }
 
   setLogin(data: any) {
