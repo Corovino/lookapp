@@ -1,5 +1,5 @@
 import { ProgressInTaskPage } from './../progress-in-task/progress-in-task';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
 import { Storage } from '@ionic/storage'
 import { GoogleMaps, GoogleMap, Marker, GoogleMapsEvent, ILatLng, Poly,  LatLng, CameraPosition, MarkerOptions } from '@ionic-native/google-maps'
@@ -113,7 +113,7 @@ export class HomePage {
 export class DetailTaskPage {
   
   public estudio: any;
-  @ViewChild('map') mapElement: ElementRef;
+  // @ViewChild('map') mapElement: ElementRef;
 
 
   map: GoogleMap;
@@ -183,7 +183,8 @@ createMarker(loc: LatLng, title: string, color){
     
     let markerOptions: MarkerOptions = {
       position: loc,
-      icon: color
+      icon: color,
+      title: title
     };
     return this.map.addMarker(markerOptions);
 
@@ -236,38 +237,6 @@ validPolilyne(polines, loc) {
 
 
 
-//Load the map 
-initMap(){
-  let controls: any = {compass: true, myLocationButton: false, indoorPicker: false, zoom: true, mapTypeControl: true, streetViewControl: false};
-  let element = this.mapElement.nativeElement;
-  this.map = this._googleMaps.create(element, {
-    'backgroundColor': 'white',
-      'controls': {
-        'compass': controls.compass,
-        'myLocationButton': controls.myLocationButton,
-        'indoorPicker': controls.indoorPicker,
-        'zoom': controls.zoom,
-        'mapTypeControl': controls.mapTypeControl,
-        'streetViewControl': controls.streetViewControl
-      },
-      'gestures': {
-        'scroll': true,
-        'tilt': true,
-        'rotate': true,
-        'zoom': true
-      },
-      zoom: 15,
-      center: {lat: 4.6097538, lng: -83.3920573}
-  })
-
-
-  this.getMyLocation();
-
-
-}
-
-
-
 mark: any = [];
 color: any = 'assets/imgs/me.png';
 
@@ -282,13 +251,42 @@ loadMap() {
   //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
   //Add 'implements AfterViewInit' to the class.
   let loc: LatLng;
-  this.initMap();
+  // this.initMap();
+
+  // let controls: any = {compass: true, myLocationButton: false, indoorPicker: false, zoom: true, mapTypeControl: true, streetViewControl: false};
+  // let element = this.mapElement.nativeElement;
+  this.map = this._googleMaps.create('map_canva', {
+    zoom: 13,
+    center: {lat: 4.6097538, lng: -83.3920573},
+    gestureHandling: 'cooperative'
+  })
+
+  // 'backgroundColor': 'white',
+  // 'controls': {
+  //   'compass': controls.compass,
+  //   'myLocationButton': controls.myLocationButton,
+  //   'indoorPicker': controls.indoorPicker,
+  //   'zoom': controls.zoom,
+  //   'mapTypeControl': controls.mapTypeControl,
+  //   'streetViewControl': controls.streetViewControl
+  // },
+  // 'gestures': {
+  //   'scroll': true,
+  //   'tilt': true,
+  //   'rotate': true,
+  //   'zoom': true,
+  // },
+
 
 
   //once the map is ready move
   //camera into position
   this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
 
+    
+    this.getMyLocation();
+    
+    //  PUNTOS SUBIDOS POR EXCEL
     if(this.estudio.type_ubication == 3) {
 
       
@@ -309,7 +307,7 @@ loadMap() {
         {lat: parseFloat(Tlat+0.0009) , lng: parseFloat(p.toString())}
       ])
       
-      this.createMarker(loc, "", 'green').then((marker: Marker) => {
+      this.createMarker(loc, element.direccion , 'green').then((marker: Marker) => {
         this.points.push(marker); marker.showInfoWindow();
       })
       
@@ -335,7 +333,7 @@ loadMap() {
           this.validPolilyne(triangleCoords, loc);
           // this.moveCamera(loc);
   
-          this.createMarker(loc, "Me", this.color ).then((marker: Marker) => {
+          this.createMarker(loc, "", this.color ).then((marker: Marker) => {
             this.markers.push(marker); marker.showInfoWindow();
             for (let index = 0; index < this.markers.length; index++) {
               if(index > 1){ this.markers[index-1].remove(); } 
@@ -372,7 +370,7 @@ loadMap() {
           // this.moveCamera(loc);
           this.validPolilyne(polines, loc);
   
-          this.createMarker(loc, "Me", this.color ).then((marker: Marker) => {
+          this.createMarker(loc, "", this.color ).then((marker: Marker) => {
 
             this.markers.push(marker); marker.showInfoWindow();
             for (let index = 0; index < this.markers.length; index++) {

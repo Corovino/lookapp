@@ -10,6 +10,7 @@ import { InstructivePage } from '../instructive/instructive';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
 
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { MyApp } from '../../app/app.component';
 
 
 
@@ -185,8 +186,9 @@ export class LoginPage {
           this.storage.set('xx-app-loap', JSON.stringify(response));
           
           setTimeout(() => {
-            this.splashscreen.show();
-            window.location.reload();
+            // this.splashscreen.show();
+            this.navCtrl.setRoot(MyApp);
+            // window.location.reload();
           }, 1000);
 
 

@@ -14,13 +14,10 @@
 
 
 <ion-content padding>
-
-    <img [src]="info_user.img"  class="avatar-img3" (click)="getPicture()"/>
+    <!-- (click)="getPicture()" -->
+    <img [src]="info_user.img"  class="avatar-img4" />
 
     <ion-list>
-      <form  >
-
-      </form>
         <!-- MOC PARA NOMBRES -->
         <label>Nombres</label>
         <ion-item>
@@ -97,4 +94,13 @@
   ion-label {
     color: red; margin-left: 16px;
   }
+
+  .avatar-img4 {
+    border-radius: 50%;
+    margin: 2vw 29.5vw 2vw;
+    width: 38%;
+    border: 3px solid #e5355b;
+  }
+
+  
 </style>

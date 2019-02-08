@@ -12,6 +12,15 @@
 
 
 <ion-content >
+
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content 
+      pullingIcon="arrow-dropdown"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"></ion-refresher-content>
+    </ion-refresher>
+
+
   <div *ngIf="info_user">
 
     <img [src]="info_user.img"  class="avatar-img3" (click)="getPicture()"/>
@@ -28,7 +37,7 @@
       <ion-item>
         
         <span> {{info_user.name +' '+ info_user.lname}}  </span> 
-        <span> {{info_user.sex == 'M' ? 'Masculino' : 'Femanino'}} </span>
+        <span> {{info_user.sex == 'M' ? 'Masculino' : 'Femenino'}} </span>
         <span> {{info_user.cedula == null ? 'Por ingresar' : info_user.cedula}} </span>
         <span> {{info_user.email}} </span>
         <span> {{info_user.birth_day | date:'dd/MMM/yyyy'}} </span>
@@ -36,11 +45,10 @@
         <span> Nivel del estudio: {{info_user.level_studie == 'tyt' ? 'Técnico/Tecnólogo' : info_user.level_studie }} </span>
         <span> Estrato: {{info_user.strate}}  </span>
         
-      </ion-item>
-      
-      <button class="btn-look cls-width" ion-button full (click)="edit_perfil()">EDITAR MI PERFIL</button>
-    </ion-list>
-      
+      </ion-item>  
+        <button class="btn-look cls-width" ion-button full (click)="edit_perfil()">EDITAR MI PERFIL</button>
+      </ion-list>
+
   </div>
 </ion-content>
       

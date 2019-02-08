@@ -32,19 +32,36 @@ export class PerfilPage {
   info_user: any;
   iduser: number;
 
+  
+
   ionViewDidLoad() {
     this.storate.get('xx-app-loap').then((loap: any) => {
         let user = JSON.parse(loap);
         this.iduser = user.data.user._id;
-        this.rest.get_info_user(user.data.user._id).subscribe((response:any) => {
-          
-          this.info_user = response.data;
-          this.info_user.img == null ? this.info_user.img = "assets/imgs/icon.png" : this.info_user.img;
-
-        })
+        this.getInfo(this.iduser);
     })
   }
 
+
+  getInfo(id){
+    this.rest.get_info_user(id).subscribe((response:any) => {
+
+      this.info_user = response.data;
+      this.info_user.img == null ? this.info_user.img = "assets/imgs/icon.png" : this.info_user.img;
+    })
+  }
+
+
+  
+  doRefresh(element){
+    
+    this.getInfo(this.iduser)
+    setTimeout(() => {
+      element.complete();
+    }, 1000);
+  }
+
+  
   ionViewCanEnter(){
     console.log("ionViewVillEnter ciclo one");
   }

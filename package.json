@@ -24,11 +24,11 @@
     "@ionic-native/core": "^4.15.0",
     "@ionic-native/device": "^4.18.0",
     "@ionic-native/geolocation": "^4.18.0",
-    "@ionic-native/google-maps": "^4.14.0",
     "@ionic-native/local-notifications": "^4.15.0",
     "@ionic-native/location-accuracy": "^4.19.0",
     "@ionic-native/network": "^5.0.0",
     "@ionic-native/splash-screen": "~4.15.0",
+    "@ionic-native/google-maps": "^4.14.0",
     "@ionic-native/status-bar": "~4.15.0",
     "@ionic/storage": "^2.2.0",
     "android-versions": "^1.4.0",
@@ -65,9 +65,12 @@
   "cordova": {
     "plugins": {
       "cordova-plugin-googlemaps": {
-        "API_KEY_FOR_ANDROID": "AIzaSyBLHQWgz1nl0QDh5MPpawhJRcCAozvdxxw",
+        "API_KEY_FOR_ANDROID": "AIzaSyDbixyDtxAwVQdIU4_CCM5HTdkD2NLrbA0",
+        "API_KEY_FOR_IOS": "AIzaSyDbixyDtxAwVQdIU4_CCM5HTdkD2NLrbA0",
         "PLAY_SERVICES_VERSION": "15.0.1",
-        "ANDROID_SUPPORT_V4_VERSION": "27.+"
+        "ANDROID_SUPPORT_V4_VERSION": "27.+",
+        "LOCATION_WHEN_IN_USE_DESCRIPTION": "This app wants to get your location while this app runs only.",
+        "LOCATION_ALWAYS_USAGE_DESCRIPTION": "This app wants to get your location always, even this app runs in background."
       },
       "cordova-plugin-whitelist": {},
       "cordova-plugin-statusbar": {},
@@ -86,7 +89,8 @@
     },
     "platforms": [
       "browser",
-      "android"
+      "android",
+      "ios"
     ]
   }
 }

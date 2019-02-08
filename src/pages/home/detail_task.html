@@ -27,7 +27,7 @@
                 <h4 style="font-weight: bold; margin: 8px 0px;">Dónde 
                     <b text-right *ngIf="stateLocation != 'false'">{{stateLocation}}</b></h4>
                 <div text-left>
-                    <div #map id="map" style="height:70vw; width: 90vw">
+                    <div id="map_canva" style="height:70vw; width: 90vw">
                         <ion-fab top right><button color="light" ion-fab (click)="getMyLocation()"><ion-icon ios="ios-locate-outline" md="md-locate"></ion-icon></button></ion-fab>
                     </div>
                 </div>
@@ -63,14 +63,13 @@
 <style>
 
     .cls-ajs {
-
         padding: 10px;
         margin: 0px 8vw;
         width: 90vw;
     }
 
-    #map {
-        height: 60%;
+    #map_canva {
+        height: 65%;
     }
 
     .card-md {

@@ -9,14 +9,37 @@
 
   <div *ngIf="list_wallet">
     <div>
-      <div text-center>  
-        <h2> Saldo disponible </h2>
-        <span style="font-size: 25px; font-weight: bold">
-          $ {{list_wallet.available[0].valor == null ? 0 : (list_wallet.available[0].valor | number) }}
-        </span>
-        <hr>
-        Total Ganado: {{list_wallet.pay[0].valor == null ? 'Aun no has ganado con LookApp' : list_wallet.pay[0].valor }}    
+
+    <ion-refresher (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content 
+        pullingIcon="arrow-dropdown"
+        pullingText="Pull to refresh"
+        refreshingSpinner="circles">
+      </ion-refresher-content>
+    </ion-refresher>
+      
+      <div style="padding: 26vw 1px;">
+        <div text-center>  
+          <h2 style="font-size: 10vw"> Saldo disponible </h2>
+          <span style="font-size: 25px; font-weight: bold; color: #e5355b">
+            $ {{list_wallet.available == null ? 0 : ( list_wallet.available | number) }} COP
+          </span>
+        </div>
       </div>
+
+
+      <!-- {{list_wallet.pay[0].valor == null ? 0 : list_wallet.pay[0].valor }}     -->
+
+      <p text-center>
+        <span>
+          Recuerda que para poder hacer un retiro de dinero a través de <b>DaviPlata</b>, debes haber acumulado mínimo <b>20.000</b> pesos.
+        </span>
+        <br> <br>
+        <span>
+          Para recibir tu pago debes tener activa tu cuenta de <b>DaviPlata</b> y esta debe tener el mismo número de teléfono que has registrado en <b>LookApp</b>.
+        </span>
+      </p>
+      
     </div>
   </div>
 

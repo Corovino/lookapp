@@ -86,7 +86,6 @@ import { LetterPipe } from '../pipes/letter/letter';
   ],
   providers: [
     StatusBar,
-    GoogleMaps,
     Geolocation,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
@@ -96,6 +95,7 @@ import { LetterPipe } from '../pipes/letter/letter';
     LocalNotifications,
     LocationAccuracy,
     HttpClient,
+    GoogleMaps,
     Device
   ]
 })

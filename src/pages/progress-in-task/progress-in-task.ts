@@ -169,23 +169,11 @@ export class ProgressInTaskPage {
     let controls: any = {compass: true, myLocationButton: false, indoorPicker: false, zoom: true, mapTypeControl: true, streetViewControl: false};
     let element = this.mapElement.nativeElement;
     this.map = this._googleMaps.create(element, {
-      'backgroundColor': 'white',
-        'controls': {
-          'compass': controls.compass,
-          'myLocationButton': controls.myLocationButton,
-          'indoorPicker': controls.indoorPicker,
-          'zoom': controls.zoom,
-          'mapTypeControl': controls.mapTypeControl,
-          'streetViewControl': controls.streetViewControl
-        },
-        'gestures': {
-          'scroll': true,
-          'tilt': true,
-          'rotate': true,
-          'zoom': true
-        },
-        zoom: 15,
-        center: {lat: 4.6097538, lng: -83.3920573}
+      zoom: 15,
+      center: {lat: 4.6097538, lng: -83.3920573},
+      // gestureHandling: 'cooperative'
+      gestureHandling: 'none',
+      zoomControl: false
     })
   }
   color: any = 'assets/imgs/me.png';
@@ -202,7 +190,6 @@ export class ProgressInTaskPage {
     this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
     
         this.list_points.forEach(element => {
-    
           loc = new LatLng(element.latitude, element.longitude);
           this.createMarker(loc, '', 'assets/imgs/notomar.png').then((marker: Marker) => {
             this.points.push(marker); 

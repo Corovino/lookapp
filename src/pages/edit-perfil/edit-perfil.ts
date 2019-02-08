@@ -3,8 +3,6 @@ import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angu
 import { Storage } from '@ionic/storage';
 import { ServicesProvider } from '../../providers/services/services';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { FormGroup, FormBuilder } from '@angular/forms';
-
 
 /**
  * Generated class for the EditPerfilPage page.
@@ -44,25 +42,6 @@ export class EditPerfilPage {
     console.log('ionViewDidLoad EditPerfilPage');
   }
   
-  validate_info(data) {
-      return data == '' || data == null || data == undefined ? true : false;
-  }
-
-  updateDate() {
-
-    if(this.validate_info(this.info_user.name) || this.validate_info(this.info_user.lname) || this.validate_info(this.info_user.phone) || this.validate_info(this.info_user.cedula)) {
-      this.presentAlert("", "Es necesario que la información este completa para poder realizar la actualización");
-    } else {
-      
-      this.rest.update_user(this.info_user, this.iduser).subscribe( (resp:any) => {
-          if(resp.error) {
-            this.presentAlert("", resp.message)
-          } else {
-            this.presentAlert("", "Se ha actualizado de forma correcta"); 
-          }
-      })
-    }
-  }
 
   presentAlert(title:string, message: string) {
     let alert = this.alertCtrl.create({
@@ -85,9 +64,11 @@ export class EditPerfilPage {
   }
 
 
-  image: any = 'assets/imgs/icon.png';
-  file: any = false;
-  userForm: any = new FormData();
+  public image: any = 'assets/imgs/icon.png';
+  public file: any = false;
+  public userForm: any = new FormData();
+  public avialableToUpdate : boolean = false;
+
   getPicture(){
     let options: CameraOptions = {
       destinationType: this.camera.DestinationType.DATA_URL,
@@ -102,9 +83,11 @@ export class EditPerfilPage {
       .then(data => {
         this.image = `data:image/jpeg;base64,${data}`;
         //Usage example:
-        this.file = this.dataURLtoFile(`data:image/jpeg;base64,${data}`, 'a.png');
+        this.info_user.img = this.dataURLtoFile(`data:image/jpeg;base64,${data}`, 'a.png');
         this.userForm.delete('img');
         this.userForm.append('img', this.file);
+        this.avialableToUpdate = true;
+
       }).catch(e => {
         console.error(e)
       })
@@ -115,9 +98,40 @@ export class EditPerfilPage {
         if(data.error == true){
             this.presentAlert("Alert", "La imagen no ha podido ser subida por favor intente de nuevo");
         } else {
-          this.image = data.data.img;
+          this.info_user.img = data.data.img;
         }
     })
   }
+
+
+  validate_info(data) {
+    return data == '' || data == null || data == undefined ? true : false;
+  }
+
+  updateDate() {
+
+    if(this.validate_info(this.info_user.name) || this.validate_info(this.info_user.lname) || this.validate_info(this.info_user.phone) || this.validate_info(this.info_user.cedula)) {
+      this.presentAlert("", "Es necesario que la información este completa para poder realizar la actualización");
+    } else {
+      
+      this.rest.update_user(this.info_user, this.iduser).subscribe( (resp:any) => {
+
+          if(this.avialableToUpdate == true) {
+            this.save_img();
+          }
+          
+          if(resp.error) {
+            this.presentAlert("", resp.message)
+          } else {
+            this.presentAlert("", "Se ha actualizado de forma correcta"); 
+          }
+
+      })
+    }
+
+
+
+  }
+
 
 }

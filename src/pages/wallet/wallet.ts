@@ -21,7 +21,9 @@ export class WalletPage {
   
   intervalWallet: any;
   list_wallet: any;
-  
+  showAvailable: boolean = false;
+  showByPay: boolean = false;
+  user: any;
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -30,18 +32,25 @@ export class WalletPage {
 
 
       this.storage.get('xx-app-loap').then( (loap: any) => {
-        
-        let user = JSON.parse(loap);
-        this.get_service_pay(user);
-        this.intervalWallet = setInterval(() => {
-          this.get_service_pay(user);
-        }, 20000);
-
+        this.user = JSON.parse(loap);
+        this.get_service_pay(this.user);
       })
+
+      this.intervalWallet = setInterval(() => {
+        this.get_service_pay(this.user);
+      }, 60000);
+    }
+    
+    
+  doRefresh(element) {
+      this.get_service_pay(this.user);
+      setTimeout(() => {
+        element.complete();
+      }, 1000);
   }
 
-
   get_service_pay(user: any) {
+    // this.rest.get_dept_to_userpayment(14438).subscribe((resp:any) => {
     this.rest.get_dept_to_userpayment(user.data.user._id).subscribe((resp:any) => {
         this.list_wallet = resp.data;
     })

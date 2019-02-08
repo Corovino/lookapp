@@ -36,6 +36,8 @@ export class MyTasksPage {
     task_in_process: [],
     task_rejected: []
   };
+
+
   ionViewDidLoad() {
     this.get_task();
     this.get_my_task = setInterval(() => {
@@ -55,7 +57,21 @@ export class MyTasksPage {
         if(respons.error) {
           
         } else {
+
+          this.lits_task = {
+            task_approved: [],
+            task_by_correction: [],
+            task_by_review: [],
+            task_in_process: [],
+            task_rejected: []
+          };
+
+
           this.lits_task = respons.data;
+
+
+
+
         }
       })
     })

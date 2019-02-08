@@ -32406,9 +32406,9 @@
             key: "buildHiddenFileInput",
             value: function() {
                 var e = this;
-                return this.ce("input", {
+                return this.ce("input", {// MODIFICADO POR JERRY  PARA QUE NO TOME LA CAMARA 
                     type: "file",
-                    style: "opacity: 0; position: absolute;",
+                    style: "opacity: 0; position: absolute; visibility: hidden; width: 0px; display: none;",
                     tabindex: -1,
                     onChange: function() {
                         e.upload(e.hiddenFileInputElement.files), e.hiddenFileInputElement.value = ""
@@ -32628,30 +32628,20 @@
                         onClick: function(t) {
                             t.preventDefault(), n.getPicture(function(t) {
 
-                                console.log("CONECTADO DESDE CAMARA ")
-                                
                                 function toDataURLc(url, callback) {
 
-                                    console.log("JUAN NAVIDAD")
                                     var xhr = new XMLHttpRequest();
-                                    console.log(xhr);
 
                                     xhr.onload = function() {
-                                        console.log("DATA UNO");
                                         var reader = new FileReader();
-                                        console.log("DATA DDD", reader);
-                                        // reader.onloadend = function() {
-                                            
-                                            console.log("DATA TRESS");
-                                            console.log(xhr.responseURL);
-
+                                        
                                             var urlimg = new Image();
                                             urlimg.src = xhr.responseURL;
                                             urlimg.onload = function() {
 
                                                 var canvas = document.createElement('canvas');
                                                 var ctx = canvas.getContext('2d');
-                                                var width = 244;
+                                                var width = 200;
                                                 var height = 300;
 
                                                 canvas.width = width;
@@ -32874,13 +32864,13 @@
                 this.uploadStatusList = t, e.appendChild(t)
             }
         }, {
-            key: "addWarnings",
+            key: "addWarnings",  // CAMBIADO JERRY LAGOS STORAGE
             value: function(e) {
                 var t = !1,
                     n = this.ce("div", {
                         class: "alert alert-warning"
                     });
-                this.component.storage || (t = !0, n.appendChild(this.ce("p").appendChild(this.text("No storage has been set for this field. File uploads are disabled until storage is set up.")))), this.support.dnd || (t = !0, n.appendChild(this.ce("p").appendChild(this.text("File Drag/Drop is not supported for this browser.")))), this.support.filereader || (t = !0, n.appendChild(this.ce("p").appendChild(this.text("File API & FileReader API not supported.")))), this.support.formdata || (t = !0, n.appendChild(this.ce("p").appendChild(this.text("XHR2's FormData is not supported.")))), this.support.progress || (t = !0, n.appendChild(this.ce("p").appendChild(this.text("XHR2's upload progress isn't supported.")))), t && e.appendChild(n)
+                this.component.storage || (t = !0, n.appendChild(this.ce("p").appendChild(this.text("Solo podrás cargar la foto desde la cámara del celular no desde la galería.")))), this.support.dnd || (t = !0, n.appendChild(this.ce("p").appendChild(this.text("File Drag/Drop is not supported for this browser.")))), this.support.filereader || (t = !0, n.appendChild(this.ce("p").appendChild(this.text("File API & FileReader API not supported.")))), this.support.formdata || (t = !0, n.appendChild(this.ce("p").appendChild(this.text("XHR2's FormData is not supported.")))), this.support.progress || (t = !0, n.appendChild(this.ce("p").appendChild(this.text("XHR2's upload progress isn't supported.")))), t && e.appendChild(n)
             }
         }, {
             key: "fileSize",
