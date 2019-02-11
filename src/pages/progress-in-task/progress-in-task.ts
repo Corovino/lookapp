@@ -177,7 +177,7 @@ export class ProgressInTaskPage {
     })
   }
   color: any = 'assets/imgs/me.png';
-  
+    
   markers: any = [];
   points: any = [];
   mypoint: any = [];
