@@ -1,0 +1,185 @@
+<!--
+  Generated template for the FormPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>form</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <div>
+      <div *ngFor="let data of formulario; let i = index ">
+
+        <!-- 
+
+          MOC PARA LOS CASOS CUANDO SON SOLECTS
+         -->
+        <div class="cls-content" *ngIf="data.type == 'select'" [ngClass]="{'cls-alfa-romeo': data.error}" >
+          <label>{{data.label}}</label>
+          <select name="infoSelecct" id="" [(ngModel)]="data.response" required="true" class="form-control" >
+              <option *ngFor="let item of data.data" value="item.value">{{item.label}} </option>
+          </select>
+          <div *ngIf="data.error" class="col-90">
+            <span class="cls-error" >
+              Este campo es obligatorio
+            </span> 
+          </div>
+        </div>
+
+        <!-- 
+
+          MOC CUANDO ES CASO ES UN RADIO BUTTON
+         -->
+        <div class="cls-content" *ngIf="data.type == 'radio'" [ngClass]="{'cls-alfa-romeo': data.error}" >
+          <label for="">{{data.label}}</label>
+          <div *ngFor="let item of data.data">
+              
+            <input name="{{i}}" type="radio" value="{{item.response}}">
+            <span >{{item.label}}</span>
+          </div>
+          <div *ngIf="data.error" class="col-90">
+            <span class="cls-error" >
+              Este campo es obligatorio
+            </span> 
+          </div>
+        </div>
+        
+        
+        <!-- 
+
+            MOC CUANDO ES EL CASO DE BOXES O CHECKBOXES
+         -->
+        <div class="cls-content" *ngIf="data.type == 'boxes'" [ngClass]="{'cls-alfa-romeo': data.error}">
+          <label for="">{{data.label}} </label>
+          <div *ngFor="let item of data.data">
+            <input type="checkbox" id="id" name="data[i]" [(ngModel)]="item.response"   >
+            <span >{{item.label}}</span>
+          </div>
+          <div *ngIf="data.error" class="col-90">
+            <span class="cls-error" >
+              Este campo es obligatorio
+            </span> 
+          </div>
+        </div>
+
+
+        <!-- 
+
+          MOC CUANDO ESL TIPO DE DATO ES UN IMPUT
+         -->
+        <div class="cls-content" *ngIf="data.type == 'input'" [ngClass]="{'cls-alfa-romeo': data.error}">
+          <label for="">{{data.label}}</label>
+          <input type="text" [(ngModel)]="data.response" required="true" class="form-control" >
+          <div *ngIf="data.error" class="col-90">
+            <span class="cls-error" >
+              Este campo es obligatorio
+            </span> 
+          </div>
+        </div>
+
+
+        <!-- 
+
+          MOC CUANDO EL TIMPO DE CONTENIDO ES TITULOS
+         -->
+        <div class="cls-content" *ngIf="data.type == 'title'" [ngClass]="{'cls-alfa-romeo': data.error}">
+          <p [innerHTML]="data.label" ></p>
+        </div>
+
+
+        <!-- 
+
+          MOC CUANDO EL TIPO DE CONTENIDO SOLICITA UNA PHOTO 
+         -->
+        <div class="cls-content" *ngIf="data.type == 'photo'" [ngClass]="{'cls-alfa-romeo': data.error}">
+          <label for="">{{data.label}}</label>
+          <button class="cls-button-photo" (click)="take_photo(data)">Tomar foto</button>
+          <div *ngIf="data.error" class="col-90">
+            <span class="cls-error" >
+              Este campo es obligatorio
+            </span> 
+          </div>
+        </div>
+
+
+      </div>
+
+      
+      <button class="btn-look" full (click)="sendForm()">Enviar tarea</button>
+
+  </div>
+</ion-content>
+
+
+<style>
+  
+
+  .cls-error {
+    color: red;
+  }
+
+
+  .col-90 {
+    width: 95%;
+    margin: 1vw 2vw;
+    float: left;
+  }
+  
+  .cls-alfa-romeo {
+    background:#ff00004d;
+    border: 1px solid #ff00004d;
+  }
+
+  .form-control {
+    width: 95%;
+    border-radius: 25px;
+    border: 1px solid #e6355b;
+    height: 8vw;
+    float: left;
+  }
+
+  .cls-content {
+    width: 95%;
+    margin: 1px 2%;
+    padding: 10px;
+    position: relative;
+    float: left;
+    border-bottom: 1px solid #0000001a;
+  }
+
+  .cls-button-photo {
+    border: 1px solid #e678b5;
+    border-radius: 27px;
+    padding: 10px;
+    position: relative;
+    float: right;
+    background: #e5355b;
+    color: white;
+    right: 26px;
+  }
+
+
+  hr {
+    background-color: rgba(0, 0, 0, 0.08);
+    width: 100%;
+    float: left;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+
+  .cls-btn-w {
+    width: 90%;
+    background: #e5355b;
+    color: white;
+  }
+
+
+</style>

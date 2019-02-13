@@ -29,16 +29,11 @@ export class MorePage {
   }
   
   cerrarSesion(){
-    
     this.storage.remove('xx-app-loap');
-    
     setTimeout(() => {
       this.splashscreen.show();
       window.location.reload();
-    }, 1000)
-
-    
-    
+    }, 1000) 
   }
 
   action_click(option) {

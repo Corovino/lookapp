@@ -45,7 +45,6 @@ export class PerfilPage {
 
   getInfo(id){
     this.rest.get_info_user(id).subscribe((response:any) => {
-
       this.info_user = response.data;
       this.info_user.img == null ? this.info_user.img = "assets/imgs/icon.png" : this.info_user.img;
     })

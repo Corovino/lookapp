@@ -2,10 +2,19 @@ page-perfil {
 
     ion-item spam {
         color: #8a8585;
+        height: 16vw;
     }
 
     ion-icon {
         color: color($colors, primary);
+    }
+
+    .item-divider-md {
+        padding-left: 16px;
+        border-bottom: 1px solid color($colors, primary);
+        font-size: 1.4rem;
+        color: #fff;
+        background-color: #fff;
     }
 
 }

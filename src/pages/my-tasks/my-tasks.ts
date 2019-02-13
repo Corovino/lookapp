@@ -68,10 +68,6 @@ export class MyTasksPage {
 
 
           this.lits_task = respons.data;
-
-
-
-
         }
       })
     })

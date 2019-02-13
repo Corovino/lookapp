@@ -1,3 +1,4 @@
+
 import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, AlertController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -6,7 +7,6 @@ import { LoginPage } from '../pages/login/login';
 import { Storage } from '@ionic/storage';
 import { TabsPage } from '../pages/tabs/tabs';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
-
 
 @Component({
   templateUrl: 'app.html'
@@ -43,7 +43,7 @@ export class MyApp {
     });
   }
 
-
+  
   initializeApp() {
     this.platform.ready().then(() => {
       this.splashScreen.hide();

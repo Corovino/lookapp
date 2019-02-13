@@ -10,6 +10,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
 
 import { Geolocation } from '@ionic-native/geolocation';
 import { Device } from '@ionic-native/device';
+import { FormPage } from '../form/form';
 
 
 @Component({
@@ -72,7 +73,9 @@ export class HomePage {
     })
   }
 
-
+  showForm() {
+    this.navCtrl.push(FormPage)
+  }
   doRefresh(element){
     this.get_studies();
     this.get_studies_test()

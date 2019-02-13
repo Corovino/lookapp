@@ -85,7 +85,7 @@ ion-header .toolbar-title-md {
     border-radius: 50%;
     margin: 7vw 32.5vw 2vw;
     width: 35%;
-    border: 3px solid #e5355b;
+    border: 3px solid #faecef;
 }
 
 
@@ -98,6 +98,9 @@ ion-header .toolbar-title-md {
     width: 94%;
 }
 
+.segment-md .segment-button {
+    color: #000 !important;
+}
 
 .item-md.item-block .item-inner {
     padding-right: 0px !important;

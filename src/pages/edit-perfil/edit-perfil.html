@@ -5,11 +5,9 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
   <ion-navbar>
-    <ion-title></ion-title>
+    <ion-title>Actualización de datos</ion-title>
   </ion-navbar>
-
 </ion-header>
 
 
@@ -19,32 +17,32 @@
 
     <ion-list>
         <!-- MOC PARA NOMBRES -->
-        <label>Nombres</label>
+        <label>Nombres *</label>
         <ion-item>
           <ion-input type="text" id="name" name="name" [(ngModel)]="info_user.name"></ion-input>
         </ion-item>
         <!-- MOC PARA APELLIDOS -->
-        <label>Apellidos</label>
+        <label>Apellidos *</label>
         <ion-item>
           <ion-input type="text" id="lname" name="lname" [(ngModel)]="info_user.lname"></ion-input>
         </ion-item>
         <!-- MOC PARA CEDULA -->
-        <label> Número de cedula</label>
+        <label>Número de cédula *</label>
         <ion-item>
           <ion-input type="number" id="cedula" name="cedula" [(ngModel)]="info_user.cedula"></ion-input>
         </ion-item>
         <!-- MOC PARA NUMERO DE CELULAR -->
-        <label>Número de celular</label>
+        <label>Número de celular *</label>
         <ion-item>
           <ion-input type="number" id="phone" name="phone" [(ngModel)]="info_user.phone"></ion-input>
         </ion-item>
         <!-- MOC FECHA DE NACIMIENTO -->
-        <label>Fecha de nacimiento</label>
+        <label>Fecha de nacimiento *</label>
         <ion-item>
           <ion-datetime class="btn-birthday" displayFormat="MM/DD/YYYY" [(ngModel)]="info_user.birth_day" placeholder="Fecha de nacimiento"></ion-datetime>
         </ion-item>
         <!-- MOC SEXO -->
-        <label>Genero</label>
+        <label>Género</label>
         <ion-item>
           <ion-select [(ngModel)]="info_user.sex" multiple="false" >
             <ion-option value="M" >Masculino</ion-option>

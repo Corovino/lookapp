@@ -34,8 +34,8 @@
               <ion-avatar item-left>
                 <img [src]="studio.img_studie">
               </ion-avatar>
-              <h2><b>#{{studio.id}}</b></h2>
-              <p>{{studio.name_studie}}</p>
+              <h2><b>{{studio.name_studie}}</b></h2>
+              <p>{{studio.desc_studie}}</p>
               <button class="btn-look" style="padding: 0 1.6em; margin: 3vw;" ion-button item-end (click)="razon(studio)">Retomar</button>
               
             </ion-item>
@@ -56,16 +56,11 @@
             <ion-avatar item-left>
               <img [src]="studio.img_studie">
             </ion-avatar>
-            <h2><b>#{{studio.id}}</b></h2>
-            <p>{{studio.name_studie}}</p>
+            <h2><b>{{studio.name_studie}}</b></h2>
+            <p>{{studio.desc_studie}}</p>
             <button class="btn-look" style="padding: 0 1.6em; margin: 3vw;" ion-button item-end>Enviada</button>
           </ion-item>
         </ion-list>
-
-
-        
-
-
     </div>
 
     <div *ngSwitchCase="'Aprobadas'">
@@ -74,8 +69,8 @@
             <ion-avatar item-left>
               <img [src]="studio.img_studie">
             </ion-avatar>
-            <h2>{{studio.name_studie}}</h2>
-            <p>{{studio.desc_studie}} </p>
+            <h2><b>{{studio.name_studie}}</b></h2>
+            <p>{{studio.desc_studie}}</p>
           </ion-item>
         </ion-list>
 
@@ -99,7 +94,7 @@
             </ion-avatar>
             <h2>{{studio.name_studie}}</h2>
             <p>{{studio.desc_studie}} </p>
-            <button class="btn-look" ion-button item-end (click)="razon(studio)">Razón</button>
+            <button class="btn-look" ion-button item-end (click)="razon(studio)">¿Por Qué?</button>
           </ion-item>
         </ion-list>
 

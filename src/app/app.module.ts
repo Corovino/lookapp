@@ -34,7 +34,10 @@ import { MorePage } from '../pages/more/more';
 import { SkipsPage } from '../pages/skips/skips';
 import { EditPerfilPage } from '../pages/edit-perfil/edit-perfil'
 
+
+
 import { LetterPipe } from '../pipes/letter/letter';
+import { FormPage } from '../pages/form/form';
 
 @NgModule({
   declarations: [
@@ -54,6 +57,7 @@ import { LetterPipe } from '../pipes/letter/letter';
     MyTasksPage,
     MorePage,
     SkipsPage,
+    FormPage,
     LetterPipe
   ],
   imports: [
@@ -82,6 +86,7 @@ import { LetterPipe } from '../pipes/letter/letter';
     DetailTaskPage,
     ProgressInTaskPage,
     MorePage,
+    FormPage,
     SkipsPage
   ],
   providers: [
