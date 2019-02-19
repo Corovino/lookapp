@@ -32641,7 +32641,7 @@
 
                                                 var canvas = document.createElement('canvas');
                                                 var ctx = canvas.getContext('2d');
-                                                var width = 200;
+                                                var width = 230;
                                                 var height = 300;
 
                                                 canvas.width = width;
@@ -32662,13 +32662,6 @@
                                     xhr.open('GET', url);
                                     xhr.responseType = 'blob';
                                     xhr.send();
-                                }
-                                 
-                                if (navigator.geolocation) {
-                                    // console.log(navigator.geolocation.getCurrentPosition);
-                                    // navigator.geolocation.getCurrentPosition(showPosition);
-                                } else {
-                                    console.log("No se tiene soportado esa habilidad")
                                 }
                             
                                 toDataURLc(t, function(dataUrl) {

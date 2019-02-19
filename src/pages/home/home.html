@@ -11,9 +11,9 @@
     refreshingSpinner="circles"></ion-refresher-content>
   </ion-refresher>
   <!-- Contendor 100% -->
-  <div class="cls-list-img" *ngFor="let studie of list_studies">
+  <div class="cls-list-img" *ngFor="let studie of list_studies" (click)="take_taks(studie)">
     <!-- contenedor imagen 30% -->
-    <div class="cls-img" (click)="take_taks(studie)">
+    <div class="cls-img">
       <img [src]="studie.img" alt="{{studie.name}}">
     </div>
     <!-- contendor la descripcion 60 %-->
@@ -28,11 +28,11 @@
     </div>
     <!-- contendor para  ver imagen 10% -->
     <div class="cls-view">
-      <a (click)="take_taks(studie)" clear item-end >Ver</a>
+      <a clear item-end >Ver</a>
     </div>
   </div>
   
-  <button ion-button full (click)="showForm()">Ver más</button>
+  <!-- <button ion-button full (click)="showForm()">Ver más</button> -->
   
   <ion-list *ngIf="!list_studies_test.error">
     <p>Estudios para comunidad cerrada</p>
@@ -48,23 +48,43 @@
           {{studie.description}}
         </p>
 
-          <button ion-button clear item-end (click)="take_taks(studie)">Ver</button>
+        <button ion-button clear item-end (click)="take_taks(studie)">Ver</button>
     </ion-item>
   </ion-list>
 
+    
+  <ion-list *ngIf="!list_studies_prueba.error">
+    <p>Estudios de prueba</p>
+    <ion-item *ngFor="let studie of list_studies_prueba.data"  >
+      <ion-avatar item-left style="margin: 4px 2px 4px 0;">
+        <img [src]="studie.img" (click)="take_taks(studie)" />
+      </ion-avatar>
+        <ion-title>
+          {{studie.name}}
+        </ion-title>
+        <b>Pago:</b> <span class="cls-alert-red">{{studie.price_by_task | number}} </span> <br>
+        <p class="cls-history">
+          {{studie.description}}
+        </p>
 
+        <button ion-button clear item-end (click)="take_taks(studie)">Ver</button>
+    </ion-item>
+  </ion-list>
   
 </ion-content>
 
 
 <style>
+  
+  
   .cls-history {
     color: gray; 
     font-size: 10px
   }
 
-
   .cls-alert-red {
     color: red;
   }
+
+
 </style>

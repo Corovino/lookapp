@@ -36,7 +36,7 @@
               </ion-avatar>
               <h2><b>{{studio.name_studie}}</b></h2>
               <p>{{studio.desc_studie}}</p>
-              <button class="btn-look" style="padding: 0 1.6em; margin: 3vw;" ion-button item-end (click)="razon(studio)">Retomar</button>
+              <button class="btn-look" style="padding: 0 1.6em; margin: 3vw;" ion-button item-end >Retomar</button>
               
             </ion-item>
           </div>
@@ -78,12 +78,12 @@
             <!-- <h3>Apurate a ser reconocido, haz muchas muchas tareas</h3> -->
             <ion-card text-center style="padding: 51px 5px;" >
               <img src="assets/imgs/rechazado.png" alt="Tareas en progreso" style="width: 53px; margin-left: 45%">
-              <p >
+              <p>
                 Upps!,No haz realizado tareas aún, te invitamos a tomar alguna. 
               </p>
             </ion-card>
-
         </div>
+
     </div>
   
     <div *ngSwitchCase="'Rechazadas'">
@@ -112,19 +112,3 @@
 
   </div>
 </ion-content>
-
-<style>
-  /* .btn-primary {
-    background: red !important; 
-  }
-
-
-  .btn-primary:hover {
-    color: #fff;
-    background-color: red !important;
-    border-color: red !important;
-  } */
-
-
-
-</style>

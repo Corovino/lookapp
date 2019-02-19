@@ -35,6 +35,9 @@ import { SkipsPage } from '../pages/skips/skips';
 import { EditPerfilPage } from '../pages/edit-perfil/edit-perfil'
 
 
+import { Network } from '@ionic-native/network/ngx';
+
+
 
 import { LetterPipe } from '../pipes/letter/letter';
 import { FormPage } from '../pages/form/form';
@@ -101,6 +104,7 @@ import { FormPage } from '../pages/form/form';
     LocationAccuracy,
     HttpClient,
     GoogleMaps,
+    Network,
     Device
   ]
 })

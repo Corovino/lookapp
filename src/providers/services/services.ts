@@ -54,6 +54,10 @@ export class ServicesProvider {
     return this.http.get(`${this.endApi}/studies_test/${id}`);
   }
 
+  get_studies_prueba(id) {
+    return this.http.get(`${this.endApi}/studies_prueba/${id}`);
+  }
+
   get_dept_to_userpayment(id) {
     return this.http.get(`${this.endApi}/get_dept_to_userpayment/${id}`);
   }
@@ -134,6 +138,16 @@ export class ServicesProvider {
   // Traer informacion sobre un estudio
   get_studie(id) {
     return this.http.get(`${this.endApi}/get_studie/${id}`, { headers: this.getHeader() }  );
+  }
+
+  // Process to make this
+  save_img_get_url(data) {
+    return this.http.post(`${this.endApi}/save_img_to_form`, data);
+  }
+
+  // PROCESO TO SEND A  TASK
+  save_task(data) {
+    return this.http.post(`${this.endApi}/update_form_response_to_task`, data);
   }
 
 

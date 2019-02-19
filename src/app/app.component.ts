@@ -7,6 +7,7 @@ import { LoginPage } from '../pages/login/login';
 import { Storage } from '@ionic/storage';
 import { TabsPage } from '../pages/tabs/tabs';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
+import { Network } from '@ionic-native/network/ngx';
 
 @Component({
   templateUrl: 'app.html'
@@ -24,10 +25,16 @@ export class MyApp {
     public splashScreen: SplashScreen, 
     public storage: Storage,
     public locationAccuracy: LocationAccuracy,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
+    private network: Network
+
   ) {
 
     this.initializeApp();
+    // ESTADO DE LA CONEXION
+    this.stateConnect();
+   
+
 
     this.locationAccuracy.canRequest().then((canRequest: boolean) => {
       if(canRequest) {
@@ -43,7 +50,32 @@ export class MyApp {
     });
   }
 
-  
+  stateConnect() {
+    // console.log(this.network.onDisconnect() ,   "THIS IS MY NETWORK");
+
+
+    // //  watch network for a disconnection
+    // this.network.onDisconnect()
+    // .subscribe((info) => {
+    //   console.log(info)
+    //   console.log("ESTADO DESCONEXTAS");
+    //   // this.presentAlert("", "No hay conexión a Internet");
+    // });
+ }
+
+
+
+  presentAlert(title:string, message: string) {
+    
+    let alert = this.alertCtrl.create({
+      title: title,
+      subTitle: message,
+      buttons: ['Aceptar']
+    });
+    alert.present();
+
+  }
+
   initializeApp() {
     this.platform.ready().then(() => {
       this.splashScreen.hide();

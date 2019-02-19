@@ -319,8 +319,6 @@ export class FormPage {
       public navParams: NavParams,
       public formBuilder: FormBuilder
       ) {
-
-        // const controls = this.formulario.forEach(element => new FormControl(false)); 
   }
 
   validate_response(element) {
@@ -328,22 +326,16 @@ export class FormPage {
   }
 
   sendForm() {
-    
-    console.log("THIS IS THE BEST INFORMATION", this.formulario);
-
     for (let e = 0; e < this.formulario.length; e++) {
       
       this.formulario[e].error = false;
-
       if(this.formulario[e].type == 'boxes'){
         let cnt = 0;
         this.formulario[e].data.forEach(element => {
             if(this.validate_response(element.response)){
               this.formulario[e].error = true;              
             } else if(element.response) {
-
               cnt++;
-              console.log(cnt, "this is my contnent");
             }
           });
           
@@ -353,7 +345,6 @@ export class FormPage {
       } else {
         
         if(this.formulario[e].required == true && this.validate_response(this.formulario[e].response)) {
-          console.log("lo siento pero todos los cambos deben ser llenado s")
           this.formulario[e].error = true;
         }
 

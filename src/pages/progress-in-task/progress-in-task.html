@@ -1,9 +1,3 @@
-<!--
-  Generated template for the ProgressInTaskPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
   <ion-navbar>
     <ion-title>{{name_studie}}</ion-title>
@@ -12,9 +6,7 @@
 
 
 <ion-content padding>
-    
-    <div id="bar" class="cls-progress"  [ngStyle]="{'width': pg +'vw' }"></div>
-    <!-- {{ (this.timee / 60 ) | number }} min -->
+
     <ion-slides pager *ngIf="showInstructive">
         <ion-slide *ngFor="let slide of loap_instructives">
           <ion-toolbar>
@@ -55,10 +47,250 @@
 
     <div #idform id="formio"></div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+    
+  <div>
+    <div *ngFor="let data of formulario; let i = index ">
+      <!-- 
+        MOC PARA LOS CASOS CUANDO SON SOLECTS
+       -->
+      <div class="cls-content" *ngIf="data.type == 'select'" [ngClass]="{'cls-alfa-romeo': data.error}" >
+        <label> <i></i>  {{data.label}}</label>
+        <select name="infoSelecct" id="" [(ngModel)]="data.response" required="true" class="form-control" >
+            <option *ngFor="let item of data.data" value="item.value">{{item.label}} </option>
+        </select>
+        <div *ngIf="data.error" class="col-90">
+          <span class="cls-error" >
+            Este campo es obligatorio
+          </span> 
+        </div>
+      </div>
+
+      <!-- 
+        MOC CUANDO ES CASO ES UN RADIO BUTTON
+      -->
+      <div class="cls-content" *ngIf="data.type == 'radio'" [ngClass]="{'cls-alfa-romeo': data.error}" >
+        <label for=""> <i></i>  {{data.label}}</label>
+        <div *ngFor="let item of data.data; let e = index">
+          <input  id="{{e + '_' + i}}" name="{{i}}" type="radio" value="{{item.response}}">
+          <label for="{{e + '_' + i}}"> {{item.label}} </label>
+        </div>
+        <div *ngIf="data.error" class="col-90">
+          <span class="cls-error" >
+            Este campo es obligatorio
+          </span> 
+        </div>
+      </div>
+      
+      
+      <!-- 
+          MOC CUANDO ES EL CASO DE BOXES O CHECKBOXES
+       -->
+      <div class="cls-content" *ngIf="data.type == 'boxes'" [ngClass]="{'cls-alfa-romeo': data.error}">
+        <label for=""> <i></i>   {{data.label}} </label>
+        <div *ngFor="let item of data.data; let e = index">
+          <input type="checkbox" id="{{e + '_' + i}}" name="{{data[i]}}" [(ngModel)]="item.response">
+          <label for="{{e + '_' + i}}" >{{item.label}}</label>
+
+        </div>
+        <div *ngIf="data.error" class="col-90">
+          <span class="cls-error" >
+            Este campo es obligatorio
+          </span> 
+        </div>
+      </div>
+
+
+      <!-- 
+        MOC CUANDO ESL TIPO DE DATO ES UN IMPUT
+       -->
+      <div class="cls-content" *ngIf="data.type == 'input'" [ngClass]="{'cls-alfa-romeo': data.error}">
+        <label for=""><i></i> {{data.label}}</label>
+        <input type="text" [(ngModel)]="data.response" required="true" class="form-control" >
+        <div *ngIf="data.error" class="col-90">
+          <span class="cls-error" >
+            Este campo es obligatorio
+          </span> 
+        </div>
+      </div>
+
+
+      <!-- 
+        MOC CUANDO EL TIMPO DE CONTENIDO ES TITULOS
+       -->
+      <div class="cls-content" *ngIf="data.type == 'title'" [ngClass]="{'cls-alfa-romeo': data.error}">
+        <p [innerHTML]="data.label" ></p>
+      </div>
+
+
+      <!-- 
+        MOC CUANDO EL TIPO DE CONTENIDO SOLICITA UNA PHOTO 
+       -->
+      <div class="cls-content" *ngIf="data.type == 'photo'" [ngClass]="{'cls-alfa-romeo': data.error}">
+        <label for=""> <i></i>  {{data.label}}</label> <br>
+        
+        <div text-center>
+          <button class="cls-button-photo" (click)="take_photo(data)">Tomar foto</button>
+        </div>
+
+
+        <div class="img-form">
+          <ion-icon name="trash" (click)="data.src = ''" ></ion-icon>
+          <img src="{{data.src}}" alt="" class="">
+        </div>
+
+        <div *ngIf="data.error" class="col-90">
+          <span class="cls-error" >
+            Este campo es obligatorio
+          </span> 
+        </div>
+      </div>
+
+
+    </div>
+
+    
+    <button class="cls-button-photo cls-btn-send" full (click)="sendForm()">Enviar tarea</button>
+
+
+  </div>
+
   <!-- <button ion-button (click)="conoce()" >Hola como vas</button> -->
 </ion-content>
 
 <style>
+
+  .cls-btn-send {
+    width: 60vw;
+    background: #e5355b;
+    margin: 10px 14vw;
+    font-size: 8vw;
+
+  }
+
+  .cls-hide {
+    display: block !important;
+  }
+
+  input[type="checkbox"], input[type="radio"] {
+      /* margin: 4px 0 0; */
+      /* margin-top: 1px\9; */
+      line-height: normal;
+      background: blue !important;
+      box-shadow: 0px 0px 0px 1px #e5355b;
+      border: 1px solid red !important;
+  }
+  
+  input[type="checkbox"] + span,
+  input[type="checkbox"] + span::before
+  {
+      display: flex;
+      vertical-align: middle;
+      
+  }
+
+  label i {
+    height: 8px;
+    width: 8px;
+    background: #e5355b;
+    position: relative;
+    float: left;
+    margin: 5px;
+    border-radius: 14px;
+  }
+
+  input[type="radio"]:checked + span::before,
+  input[type="checkbox"]:checked + span::before
+  {
+      color: #666;
+  }
+
+
+
+  .img-form img {
+    width: 50%;
+    margin-left: 25%;
+  }
+  
+  .img-form ion-icon {
+    position: relative;
+    right: 15px;
+    float: right;
+  }
+
+  .cls-error {
+    color: red;
+  }
+
+
+  .col-90 {
+    width: 95%;
+    margin: 1vw 2vw;
+    float: left;
+  }
+  
+  .cls-alfa-romeo {
+    background: hsla(0, 100%, 50%, 0.08);
+    border: 1px solid rgba(255, 0, 0, 0.37);
+
+  }
+
+  .form-control {
+    width: 100%;
+    border-radius: 25px;
+    border: 1px solid #e6355b;
+    height: 12vw;
+    float: left;
+  }
+
+  .cls-content {
+    width: 100%;
+    margin: 1px 0%;
+    padding: 10px;
+    position: relative;
+    float: left;
+    border-bottom: 1px solid #0000001a;
+  }
+
+  .cls-button-photo {
+    border: 1px solid #e678b5;
+    border-radius: 27px;
+    padding: 10px;
+    background: #e5355b;
+    color: white;
+  }
+
+
+  hr {
+    background-color: rgba(0, 0, 0, 0.08);
+    width: 100%;
+    float: left;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+
+  .cls-btn-w {
+    width: 90%;
+    background: #e5355b;
+    color: white;
+  }
+
+
+
+
+
+
   .cls-progress {
     background: rgb(229, 53, 91) none repeat scroll 0% 0%;
     height: 4px;

@@ -5,7 +5,7 @@
         </ion-title>
     </ion-navbar>
 </ion-header>
-<ion-content>
+<ion-content id="info">
     <ion-card>
         
         <div class="content-hidden">
@@ -44,8 +44,9 @@
                     </ion-item>
                 </div>
             </ion-row>
-            <!-- <h4>Dónde y cúando</h4> -->
         </ion-card-content>
+
+
         <ion-row>
             <ion-col>
                 <button class="btn-look cls-ajs" ion-button full (click)="start_task(estudio)">
@@ -53,20 +54,45 @@
                 </button>
             </ion-col>
         </ion-row>
+
+        
     </ion-card>
-    <!-- <div *ngIf="showMapa"> -->
-        <!-- <div #map id="map" style="height:70vw"></div> -->
-    <!-- </div> -->
-    
 </ion-content>
 
 <style>
+
+
+
+
 
     .cls-ajs {
         padding: 10px;
         margin: 0px 8vw;
         width: 90vw;
     }
+
+    .show-spinner {
+        min-width: 38px;
+        position: fixed;
+        background: white;
+        top: 42%;
+        left: 30%;
+        border: 1px solid #0006;
+        width: 159px;
+        height: 123px;
+    }
+
+
+    .cls-showw-sppiner {
+        width: 100%;
+        height: 100vw;
+        background: rgba(0, 0, 0, 0.38);
+        z-index: 9;
+        position: fixed;
+        top: 0px;
+    }
+
+
 
     #map_canva {
         height: 65%;

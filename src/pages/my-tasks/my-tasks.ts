@@ -66,7 +66,6 @@ export class MyTasksPage {
             task_rejected: []
           };
 
-
           this.lits_task = respons.data;
         }
       })
@@ -75,8 +74,7 @@ export class MyTasksPage {
 
 
 
-  continue_task(data: any) {
-    console.log(data, "DATA DESDDE MY TASK")
+  continue_task(data: any) {    
     this.storage.get('xx-app-loap').then( (loap: any) => {
       let user = JSON.parse(loap);
       this.rest.get_studie(data.id_studie).subscribe((resp: any) => {
@@ -91,7 +89,6 @@ export class MyTasksPage {
 
 
   doRefresh(element){
-    
     this.get_task();
     setTimeout(() => {
       element.complete();

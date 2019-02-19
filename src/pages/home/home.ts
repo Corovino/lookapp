@@ -1,8 +1,8 @@
 import { ProgressInTaskPage } from './../progress-in-task/progress-in-task';
-import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
+import { Component, ɵConsole } from '@angular/core';
+import { NavController, NavParams, AlertController, LoadingController, Loading } from 'ionic-angular';
 import { Storage } from '@ionic/storage'
-import { GoogleMaps, GoogleMap, Marker, GoogleMapsEvent, ILatLng, Poly,  LatLng, CameraPosition, MarkerOptions } from '@ionic-native/google-maps'
+import { GoogleMaps, GoogleMap, Marker, GoogleMapsEvent, ILatLng, Poly, Spherical, LatLng, CameraPosition, MarkerOptions } from '@ionic-native/google-maps'
 import { ServicesProvider } from '../../providers/services/services';
 
 import { Camera } from '@ionic-native/camera';
@@ -58,9 +58,9 @@ export class HomePage {
     clearInterval(this.searchStudies);
   }
 
+
   list_studies_test: any = {error: true, data: ''};
   get_studies_test(){
-
     this.storage.get('xx-app-loap').then( (loap: any) => {
       let user = JSON.parse(loap);
       this.rest.get_studies_test(user.data.user._id)
@@ -69,16 +69,36 @@ export class HomePage {
             this.list_studies_test = resp;
           }
       })
-
     })
   }
+
+
+  list_studies_prueba: any = {error: true, data: ''};
+  get_studies_prueba(){
+    this.storage.get('xx-app-loap').then( (loap: any) => {
+      let user = JSON.parse(loap);
+      this.rest.get_studies_prueba(user.data.user._id)
+      .subscribe((resp: any) => {
+          if(!resp.error) {
+            this.list_studies_prueba = resp;
+          }
+      })
+    })
+  }
+
+
+
 
   showForm() {
     this.navCtrl.push(FormPage)
   }
+
+
   doRefresh(element){
     this.get_studies();
-    this.get_studies_test()
+    this.get_studies_test();
+    this.get_studies_prueba();
+
     setTimeout(() => {
       element.complete();
     }, 1000);
@@ -101,6 +121,17 @@ export class HomePage {
   /////////////////// LOAD MAP
   ionViewDidLoad(){ }
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -139,7 +170,26 @@ export class DetailTaskPage {
     public loadingCtrl: LoadingController
   ) { 
     this.estudio = this.params.data.data;
-   }
+
+    
+
+
+  }
+
+
+  loding: any;
+  startMessage() {
+    this.loding = this.loadingCtrl.create({
+      content: 'Buscando geolocalización.',
+      spinner: 'crescent',
+    });
+
+    this.loding.present();  
+  }
+  
+  stopMessage(){
+    this.loding.dismiss() ;
+  }
 
 /////////////////// LOAD MAP
 // 
@@ -204,20 +254,97 @@ createPolilyne(element) {
   })
 }
 
+MyP:  LatLng;
+
 // BUTTON PARA QUE LA CAMARA PONGA MY GEOLOCALIZACION EN EL PUNTO QUE ES
 stateLocation: string = 'false';
 getMyLocation() {
   let locd: LatLng;
+  this.startMessage();
   this.stateLocation = 'Buscando...';
   this.geolocation.getCurrentPosition().then((resp) => {
     locd = new LatLng(resp.coords.latitude, resp.coords.longitude);
+    this.stopMessage();
+    this.MyP = locd;
     this.stateLocation = 'false';
     this.moveCamera(locd);
+    this.manageData();
   }).catch(err => {
     this.stateLocation = 'Activa tu geolocalización';
   })
 }
 
+
+manageData() {
+    let loc: LatLng;
+    
+    //  PUNTOS SUBIDOS POR EXCEL
+    if(this.estudio.type_ubication == 3) {
+
+      this.estudio.ubicaciones.forEach(element => {
+        loc = new LatLng(element.latitud, element.longitud); 
+        this.createMarker(loc, element.direccion , 'green').then((marker: Marker) => {
+          this.points.push(marker); marker.showInfoWindow();
+        })
+      });
+
+
+        
+        this.showLocation = setInterval(() => {
+          
+          this.geolocation.getCurrentPosition({
+            enableHighAccuracy: true, // HABILITAR ALTA PRECISION
+          }).then((resp) => {
+            loc = new LatLng(resp.coords.latitude, resp.coords.longitude);
+    
+            this.createMarker(loc, "", this.color ).then((marker: Marker) => {
+              this.markers.push(marker); marker.showInfoWindow();
+              for (let index = 0; index < this.markers.length; index++) {
+                if(index > 1){ this.markers[index-1].remove(); } 
+                else if(index == 1) { this.markers[0].remove(); } 
+              }
+            })
+            
+           }).catch((error) => {
+           });
+        }, 1500);
+      
+      } else {
+  
+        let polines = [];
+        this.estudio.ubicaciones.forEach( (element, key) => {
+          let pol: ILatLng = element.json_poligono;
+          polines.push(pol);
+        });
+  
+        polines.forEach(element => {
+          this.createPolilyne(element);
+        })
+  
+        this.showLocation = setInterval(() => {
+          this.geolocation.getCurrentPosition({
+            enableHighAccuracy: true, // HABILITAR ALTA PRECISION
+          }).then((resp) => {
+            loc = new LatLng(resp.coords.latitude, resp.coords.longitude);
+            // this.moveCamera(loc);
+            this.validPolilyne(polines, loc);
+    
+            this.createMarker(loc, "", this.color ).then((marker: Marker) => {
+  
+              this.markers.push(marker); marker.showInfoWindow();
+              for (let index = 0; index < this.markers.length; index++) {
+                if(index > 1){ this.markers[index-1].remove(); } 
+                else if(index == 1) { this.markers[0].remove(); }
+              }
+  
+            })
+          })
+        }, 1500)
+  
+  
+      }
+      
+}
 // know estate my ubication
 validPolilyne(polines, loc) {
   let resuls = [];
@@ -225,6 +352,8 @@ validPolilyne(polines, loc) {
   polines.forEach(element => {
     resuls.push({state: Poly.containsLocation(loc, element), id: element[0].id});
   }); 
+
+  
   // SE RETORNA CUANDO UNO DE LOS REUSLTADO ES IGUAL A TRUE
   var resultobj = resuls.filter(obj => {  if(obj.state == true) { return obj; } });
 
@@ -246,14 +375,10 @@ color: any = 'assets/imgs/me.png';
 markers: any = [];
 points: any = [];
 loadMap() {
-
-  
-
-  
-  
+    
   //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
   //Add 'implements AfterViewInit' to the class.
-  let loc: LatLng;
+  
   // this.initMap();
 
   // let controls: any = {compass: true, myLocationButton: false, indoorPicker: false, zoom: true, mapTypeControl: true, streetViewControl: false};
@@ -264,130 +389,13 @@ loadMap() {
     gestureHandling: 'cooperative'
   })
 
-  // 'backgroundColor': 'white',
-  // 'controls': {
-  //   'compass': controls.compass,
-  //   'myLocationButton': controls.myLocationButton,
-  //   'indoorPicker': controls.indoorPicker,
-  //   'zoom': controls.zoom,
-  //   'mapTypeControl': controls.mapTypeControl,
-  //   'streetViewControl': controls.streetViewControl
-  // },
-  // 'gestures': {
-  //   'scroll': true,
-  //   'tilt': true,
-  //   'rotate': true,
-  //   'zoom': true,
-  // },
 
 
 
   //once the map is ready move
   //camera into position
   this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
-
-    
     this.getMyLocation();
-    
-    //  PUNTOS SUBIDOS POR EXCEL
-    if(this.estudio.type_ubication == 3) {
-
-      
-    let triangleCoords = [];
-    this.estudio.ubicaciones.forEach(element => {
-      
-
-      var loc = new LatLng(element.latitud, element.longitud); 
-      var Tlat = element.latitud, Tlng = element.longitud;
-
-      var j = parseFloat(Tlat) - parseFloat("0.0009");
-      var p = parseFloat(Tlng) - parseFloat("0.0009");
-
-      triangleCoords.push([
-        {lat: parseFloat(Tlat), lng: parseFloat(Tlng) , id: element.id},
-        {lat: parseFloat(Tlat+0.0009) , lng: parseFloat(Tlng+0.0009)},
-        {lat: parseFloat(j.toString()) , lng: parseFloat(p.toString())},
-        {lat: parseFloat(Tlat+0.0009) , lng: parseFloat(p.toString())}
-      ])
-      
-      this.createMarker(loc, element.direccion , 'green').then((marker: Marker) => {
-        this.points.push(marker); marker.showInfoWindow();
-      })
-      
-    });
-      
-      let ponies = [];
-      triangleCoords.forEach(element => {
-        let polw: ILatLng = element;
-        ponies.push(polw);
-      })
-      
-      ponies.forEach(element => {
-        this.createPolilyne(element);
-      })
-      
-      this.showLocation = setInterval(() => {
-        
-        this.geolocation.getCurrentPosition({
-          enableHighAccuracy: true, // HABILITAR ALTA PRECISION
-        }).then((resp) => {
-          loc = new LatLng(resp.coords.latitude, resp.coords.longitude);
-
-          this.validPolilyne(triangleCoords, loc);
-          // this.moveCamera(loc);
-  
-          this.createMarker(loc, "", this.color ).then((marker: Marker) => {
-            this.markers.push(marker); marker.showInfoWindow();
-            for (let index = 0; index < this.markers.length; index++) {
-              if(index > 1){ this.markers[index-1].remove(); } 
-              else if(index == 1) { this.markers[0].remove(); }
-            }
-          })
-          
-         }).catch((error) => {
-         });
-      }, 1500);
-
-  
-
-    
-    } else {
-
-      let polines = [];
-      this.estudio.ubicaciones.forEach( (element, key) => {
-        let pol: ILatLng = element.json_poligono;
-        polines.push(pol);
-      });
-
-      polines.forEach(element => {
-        this.createPolilyne(element);
-      })
-  
-
-
-      this.showLocation = setInterval(() => {
-        this.geolocation.getCurrentPosition({
-          enableHighAccuracy: true, // HABILITAR ALTA PRECISION
-        }).then((resp) => {
-          loc = new LatLng(resp.coords.latitude, resp.coords.longitude);
-          // this.moveCamera(loc);
-          this.validPolilyne(polines, loc);
-  
-          this.createMarker(loc, "", this.color ).then((marker: Marker) => {
-
-            this.markers.push(marker); marker.showInfoWindow();
-            for (let index = 0; index < this.markers.length; index++) {
-              if(index > 1){ this.markers[index-1].remove(); } 
-              else if(index == 1) { this.markers[0].remove(); }
-            }
-
-          })
-        })
-      }, 1500)
-
-
-    }
-    
   });
 
 }
@@ -408,7 +416,6 @@ somefunction(){
 }
 
 
-
 presentAlert(title:string, message: string) {
   let alert = this.alertCtrl.create({
     title: title,
@@ -418,12 +425,10 @@ presentAlert(title:string, message: string) {
   alert.present();
 }
 
+  
+  
 
   start_task(data) {
-
-    /**
-     * La edad cuando no es "todos",
-     */
 
     if(data.detail_studie.length > 0) {
       data.detail_studie = data.detail_studie[0];
@@ -434,28 +439,10 @@ presentAlert(title:string, message: string) {
       rang_dos: data.detail_studie.ages.rang_2
     }
 
-    /**
-     * 
-     * El nivel de estudios 
-     */
     let level_studie = data.detail_studie.level_studie.level;
-
-    /**
-     * 
-     * Conocer el querido estrato
-     */
     let estrata = data.detail_studie.estrata.stratum;
+    let gender = data.detail_studie.gender.type;
 
-    /**
-     * 
-     * Proceso para conocer el gender
-    */
-     let gender = data.detail_studie.gender.type;
-  
-    /**
-      * 
-      * 
-    */
   
     this.storage.get('xx-app-loap').then( (loap: any) => {
 
@@ -473,36 +460,94 @@ presentAlert(title:string, message: string) {
         gender == "Todos" || gender == segments.gender
       ) {
         
+        if(this.estudio.type_ubication == 3){
 
-        // if(this.color == 'assets/imgs/tomar.png') {
-        if(this.stateTask == true) {
+          let distance_more_near: any = 999999999999999999999999999999999999, 
+          a = 0,
+          direccion = '',
+          idPoint = '';
+          
+          this.startMessage();
+          this.geolocation.getCurrentPosition().then((resp) => {
+            let locd = new LatLng(resp.coords.latitude, resp.coords.longitude);;
+
+            this.estudio.ubicaciones.forEach(element => {
+
+              var loc = new LatLng(element.latitud, element.longitud);
+              let result_value  = Spherical.computeDistanceBetween(locd, loc);
+              if(result_value < distance_more_near) { 
+                distance_more_near = result_value;
+                direccion = element.direccion,
+                idPoint = element.id
+              };
+
+              a++;
+
+              if(a == this.estudio.ubicaciones.length) {
+                if(distance_more_near < 60) {
+                  
+                  this.rest.take_task({
+                    iduser: user.data.user._id,
+                    idstudie: data.id
+                  }).subscribe( (response: any) => {
+                    if(!response.error) {
+                        
+                        this.rest.hide_point(idPoint).subscribe( (resp:any) => {
+                        this.stopMessage();
+                        
+                        if(resp.error){
+                          this.presentAlert("", resp.message);
+                          this.stopMessage();
+                        } else {
+                          this.navCtrl.setRoot(ProgressInTaskPage, {data: data, iduser: user.data.user._id, idt:response.data.id })
+                        }
+
+                      })
+                    } else {
+                      this.stopMessage();
+                      this.presentAlert(response.error, response.message);    
+                    }
+                  })
+                } else {
+                  this.presentAlert("", "Estas a " + parseInt(distance_more_near) + " metros del punto más cercano. debes estar a menos de 60 metros");
+                  this.stopMessage();
+                }
+              }
+  
+  
+            });
+          }).catch(err => {
+            this.stateLocation = 'Activa tu geolocalización';
+            this.stopMessage();
+          })
+
+
+          
+
+        } else if(this.stateTask == true) {
+
           this.rest.take_task({
             iduser: user.data.user._id,
             idstudie: data.id
           }).subscribe( (response: any) => {
             if(!response.error) {
               // cuando las ubicaciones son por excel
-              if(this.estudio.type_ubication == 3 && this.idPointToHide != 0){
-                this.rest.hide_point(this.idPointToHide).subscribe( (resp:any) => {
-                  if(resp.error){
-                    this.presentAlert("", resp.message);
-                  } else {
-                    this.navCtrl.setRoot(ProgressInTaskPage, {data: data, iduser: user.data.user._id, idt:response.data.id })
-                  }
-                })
-              } else {
-                this.navCtrl.setRoot(ProgressInTaskPage, {data: data, iduser: user.data.user._id, idt:response.data.id })
-              }
-              // this.navCtrl.push(SkipsPage, {data: data, iduser: user.data.data._id})
+              this.navCtrl.setRoot(ProgressInTaskPage, {data: data, iduser: user.data.user._id, idt:response.data.id }) 
             } else {
-              this.presentAlert("", "Ya haz tomado esta tarea.");    
+              this.presentAlert(response.error, response.message);  
+              this.stopMessage();  
             }
           })
+
         } else {
-            this.presentAlert("", "No puedes realizar la tarea, asegurate de estar en el area permitida");    
+          this.stopMessage();
+          this.presentAlert("", "No puedes realizar la tarea, asegurate de estar en el area permitida");    
         }
 
+
+
       } else {
+        this.stopMessage();
         this.presentAlert("Sin acceso", "Esta tarea esta disponible para una población en particular");
       }
     })

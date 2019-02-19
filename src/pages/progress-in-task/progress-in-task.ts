@@ -1,8 +1,11 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { ServicesProvider } from '../../providers/services/services';
 import { GoogleMaps, GoogleMap, Marker, GoogleMapsEvent, LatLng, CameraPosition, MarkerOptions } from '@ionic-native/google-maps'
+import { FormArray } from '@angular/forms';
+import { CodegenComponentFactoryResolver } from '@angular/core/src/linker/component_factory_resolver';
+import { Camera, CameraOptions } from '@ionic-native/camera';
 
 
 /**
@@ -28,6 +31,7 @@ export class ProgressInTaskPage {
   @ViewChild('map') mapElement: ElementRef;
   map: GoogleMap;
   value_heigth: number = 1;
+  public formulario: any = [];
   
   constructor(
     public navCtrl: NavController, 
@@ -36,14 +40,17 @@ export class ProgressInTaskPage {
     public alertCtrl: AlertController,
     public rest: ServicesProvider,
     private _googleMaps: GoogleMaps,
+    private camera: Camera,
+    private loadingCtrl: LoadingController
   ) {
     this.timeOut();
+    
+    
   }
 
   
   showLocation: any;
   ionViewDidEnter(){
-    console.log("INGRESO SATISFACTORIAMENTE");
   }
 
   ionViewWillUnload(){
@@ -88,9 +95,12 @@ export class ProgressInTaskPage {
       this.navParams.data.iduser,
       this.navParams.data.data.id,
       this.navParams.data.data.price_by_task,
-      this.navParams.data.idt
-      
+      this.navParams.data.idt,
+      this.navParams.data.data.form 
     );
+
+
+
   }
 
 
@@ -112,7 +122,8 @@ export class ProgressInTaskPage {
       this.navParams.data.iduser,
       this.navParams.data.data.id,
       this.navParams.data.data.price_by_task,
-      this.navParams.data.idt
+      this.navParams.data.idt,
+      this.navParams.data.data.form
     );
       
   }
@@ -208,7 +219,12 @@ export class ProgressInTaskPage {
   }
 
 
-  loadForm(form_studie: any, iduser: number, idtask: number, price: any, id: any ){
+  loadForm(form_studie: any, iduser: number, idtask: number, price: any, id: any, form: any ){
+
+
+    console.log("INFORMACION DE TODO LO QUE PUEDE PASAR", form);
+
+    this.formulario = form;
 
     let type_studie = this.navParams.data.data.load_types_studie_id;
     // console.log(type_studie, "asdfadsf");
@@ -299,4 +315,191 @@ export class ProgressInTaskPage {
   conoce(){
     this.presentAlert("Error", "El formulario no se ha encontrado");
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  public formshow: any = [];
+  public lastTrans: String = '';
+  
+
+
+
+
+  validate_response(element) {
+    return element == undefined || element == '' || element == null;
+  }
+
+
+  loding: any;
+  startMessage(msm) {
+    this.loding = this.loadingCtrl.create({
+      content: msm,
+      spinner: 'crescent',
+    });
+
+    this.loding.present();  
+  }
+  
+  stopMessage(){
+    this.loding.dismiss() ;
+  }
+
+
+
+  sendForm() {
+
+    let inf = false;
+    
+    for (let e = 0; e < this.formulario.length; e++) {
+      
+      this.formulario[e].error = false;
+      if(this.formulario[e].type == 'boxes'){
+        let cnt = 0;
+        this.formulario[e].data.forEach(element => {
+            if(this.validate_response(element.response)){
+              this.formulario[e].error = true;
+              inf = true;
+            } else if(element.response) {
+              cnt++;
+            }
+          });
+          
+          if(cnt > 0) {
+            inf = false;
+            this.formulario[e].error = false;         
+          }
+      } else {
+        let it = 0;
+        if(this.formulario[e].required == true && this.validate_response(this.formulario[e].response)) {
+          inf = true;
+          it++;
+          this.formulario[e].error = true;
+        }
+
+        if(it == 0) {
+          inf = false;
+        }
+
+      }
+      
+    }
+
+    if(inf == false) {
+      this.geolocation.getCurrentPosition({
+        enableHighAccuracy: true, // HABILITAR ALTA PRECISION
+      }).then((_coords) => {      
+        this.rest.save_task({
+          "idtask": this.navParams.data.idt,
+          "iduser": this.navParams.data.iduser,
+          "form_response": this.formulario,
+          "price": this.navParams.data.data.price_by_task,
+          "longitude": _coords.coords.longitude,
+          "latitude": _coords.coords.latitude,
+          "id": this.navParams.data.data.id
+        }).subscribe( (resp: any) => {
+          if(resp.error == true) {
+            this.presentAlert("", "No hemos podido guardar tu tarea");
+          } else {
+            this.presentAlert("", "Se ha guardado de forma correcta")
+          }
+        })
+      })
+    }
+  }
+
+
+  public image: any;
+  public info_user: any;
+  public userForm: any = new FormData();
+
+  take_photo(object) {
+
+    let options: CameraOptions = {
+      destinationType: this.camera.DestinationType.DATA_URL,
+      targetHeight: 500,
+      targetWidth: 500,
+      quality: 100,
+      allowEdit: true,
+      saveToPhotoAlbum: true
+    }
+    
+    this.startMessage("Obteniendo georeferenciación");
+    this.geolocation.getCurrentPosition({
+      enableHighAccuracy: true, // HABILITAR ALTA PRECISION
+    }).then((_coords) => {
+      
+      this.stopMessage();
+      this.camera.getPicture(options)
+      .then(data => {
+        this.image = `data:image/jpeg;base64,${data}`;
+        let img = this.dataURLtoFile(`data:image/jpeg;base64,${data}`, 'a.png');
+        
+        this.userForm.delete('File');
+        this.userForm.append('File', img);
+        
+              this.startMessage("Guardando imagen.");
+              this.rest.save_img_get_url(this.userForm).subscribe( (resp:any) => {
+                
+                object.src = resp.img;
+                object.lat = _coords.coords.latitude;
+                object.lng = _coords.coords.longitude;
+                
+                this.stopMessage();
+              })
+
+
+          }).catch(e => {
+            this.stopMessage();
+          })
+          
+        }).catch((error) => {
+          this.stopMessage();
+        });
+        
+        
+
+
+        
+
+  }
+
+  dataURLtoFile(dataurl, filename) {
+    var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, {type:mime});
+  }
+
 }

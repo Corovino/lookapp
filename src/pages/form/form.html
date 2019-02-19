@@ -19,7 +19,6 @@
       <div *ngFor="let data of formulario; let i = index ">
 
         <!-- 
-
           MOC PARA LOS CASOS CUANDO SON SOLECTS
          -->
         <div class="cls-content" *ngIf="data.type == 'select'" [ngClass]="{'cls-alfa-romeo': data.error}" >
@@ -35,7 +34,6 @@
         </div>
 
         <!-- 
-
           MOC CUANDO ES CASO ES UN RADIO BUTTON
          -->
         <div class="cls-content" *ngIf="data.type == 'radio'" [ngClass]="{'cls-alfa-romeo': data.error}" >
@@ -54,7 +52,6 @@
         
         
         <!-- 
-
             MOC CUANDO ES EL CASO DE BOXES O CHECKBOXES
          -->
         <div class="cls-content" *ngIf="data.type == 'boxes'" [ngClass]="{'cls-alfa-romeo': data.error}">
@@ -72,7 +69,6 @@
 
 
         <!-- 
-
           MOC CUANDO ESL TIPO DE DATO ES UN IMPUT
          -->
         <div class="cls-content" *ngIf="data.type == 'input'" [ngClass]="{'cls-alfa-romeo': data.error}">
@@ -87,7 +83,6 @@
 
 
         <!-- 
-
           MOC CUANDO EL TIMPO DE CONTENIDO ES TITULOS
          -->
         <div class="cls-content" *ngIf="data.type == 'title'" [ngClass]="{'cls-alfa-romeo': data.error}">
@@ -96,7 +91,6 @@
 
 
         <!-- 
-
           MOC CUANDO EL TIPO DE CONTENIDO SOLICITA UNA PHOTO 
          -->
         <div class="cls-content" *ngIf="data.type == 'photo'" [ngClass]="{'cls-alfa-romeo': data.error}">
@@ -114,7 +108,6 @@
 
       
       <button class="btn-look" full (click)="sendForm()">Enviar tarea</button>
-
   </div>
 </ion-content>
 
@@ -142,7 +135,7 @@
     width: 95%;
     border-radius: 25px;
     border: 1px solid #e6355b;
-    height: 8vw;
+    height: 12vw;
     float: left;
   }
 
