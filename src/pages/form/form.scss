@@ -1,3 +1,63 @@
 page-form {
 
+    .cls-error {
+        color: red;
+    }
+
+
+    .col-90 {
+        width: 95%;
+        margin: 1vw 2vw;
+        float: left;
+    }
+    
+    .cls-alfa-romeo {
+        background:#ff00004d;
+        border: 1px solid #ff00004d;
+    }
+
+    .form-control {
+        width: 95%;
+        border-radius: 25px;
+        border: 1px solid #e6355b;
+        height: 12vw;
+        float: left;
+    }
+
+    .cls-content {
+        width: 95%;
+        margin: 1px 2%;
+        padding: 10px;
+        position: relative;
+        float: left;
+        border-bottom: 1px solid #0000001a;
+    }
+
+    .cls-button-photo {
+        border: 1px solid #e678b5;
+        border-radius: 27px;
+        padding: 10px;
+        position: relative;
+        float: right;
+        background: #e5355b;
+        color: white;
+        right: 26px;
+    }
+
+
+    hr {
+        background-color: rgba(0, 0, 0, 0.08);
+        width: 100%;
+        float: left;
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    .cls-btn-w {
+        width: 90%;
+        background: #e5355b;
+        color: white;
+    }
+
+    
 }

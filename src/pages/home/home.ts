@@ -291,7 +291,6 @@ manageData() {
 
         
         this.showLocation = setInterval(() => {
-          
           this.geolocation.getCurrentPosition({
             enableHighAccuracy: true, // HABILITAR ALTA PRECISION
           }).then((resp) => {

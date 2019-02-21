@@ -59,6 +59,19 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
     
   <div>
     <div *ngFor="let data of formulario; let i = index ">
@@ -66,10 +79,17 @@
         MOC PARA LOS CASOS CUANDO SON SOLECTS
        -->
       <div class="cls-content" *ngIf="data.type == 'select'" [ngClass]="{'cls-alfa-romeo': data.error}" >
-        <label> <i></i>  {{data.label}}</label>
+        <label> <i></i> {{data.label}}</label>
+        
         <select name="infoSelecct" id="" [(ngModel)]="data.response" required="true" class="form-control" >
-            <option *ngFor="let item of data.data" value="item.value">{{item.label}} </option>
+              <option *ngFor="let item of data.data" value="{{item.value}}" >
+                <div *ngIf="item.state">
+                  {{item.label}}
+                </div>
+              </option>
         </select>
+
+
         <div *ngIf="data.error" class="col-90">
           <span class="cls-error" >
             Este campo es obligatorio
@@ -83,7 +103,7 @@
       <div class="cls-content" *ngIf="data.type == 'radio'" [ngClass]="{'cls-alfa-romeo': data.error}" >
         <label for=""> <i></i>  {{data.label}}</label>
         <div *ngFor="let item of data.data; let e = index">
-          <input  id="{{e + '_' + i}}" name="{{i}}" type="radio" value="{{item.response}}">
+          <input  id="{{e + '_' + i}}" name="{{i}}" type="radio" value="{{item.value}}" [(ngModel)]="item.response">
           <label for="{{e + '_' + i}}"> {{item.label}} </label>
         </div>
         <div *ngIf="data.error" class="col-90">
@@ -102,8 +122,8 @@
         <div *ngFor="let item of data.data; let e = index">
           <input type="checkbox" id="{{e + '_' + i}}" name="{{data[i]}}" [(ngModel)]="item.response">
           <label for="{{e + '_' + i}}" >{{item.label}}</label>
-
         </div>
+
         <div *ngIf="data.error" class="col-90">
           <span class="cls-error" >
             Este campo es obligatorio
@@ -168,142 +188,3 @@
 
   <!-- <button ion-button (click)="conoce()" >Hola como vas</button> -->
 </ion-content>
-
-<style>
-
-  .cls-btn-send {
-    width: 60vw;
-    background: #e5355b;
-    margin: 10px 14vw;
-    font-size: 8vw;
-
-  }
-
-  .cls-hide {
-    display: block !important;
-  }
-
-  input[type="checkbox"], input[type="radio"] {
-      /* margin: 4px 0 0; */
-      /* margin-top: 1px\9; */
-      line-height: normal;
-      background: blue !important;
-      box-shadow: 0px 0px 0px 1px #e5355b;
-      border: 1px solid red !important;
-  }
-  
-  input[type="checkbox"] + span,
-  input[type="checkbox"] + span::before
-  {
-      display: flex;
-      vertical-align: middle;
-      
-  }
-
-  label i {
-    height: 8px;
-    width: 8px;
-    background: #e5355b;
-    position: relative;
-    float: left;
-    margin: 5px;
-    border-radius: 14px;
-  }
-
-  input[type="radio"]:checked + span::before,
-  input[type="checkbox"]:checked + span::before
-  {
-      color: #666;
-  }
-
-
-
-  .img-form img {
-    width: 50%;
-    margin-left: 25%;
-  }
-  
-  .img-form ion-icon {
-    position: relative;
-    right: 15px;
-    float: right;
-  }
-
-  .cls-error {
-    color: red;
-  }
-
-
-  .col-90 {
-    width: 95%;
-    margin: 1vw 2vw;
-    float: left;
-  }
-  
-  .cls-alfa-romeo {
-    background: hsla(0, 100%, 50%, 0.08);
-    border: 1px solid rgba(255, 0, 0, 0.37);
-
-  }
-
-  .form-control {
-    width: 100%;
-    border-radius: 25px;
-    border: 1px solid #e6355b;
-    height: 12vw;
-    float: left;
-  }
-
-  .cls-content {
-    width: 100%;
-    margin: 1px 0%;
-    padding: 10px;
-    position: relative;
-    float: left;
-    border-bottom: 1px solid #0000001a;
-  }
-
-  .cls-button-photo {
-    border: 1px solid #e678b5;
-    border-radius: 27px;
-    padding: 10px;
-    background: #e5355b;
-    color: white;
-  }
-
-
-  hr {
-    background-color: rgba(0, 0, 0, 0.08);
-    width: 100%;
-    float: left;
-    margin-top: 15px;
-    margin-bottom: 15px;
-  }
-
-  .cls-btn-w {
-    width: 90%;
-    background: #e5355b;
-    color: white;
-  }
-
-
-
-
-
-
-  .cls-progress {
-    background: rgb(229, 53, 91) none repeat scroll 0% 0%;
-    height: 4px;
-    position: fixed;
-    margin: -15px -16px;
-  }
-
-  .cls-i {
-    margin:11px 0px 22px;
-  }
-/* 
-  #map {
-      height: 60vw;
-  }
-   */
-</style>

@@ -425,12 +425,15 @@ export class ProgressInTaskPage {
           "price": this.navParams.data.data.price_by_task,
           "longitude": _coords.coords.longitude,
           "latitude": _coords.coords.latitude,
-          "id": this.navParams.data.data.id
+          "id": this.navParams.data.idt
         }).subscribe( (resp: any) => {
+
+
+
           if(resp.error == true) {
-            this.presentAlert("", "No hemos podido guardar tu tarea");
+            this.presentAlert("", "No hemos podido guardar tu tarea.");
           } else {
-            this.presentAlert("", "Se ha guardado de forma correcta")
+            this.presentAlert("", "Se ha guardado de forma correcta.")
           }
         })
       })
