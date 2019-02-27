@@ -91,12 +91,13 @@
             <ion-input type="password" placeholder="Repita la contraseña" [(ngModel)]="forms.passed"></ion-input>
           </ion-item>
           <ion-item>
-            <ion-label>Acepto <a href="http:81/lookapp.com.co/tyc.html" target="_blank">términos y condiciones</a></ion-label>
-            <ion-checkbox color="magenta" [(ngModel)]="forms.check1" checked="false" ></ion-checkbox>
+            <ion-checkbox color="magenta" [(ngModel)]="forms.check1" checked="false" ></ion-checkbox>  
           </ion-item>
+          <ion-label>Acepto <a (click)="terminos()">términos y condiciones</a> </ion-label>
+          
 
           <ion-item>
-            <ion-label>He leido y aceptado las <br> <a href="http:81/lookapp.com.co/tyc.html"> codiciones de tratamiento de datos </a> </ion-label>
+            <ion-label>He leido y aceptado las <br> <a (click)="terminos()" > codiciones de tratamiento de datos </a> </ion-label>
             <ion-checkbox color="magenta" [(ngModel)]="forms.check2" checked="false" ></ion-checkbox>
           </ion-item>
 

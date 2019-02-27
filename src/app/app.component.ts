@@ -7,7 +7,10 @@ import { LoginPage } from '../pages/login/login';
 import { Storage } from '@ionic/storage';
 import { TabsPage } from '../pages/tabs/tabs';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
+
+
 import { Network } from '@ionic-native/network/ngx';
+
 
 @Component({
   templateUrl: 'app.html'
@@ -26,14 +29,15 @@ export class MyApp {
     public storage: Storage,
     public locationAccuracy: LocationAccuracy,
     public alertCtrl: AlertController,
-    private network: Network
+    private net: Network
 
   ) {
 
     this.initializeApp();
     // ESTADO DE LA CONEXION
-    this.stateConnect();
-   
+    // this.stateConnect();
+  
+    // console.log("herrtas", "asdf", this.net.type  );
 
 
     this.locationAccuracy.canRequest().then((canRequest: boolean) => {
@@ -78,8 +82,10 @@ export class MyApp {
 
   initializeApp() {
     this.platform.ready().then(() => {
+
       this.splashScreen.hide();
       this.statusBar.styleDefault();
+    
     });
   }
 

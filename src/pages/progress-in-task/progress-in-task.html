@@ -7,39 +7,18 @@
 
 <ion-content padding>
 
-    <ion-slides pager *ngIf="showInstructive">
-        <ion-slide *ngFor="let slide of loap_instructives">
-          <ion-toolbar>
-            <ion-buttons end >
-              <button ion-button color="primary" (click)="gtFunction()">Saltar</button>
-            </ion-buttons>
-          </ion-toolbar>
-          <img [src]="slide.img" class="slide-image"/>
-          <h2 class="slide-title" [innerHTML]="slide.title"></h2>
-          <p [innerHTML]="slide.description"></p>
-        </ion-slide>
 
-
-        <ion-slide>
-          <ion-toolbar>
-          </ion-toolbar>
-          <img src="assets/imgs/like.png" class="slide-image"/>
-          <h2 class="slide-title">¿Estas listo para empezar?</h2>
-          <button ion-button large clear icon-end color="primary" (click)="gtFunction()">
-              Continuar
-            <ion-icon name="arrow-forward"></ion-icon>
-          </button>
-        </ion-slide>
-    </ion-slides>
-
-    <button class="btn-look cls-i" ion-button full (click)="showInstructive = true">VER INSTRUCTIVO</button>
+    <div class="cls-tt-s">
+      <button class="btn-look cls-i" ion-button full (click)="showModalInstructions()">VER INSTRUCTIVO</button>
+    </div>
+    <!-- <button class="btn-look cls-i" ion-button full (click)="showInstructive = true">VER INSTRUCTIVO</button> -->
     
     <p *ngIf="value_heigth == 70">
       Los puntos rojos ya han sido tomados
     </p>
     <!--  style="width: 90vw" -->
     <div #map id="map" >
-      <ion-fab top right><button color="light" ion-fab (click)="getMyLocation()"><ion-icon ios="ios-locate-outline" md="md-locate"></ion-icon></button></ion-fab>
+      <ion-fab id="topmap" *ngIf="showGeo" top right><button color="light" ion-fab (click)="getMyLocation()"><ion-icon ios="ios-locate-outline" md="md-locate"></ion-icon></button></ion-fab>
     </div>
 
     <div *ngIf="value_heigth == 70">
@@ -70,28 +49,30 @@
 
 
 
-
-
-    
-  <div>
+  <div *ngIf="formulario.length > 0">
     <div *ngFor="let data of formulario; let i = index ">
       <!-- 
         MOC PARA LOS CASOS CUANDO SON SOLECTS
        -->
       <div class="cls-content" *ngIf="data.type == 'select'" [ngClass]="{'cls-alfa-romeo': data.error}" >
         <label> <i></i> {{data.label}}</label>
-        
-        <select name="infoSelecct" id="" [(ngModel)]="data.response" required="true" class="form-control" >
-              <option *ngFor="let item of data.data" value="{{item.value}}" >
-                <div *ngIf="item.state">
-                  {{item.label}}
-                </div>
-              </option>
-        </select>
+
+          <ion-select name="infoSelecct" id="" [(ngModel)]="data.response" required="true" class="form-control" disabled="{{data.gs}}">
+            <ion-option *ngFor="let item of data.data" value="{{item.value}}"
+              (ionSelect)="comproveOption(item, data.type, data.label, data)" disabled="{{!item.state}}" >
+                {{item.label}}
+            </ion-option>
+          </ion-select>
+
+
+          <div *ngIf="data.gs" class="cls-option-select">
+            <span> {{data.vs}} </span>
+            <button class="cls-btn-delete" (click)="deleteOption(data.selected,  data.type, data.label, data)">Eliminar</button>
+          </div>
 
 
         <div *ngIf="data.error" class="col-90">
-          <span class="cls-error" >
+          <span class="cls-error">
             Este campo es obligatorio
           </span> 
         </div>
@@ -102,14 +83,25 @@
       -->
       <div class="cls-content" *ngIf="data.type == 'radio'" [ngClass]="{'cls-alfa-romeo': data.error}" >
         <label for=""> <i></i>  {{data.label}}</label>
+
         <div *ngFor="let item of data.data; let e = index">
-          <input  id="{{e + '_' + i}}" name="{{i}}" type="radio" value="{{item.value}}" [(ngModel)]="item.response">
-          <label for="{{e + '_' + i}}"> {{item.label}} </label>
+
+            <label for="{{e + '_' + i}}" class="container">{{item.label}}
+                <input id="{{e + '_' + i}}" name="{{i}}" type="radio" value="{{item.value}}" [(ngModel)]="item.response">
+                <span class="checkmark"></span>
+            </label>
+
+
+          <!-- <input  id="{{e + '_' + i}}" name="{{i}}" type="radio" value="{{item.value}}" [(ngModel)]="item.response">
+          <label for="{{e + '_' + i}}"> {{item.label}} </label> -->
+          
         </div>
+
+
         <div *ngIf="data.error" class="col-90">
           <span class="cls-error" >
             Este campo es obligatorio
-          </span> 
+          </span>
         </div>
       </div>
       
@@ -179,11 +171,17 @@
 
 
     </div>
-
-    
-    <button class="cls-button-photo cls-btn-send" full (click)="sendForm()">Enviar tarea</button>
-
-
+    <div style="width: 100%; float: left; position: relative;">
+        <div class="cls-5">
+          <button class="cls-btn-state" send-f full (click)="sendForm()">Enviar tarea</button>
+        </div>          
+        
+        <div class="cls-5">
+          <button class="cls-btn-state" cancel-f full (click)="cancelTask()">Cancelar tarea</button>
+        </div>
+        
+    </div>
+        
   </div>
 
   <!-- <button ion-button (click)="conoce()" >Hola como vas</button> -->

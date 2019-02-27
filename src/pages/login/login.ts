@@ -11,7 +11,7 @@ import { LocationAccuracy } from '@ionic-native/location-accuracy';
 
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { MyApp } from '../../app/app.component';
-
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 
 
@@ -56,6 +56,7 @@ export class LoginPage {
     public alertCtrl: AlertController,
     public locationAccuracy: LocationAccuracy,
     public splashscreen: SplashScreen,
+    public iab: InAppBrowser
     ) {
      
       let watch = this.geolocation.watchPosition({
@@ -74,6 +75,15 @@ export class LoginPage {
      this.navCtrl.push(InstructivePage);
   }
 
+  terminos(){
+    const browser = this.iab.create('http://lookapp.com.co/politicas-tratamiento-de-la-informacion/');
+
+    browser.on('loadstop').subscribe(event => {
+      browser.insertCSS({ code: "body{color: red;" });
+    });
+
+    browser.close();
+  }
 
   validate(data){
     return !data || data == '';

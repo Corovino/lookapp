@@ -1,11 +1,13 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, LoadingController, Toast, ToastController, ModalController, Platform, ViewController, IonicModule } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { ServicesProvider } from '../../providers/services/services';
 import { GoogleMaps, GoogleMap, Marker, GoogleMapsEvent, LatLng, CameraPosition, MarkerOptions } from '@ionic-native/google-maps'
 import { FormArray } from '@angular/forms';
 import { CodegenComponentFactoryResolver } from '@angular/core/src/linker/component_factory_resolver';
 import { Camera, CameraOptions } from '@ionic-native/camera';
+import { modelGroupProvider } from '@angular/forms/src/directives/ng_model_group';
+import { HomePage } from '../home/home';
 
 
 /**
@@ -41,12 +43,15 @@ export class ProgressInTaskPage {
     public rest: ServicesProvider,
     private _googleMaps: GoogleMaps,
     private camera: Camera,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private toastController: ToastController,
+    private modalCtrl: ModalController
   ) {
     this.timeOut();
     
     
   }
+
 
   
   showLocation: any;
@@ -105,6 +110,10 @@ export class ProgressInTaskPage {
 
 
 
+  showModalInstructions() {
+    let modal = this.modalCtrl.create(ModalInstructions, this.navParams.data.data.loap_instructives);
+    modal.present();
+  }
 
 
   name_studie: string;
@@ -170,9 +179,11 @@ export class ProgressInTaskPage {
     })
   }
 
-
+  public showGeo: boolean = false;
   initMap(){
     
+
+    this.showGeo = true; 
     var mapita = document.getElementById('map');
     mapita.style.height = '60%';
     mapita.style.width = '90vw';
@@ -216,18 +227,27 @@ export class ProgressInTaskPage {
   
   ionViewDidLeave(){
     clearInterval(this.pointesCreate);
+    this.saveFormToUpdate();
   }
 
-
+  public formSaved: any;
   loadForm(form_studie: any, iduser: number, idtask: number, price: any, id: any, form: any ){
 
+    this.showModalInstructions();
+    
+    this.formSaved = form;
+    this.rest.get_form_to_task(id).subscribe((resp:any) =>  {
+      if(resp.data.form_response == null) {
+        this.formulario = form;
+      } else {
+        this.formulario = resp.data.form_response;
+      }
 
-    console.log("INFORMACION DE TODO LO QUE PUEDE PASAR", form);
-
-    this.formulario = form;
+    })
 
     let type_studie = this.navParams.data.data.load_types_studie_id;
     // console.log(type_studie, "asdfadsf");
+    
     if(type_studie == 1) {
       
       this.getPoints();
@@ -240,90 +260,90 @@ export class ProgressInTaskPage {
       this.loadMap();
       this.getMyLocation();
 
-    }   
+    }
     
-    form_studie.owner = '5c4a1e846faee6135dc859a3';
-    Formio.icons = 'fontawesome';
+    
+    if(form_studie == null || form_studie == ''  ) {
 
-    // document.getElementById('formio')
-    Formio.createForm( this.idform.nativeElement,
-    form_studie
-    ).then(form => {
-
-      form.nosubmit = true;
+    
       
-      this.geolocation.getCurrentPosition().then((resp) => {
-        let state: any;
-        form.on('submit', function(submission) {
-            
-            let response = [];
-            form_studie.components.forEach(element => {
-              response.push({
-                type: element.type,
-                key: element.key,
-                value: submission.data[element.key],
-                label: element.label
-              });
-            });
-
-            submission.response = response;
-            
-            fetch('http://node-express-env.eifgkdzath.us-west-2.elasticbeanstalk.com/api/v1/update_form_response_to_task', {
-              body: JSON.stringify({
-                "idtask": idtask,
-                "iduser": iduser,
-                "form_response": submission,
-                "price": price,
-                "longitude": resp.coords.longitude,
-                "latitude": resp.coords.latitude,
-                "id": id
-              }),
-              headers: {
-                'content-type': 'application/json'
-              },
-              method: 'POST',
-              mode: 'cors',
-            })
-            .then( function(response) {
-
-              window.location.reload();
-              form.emit('submitDone', submission);
+    } else {
+      
+      form_studie.owner = '5c4a1e846faee6135dc859a3';
+      Formio.icons = 'fontawesome';
+  
+      // document.getElementById('formio')
+      Formio.createForm( this.idform.nativeElement,
+      form_studie
+      ).then(form => {
+  
+        form.nosubmit = true;
+        
+        this.geolocation.getCurrentPosition().then((resp) => {
+          let state: any;
+          form.on('submit', function(submission) {
               
-              return response.json();
-            }).catch(function(err) {
-              console.log(err);
-            })
-          }, function(estate){
-            // this.presentAlert()
-          }) ;
-          
-
-          
-        if(state){
-          console.log("we can procees", state, state.data);
-        }
-
-      }).catch((error) => {
-        this.presentAlert("Error", "No hemos podido tomar tu geolocalización, por favor activa tu GPS");
+              let response = [];
+              form_studie.components.forEach(element => {
+                response.push({
+                  type: element.type,
+                  key: element.key,
+                  value: submission.data[element.key],
+                  label: element.label
+                });
+              });
+  
+              submission.response = response;
+              
+              fetch('http://node-express-env.eifgkdzath.us-west-2.elasticbeanstalk.com/api/v1/update_form_response_to_task', {
+                body: JSON.stringify({
+                  "idtask": idtask,
+                  "iduser": iduser,
+                  "form_response": submission,
+                  "price": price,
+                  "longitude": resp.coords.longitude,
+                  "latitude": resp.coords.latitude,
+                  "id": id
+                }),
+                headers: {
+                  'content-type': 'application/json'
+                },
+                method: 'POST',
+                mode: 'cors',
+              })
+              .then( function(response) {
+  
+                window.location.reload();
+                form.emit('submitDone', submission);
+                
+                return response.json();
+              }).catch(function(err) {
+                console.log(err);
+              })
+            }, function(estate){
+              // this.presentAlert()
+            }) ;
+            
+  
+            
+          if(state){
+            console.log("we can procees", state, state.data);
+          }
+  
+        }).catch((error) => {
+          this.presentAlert("Error", "No hemos podido tomar tu geolocalización, por favor activa tu GPS");
+        });
+      }).catch(err => {
+          this.presentAlert("Error", "El formulario no se ha encontrado");
+        // console.log("ERROR EN EL IO "+ err)
       });
-    }).catch(err => {
-        this.presentAlert("Error", "El formulario no se ha encontrado");
-      // console.log("ERROR EN EL IO "+ err)
-    });
+    }
+
   }
 
   conoce(){
     this.presentAlert("Error", "El formulario no se ha encontrado");
   }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -374,7 +394,140 @@ export class ProgressInTaskPage {
     this.loding.dismiss() ;
   }
 
+  presentToast(msm) {
+    const toast = this.toastController.create({
+      message: msm,
+      duration: 3000,
+      position: 'top'
+    });
+    toast.present();
+  }
 
+
+  deleteOption(item, type, label, data) {
+
+    let alert = this.alertCtrl.create({
+      title: "Confirmación",
+      subTitle: "¿Estás seguro de querer eliminar esta selección?, es posible que no la puedas volver a tomar y debas realizar la encuesta de nuevo.",
+      buttons: [
+        {
+          text: 'Cancelar',
+          handler: () => {
+            console.log('Disagree clicked');
+          }
+        },
+        {
+          text: 'Aceptar',
+          handler: () => {
+            this.startMessage("Restaurando pregunta");
+
+            this.rest.delete_selected({
+                idtask: this.navParams.data.idt,
+                iduser: this.navParams.data.iduser,
+                idstudie: this.navParams.data.data.id,
+                type_column: type,
+                value_column: item.value,
+                concurrence_value: item.concurrence_value,
+                label: label
+            }).subscribe((resp: any) => {
+
+              this.formulario = this.formSaved;
+
+              data.gs = false;
+              data.vs = '';
+              data.selected = '';
+              this.stopMessage();
+              this.presentAlert("", "Se ha elimado de forma correcta")
+
+            })
+            
+          }
+        }
+      ]
+    });
+    alert.present();
+
+
+
+    
+
+
+
+  }
+
+
+
+  cancelTask() {
+
+
+    let alert = this.alertCtrl.create({
+      title: "Confirmación",
+      subTitle: "¿Estás seguro de querer cancelar esta tarea?, No podrás volver acceder a ella.",
+      buttons: [
+        {
+          text: 'Cancelar',
+          handler: () => {
+            console.log('Disagree clicked');
+          }
+        },
+        {
+          text: 'Aceptar',
+          handler: () => {
+            this.startMessage("Procesando")
+            this.rest.cancel_task(this.navParams.data.idt).subscribe(resp => {
+                this.stopMessage();
+                this.navCtrl.setRoot(HomePage)
+            }) 
+          }
+        }
+      ]
+    });
+    alert.present();
+
+    
+    
+  }
+  saveFormToUpdate() {
+    if(this.formulario.length > 0) {
+      this.rest.save_last_modify_to_task( {form_response: this.formulario}, this.navParams.data.idt).subscribe((resp: any) => {
+          this.presentToast("Edición guardada");
+      })
+    }
+  }
+
+
+  comproveOption(item, type, label, data) {
+
+      
+    if(item.concurrence){
+      this.startMessage("Validando disponibilidad.");
+      this.rest.know_available({
+        idtask: this.navParams.data.idt,
+        iduser: this.navParams.data.iduser,
+        idstudie: this.navParams.data.data.id,
+        type_column: type,
+        value_column: item.value,
+        concurrence_value: item.concurrence_value,
+        label: label
+      }).subscribe( (resp: any) => {
+
+        this.stopMessage();
+        if(resp.error){
+
+          item.state = false;
+
+          this.presentAlert("", resp.message);
+        } else {
+          data.gs = true;
+          data.vs = item.label;
+          data.selected = item.value;
+          this.presentToast("Producto seleccionado");
+        }
+
+      })
+    }
+    
+  }
 
   sendForm() {
 
@@ -433,7 +586,8 @@ export class ProgressInTaskPage {
           if(resp.error == true) {
             this.presentAlert("", "No hemos podido guardar tu tarea.");
           } else {
-            this.presentAlert("", "Se ha guardado de forma correcta.")
+            this.presentToast("Se ha guardado de forma correcta.");
+            this.navCtrl.setRoot(HomePage);
           }
         })
       })
@@ -505,4 +659,26 @@ export class ProgressInTaskPage {
     return new File([u8arr], filename, {type:mime});
   }
 
+}
+
+
+
+@Component({
+  templateUrl: 'modal-instructions.html'
+})
+export class ModalInstructions {
+
+  public loap_instructives: any;
+  constructor( 
+    public platform: Platform,
+    public params: NavParams,
+    public viewCtrl: ViewController){
+
+    this.loap_instructives = this.params.data;
+
+  }
+
+  dismiss() {
+      this.viewCtrl.dismiss();
+  }
 }

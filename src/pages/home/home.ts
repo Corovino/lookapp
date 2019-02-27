@@ -305,6 +305,7 @@ manageData() {
             })
             
            }).catch((error) => {
+
            });
         }, 1500);
       
@@ -429,6 +430,9 @@ presentAlert(title:string, message: string) {
 
   start_task(data) {
 
+
+    this.startMessage();
+
     if(data.detail_studie.length > 0) {
       data.detail_studie = data.detail_studie[0];
     }
@@ -453,6 +457,7 @@ presentAlert(title:string, message: string) {
          gender: user.data.user.sex,
          estrata: user.data.user.strate
       }
+
       
       if(level_studie == "Todos" || level_studie == segments.level_studie &&
         estrata == "Todos" || estrata == segments.estrata &&
@@ -466,14 +471,16 @@ presentAlert(title:string, message: string) {
           direccion = '',
           idPoint = '';
           
-          this.startMessage();
+          
           this.geolocation.getCurrentPosition().then((resp) => {
             let locd = new LatLng(resp.coords.latitude, resp.coords.longitude);;
 
             this.estudio.ubicaciones.forEach(element => {
 
               var loc = new LatLng(element.latitud, element.longitud);
+              
               let result_value  = Spherical.computeDistanceBetween(locd, loc);
+              
               if(result_value < distance_more_near) { 
                 distance_more_near = result_value;
                 direccion = element.direccion,
@@ -484,14 +491,14 @@ presentAlert(title:string, message: string) {
 
               if(a == this.estudio.ubicaciones.length) {
                 if(distance_more_near < 60) {
-                  
+
                   this.rest.take_task({
                     iduser: user.data.user._id,
                     idstudie: data.id
                   }).subscribe( (response: any) => {
                     if(!response.error) {
                         
-                        this.rest.hide_point(idPoint).subscribe( (resp:any) => {
+                        this.rest.hide_point(idPoint, response.data.id).subscribe( (resp:any) => {
                         this.stopMessage();
                         
                         if(resp.error){
@@ -533,8 +540,10 @@ presentAlert(title:string, message: string) {
               // cuando las ubicaciones son por excel
               this.navCtrl.setRoot(ProgressInTaskPage, {data: data, iduser: user.data.user._id, idt:response.data.id }) 
             } else {
+              
               this.presentAlert(response.error, response.message);  
               this.stopMessage();  
+            
             }
           })
 
