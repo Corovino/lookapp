@@ -260,8 +260,8 @@ MyP:  LatLng;
 stateLocation: string = 'false';
 getMyLocation() {
   let locd: LatLng;
-  this.startMessage();
   this.stateLocation = 'Buscando...';
+  this.startMessage();
   this.geolocation.getCurrentPosition().then((resp) => {
     locd = new LatLng(resp.coords.latitude, resp.coords.longitude);
     this.stopMessage();
@@ -474,6 +474,7 @@ presentAlert(title:string, message: string) {
           
           this.geolocation.getCurrentPosition().then((resp) => {
             let locd = new LatLng(resp.coords.latitude, resp.coords.longitude);;
+            this.stopMessage();
 
             this.estudio.ubicaciones.forEach(element => {
 
@@ -499,24 +500,22 @@ presentAlert(title:string, message: string) {
                     if(!response.error) {
                         
                         this.rest.hide_point(idPoint, response.data.id).subscribe( (resp:any) => {
-                        this.stopMessage();
                         
                         if(resp.error){
                           this.presentAlert("", resp.message);
-                          this.stopMessage();
+                          
                         } else {
                           this.navCtrl.setRoot(ProgressInTaskPage, {data: data, iduser: user.data.user._id, idt:response.data.id })
                         }
 
                       })
                     } else {
-                      this.stopMessage();
+
                       this.presentAlert(response.error, response.message);    
                     }
                   })
                 } else {
                   this.presentAlert("", "Estas a " + parseInt(distance_more_near) + " metros del punto más cercano. debes estar a menos de 60 metros");
-                  this.stopMessage();
                 }
               }
   
@@ -538,9 +537,10 @@ presentAlert(title:string, message: string) {
           }).subscribe( (response: any) => {
             if(!response.error) {
               // cuando las ubicaciones son por excel
+              this.stopMessage();
               this.navCtrl.setRoot(ProgressInTaskPage, {data: data, iduser: user.data.user._id, idt:response.data.id }) 
             } else {
-              
+
               this.presentAlert(response.error, response.message);  
               this.stopMessage();  
             

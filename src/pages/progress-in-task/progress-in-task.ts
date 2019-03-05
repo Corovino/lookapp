@@ -33,6 +33,7 @@ export class ProgressInTaskPage {
   @ViewChild('map') mapElement: ElementRef;
   map: GoogleMap;
   value_heigth: number = 1;
+
   public formulario: any = [];
   
   constructor(
@@ -120,7 +121,7 @@ export class ProgressInTaskPage {
   loap_instructives: string;
   pointesCreate: any;
 
-  list_points: any;
+  list_points: any = [];
   ionViewDidLoad() {
 
     this.loap_instructives = this.navParams.data.data.loap_instructives;
@@ -210,7 +211,8 @@ export class ProgressInTaskPage {
     this.initMap();
     
     this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
-    
+
+      if(this.list_points.length > 0) {
         this.list_points.forEach(element => {
           loc = new LatLng(element.latitude, element.longitude);
           this.createMarker(loc, '', 'assets/imgs/notomar.png').then((marker: Marker) => {
@@ -219,6 +221,7 @@ export class ProgressInTaskPage {
           })
     
         });
+      }
     
     });
 
@@ -237,10 +240,13 @@ export class ProgressInTaskPage {
     
     this.formSaved = form;
     this.rest.get_form_to_task(id).subscribe((resp:any) =>  {
-      if(resp.data.form_response == null) {
-        this.formulario = form;
-      } else {
-        this.formulario = resp.data.form_response;
+
+      if(form){
+        if(resp.data.form_response == null) {
+          this.formulario = form;
+        } else {
+          this.formulario = resp.data.form_response;
+        }
       }
 
     })
@@ -327,7 +333,7 @@ export class ProgressInTaskPage {
   
             
           if(state){
-            console.log("we can procees", state, state.data);
+
           }
   
         }).catch((error) => {
@@ -426,7 +432,7 @@ export class ProgressInTaskPage {
                 iduser: this.navParams.data.iduser,
                 idstudie: this.navParams.data.data.id,
                 type_column: type,
-                value_column: item.value,
+                value_column: item,
                 concurrence_value: item.concurrence_value,
                 label: label
             }).subscribe((resp: any) => {

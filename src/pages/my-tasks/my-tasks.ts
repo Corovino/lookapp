@@ -1,6 +1,6 @@
 import { ProgressInTaskPage } from './../progress-in-task/progress-in-task';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
 import { ServicesProvider } from '../../providers/services/services';
 import { Storage } from '@ionic/storage';
 
@@ -23,7 +23,8 @@ export class MyTasksPage {
     public navParams: NavParams,
     public storage: Storage,
     public rest: ServicesProvider,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
+    public loadingCtrl: LoadingController
     ) {
   }
 
@@ -72,12 +73,29 @@ export class MyTasksPage {
     })
   }
 
+  
+  loding: any;
+  startMessage() {
+    this.loding = this.loadingCtrl.create({
+      content: 'Retomando tarea',
+      spinner: 'crescent',
+    });
+
+    this.loding.present();  
+  }
+  
+  stopMessage(){
+    this.loding.dismiss() ;
+  }
 
 
-  continue_task(data: any) {    
+  continue_task(data: any) {
+
+    this.startMessage();
     this.storage.get('xx-app-loap').then( (loap: any) => {
       let user = JSON.parse(loap);
       this.rest.get_studie(data.id_studie).subscribe((resp: any) => {
+        this.stopMessage();
         this.navCtrl.push(ProgressInTaskPage, {data: resp.data, iduser: user.data.user._id, idt: data.id});
       })
     })

@@ -52,10 +52,19 @@ export class MorePage {
           this.terminos();
       break
 
+      case 1:
+          this.faq();
+      break
+
     
       default:
         break;
     }
+  }
+
+
+  send_feedback() {
+    
   }
 
   presentAlert(title:string, message: string) {
@@ -69,11 +78,20 @@ export class MorePage {
 
   
   terminos(){
-    const browser = this.iab.create('http://lookapp.com.co/politicas-tratamiento-de-la-informacion/');
+    let browser = this.iab.create('http://lookapp.com.co/politicas-tratamiento-de-la-informacion/');
 
     browser.on('loadstop').subscribe(event => {
       browser.insertCSS({ code: "body{color: red;" });
     });
+
+    browser.close();
+  }
+
+  faq() {
+    let browser = this.iab.create('http://lookapp.com.co/faq/');
+    browser.on('loadstop').subscribe(evet => {
+      browser.insertCSS({ code: "body{color: red}"})
+    })
 
     browser.close();
   }

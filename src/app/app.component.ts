@@ -9,7 +9,7 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
 
 
-import { Network } from '@ionic-native/network/ngx';
+// import { Network } from '@ionic-native/network/ngx';
 
 
 @Component({
@@ -28,8 +28,8 @@ export class MyApp {
     public splashScreen: SplashScreen, 
     public storage: Storage,
     public locationAccuracy: LocationAccuracy,
-    public alertCtrl: AlertController,
-    private net: Network
+    public alertCtrl: AlertController
+    // ,private net: Network
 
   ) {
 

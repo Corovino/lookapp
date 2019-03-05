@@ -35,7 +35,7 @@ import { SkipsPage } from '../pages/skips/skips';
 import { EditPerfilPage } from '../pages/edit-perfil/edit-perfil'
 
 
-import { Network } from '@ionic-native/network/ngx';
+// import { Network } from '@ionic-native/network/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 
@@ -106,7 +106,7 @@ import { FormPage } from '../pages/form/form';
     LocationAccuracy,
     HttpClient,
     GoogleMaps,
-    Network,
+    // Network,
     Device,
     InAppBrowser
     
