@@ -1,16 +1,19 @@
+import { RepoProvider } from './../../providers/repo/repo';
+
+
 import { ProgressInTaskPage } from './../progress-in-task/progress-in-task';
-import { Component, ɵConsole } from '@angular/core';
-import { NavController, NavParams, AlertController, LoadingController, Loading } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
 import { Storage } from '@ionic/storage'
 import { GoogleMaps, GoogleMap, Marker, GoogleMapsEvent, ILatLng, Poly, Spherical, LatLng, CameraPosition, MarkerOptions } from '@ionic-native/google-maps'
 import { ServicesProvider } from '../../providers/services/services';
 
 import { Camera } from '@ionic-native/camera';
-import { LocalNotifications } from '@ionic-native/local-notifications';
 
 import { Geolocation } from '@ionic-native/geolocation';
 import { Device } from '@ionic-native/device';
 import { FormPage } from '../form/form';
+import { Message_rpt } from '../../clases/letters';
 
 
 @Component({
@@ -23,28 +26,17 @@ export class HomePage {
   
   rootPage:any = 'ionic-pipes-home';
   list_studies: any = [];
-  repo: any;
-  
+
   constructor(
     public navCtrl: NavController, 
     private storage: Storage, 
     public rest: ServicesProvider,
     public geolocation: Geolocation,
     public camera: Camera,
-    public localNoti: LocalNotifications,
     public device: Device,
-    public loadingCtrl: LoadingController
-    
+    public repo: RepoProvider
     ) {
-      
-      const loding = this.loadingCtrl.create({
-        content: 'Please wait...',
-        duration: 1100
-      });
-
-      loding.present();
       this.get_studies();
-      
     }
   
   searchStudies: any;
@@ -106,9 +98,16 @@ export class HomePage {
   }
 
   get_studies(){
+    
+    this.repo.startMessage(Message_rpt.RTP_CHARGIN);
     this.rest.get_studies_available()
     .subscribe((response : any) => {
+      this.repo.stopMessage();
       this.list_studies = response.data;
+    }, (err) => {
+      this.repo.stopMessage();
+    }, () => {
+      this.repo.stopMessage();
     })
   }
 
@@ -121,6 +120,17 @@ export class HomePage {
   /////////////////// LOAD MAP
   ionViewDidLoad(){ }
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -161,35 +171,15 @@ export class DetailTaskPage {
     public navCtrl: NavController,
     public storage: Storage,
     public rest: ServicesProvider,
-    public alertCtrl: AlertController,
     public geolocation: Geolocation,
     public camera: Camera,
     private _googleMaps: GoogleMaps,
-    public localNoti: LocalNotifications,
     public device: Device,
-    public loadingCtrl: LoadingController
+    public repo: RepoProvider
   ) { 
     this.estudio = this.params.data.data;
-
-    
-
-
   }
 
-
-  loding: any;
-  startMessage() {
-    this.loding = this.loadingCtrl.create({
-      content: 'Buscando geolocalización.',
-      spinner: 'crescent',
-    });
-
-    this.loding.present();  
-  }
-  
-  stopMessage(){
-    this.loding.dismiss() ;
-  }
 
 /////////////////// LOAD MAP
 // 
@@ -198,8 +188,8 @@ export class DetailTaskPage {
 moveCamera(loc: LatLng){
   let options: CameraPosition<LatLng> = {
     target: loc,
-    zoom: 5
-    ,tilt: 10
+    zoom: 5,
+    tilt: 10
   }
   this.map.moveCamera(options);
 }
@@ -208,10 +198,8 @@ moveCamera(loc: LatLng){
 showLocation: any;
 points_available: any;
 ionViewDidEnter(){
-  
   this.loadMap();
   this.get_points_availables();
-
 }
 
 
@@ -257,20 +245,18 @@ createPolilyne(element) {
 MyP:  LatLng;
 
 // BUTTON PARA QUE LA CAMARA PONGA MY GEOLOCALIZACION EN EL PUNTO QUE ES
-stateLocation: string = 'false';
 getMyLocation() {
   let locd: LatLng;
-  this.stateLocation = 'Buscando...';
-  this.startMessage();
+  this.repo.startMessage(Message_rpt.RTP_SEARCH_GEO);
   this.geolocation.getCurrentPosition().then((resp) => {
     locd = new LatLng(resp.coords.latitude, resp.coords.longitude);
-    this.stopMessage();
+    this.repo.stopMessage();
     this.MyP = locd;
-    this.stateLocation = 'false';
     this.moveCamera(locd);
     this.manageData();
   }).catch(err => {
-    this.stateLocation = 'Activa tu geolocalización';
+    this.repo.presentAlert(Message_rpt.RTP_GEO_LOST, [Message_rpt.RTP_ACCEPT], 'cls_accept');
+
   })
 }
 
@@ -410,37 +396,19 @@ onMarkerAdd(marker: Marker) {
 }
 
   
-
-somefunction(){
-  console.log("ESTA ES LA INFORMACION ESPECIAL MAS IMPORTANTE");
-}
-
-
-presentAlert(title:string, message: string) {
-  let alert = this.alertCtrl.create({
-    title: title,
-    subTitle: message,
-    buttons: ['Aceptar']
-  });
-  alert.present();
-}
-
-  
-  
-
   start_task(data) {
 
 
-    this.startMessage();
+    this.repo.startMessage(Message_rpt.RTP_SEARCH_GEO);
 
     if(data.detail_studie.length > 0) {
       data.detail_studie = data.detail_studie[0];
     }
     
-    let rang_age = {
-      rang_uno: data.detail_studie.ages.rang_1,
-      rang_dos: data.detail_studie.ages.rang_2
-    }
+    // let rang_age = {
+    //   rang_uno: data.detail_studie.ages.rang_1,
+    //   rang_dos: data.detail_studie.ages.rang_2
+    // }
 
     let level_studie = data.detail_studie.level_studie.level;
     let estrata = data.detail_studie.estrata.stratum;
@@ -474,7 +442,7 @@ presentAlert(title:string, message: string) {
           
           this.geolocation.getCurrentPosition().then((resp) => {
             let locd = new LatLng(resp.coords.latitude, resp.coords.longitude);;
-            this.stopMessage();
+            this.repo.stopMessage();
 
             this.estudio.ubicaciones.forEach(element => {
 
@@ -502,7 +470,7 @@ presentAlert(title:string, message: string) {
                         this.rest.hide_point(idPoint, response.data.id).subscribe( (resp:any) => {
                         
                         if(resp.error){
-                          this.presentAlert("", resp.message);
+                          this.repo.presentAlert(resp.message, [Message_rpt.RTP_ACCEPT], 'cls-accept');
                           
                         } else {
                           this.navCtrl.setRoot(ProgressInTaskPage, {data: data, iduser: user.data.user._id, idt:response.data.id })
@@ -511,19 +479,18 @@ presentAlert(title:string, message: string) {
                       })
                     } else {
 
-                      this.presentAlert(response.error, response.message);    
+                      this.repo.presentAlert(response.message, [Message_rpt.RTP_ACCEPT], 'cls-accept');    
                     }
                   })
                 } else {
-                  this.presentAlert("", "Estas a " + parseInt(distance_more_near) + " metros del punto más cercano. debes estar a menos de 60 metros");
+                  this.repo.presentAlert("Estas a " + parseInt(distance_more_near) + " metros del punto más cercano. debes estar a menos de 60 metros", [Message_rpt.RTP_ACCEPT], 'cls-accept');
                 }
               }
   
   
             });
           }).catch(err => {
-            this.stateLocation = 'Activa tu geolocalización';
-            this.stopMessage();
+            this.repo.stopMessage();
           })
 
 
@@ -537,26 +504,24 @@ presentAlert(title:string, message: string) {
           }).subscribe( (response: any) => {
             if(!response.error) {
               // cuando las ubicaciones son por excel
-              this.stopMessage();
+              this.repo.stopMessage();
               this.navCtrl.setRoot(ProgressInTaskPage, {data: data, iduser: user.data.user._id, idt:response.data.id }) 
             } else {
-
-              this.presentAlert(response.error, response.message);  
-              this.stopMessage();  
-            
+              this.repo.presentAlert(response.message, [Message_rpt.RTP_ACCEPT], 'cls-accept');
+              this.repo.stopMessage();  
             }
           })
 
         } else {
-          this.stopMessage();
-          this.presentAlert("", "No puedes realizar la tarea, asegurate de estar en el area permitida");    
+          this.repo.stopMessage();
+          this.repo.presentAlert(Message_rpt.RTP_TASK_RECHAGE, [Message_rpt.RTP_ACCEPT], 'cls-accept');
         }
 
 
 
       } else {
-        this.stopMessage();
-        this.presentAlert("Sin acceso", "Esta tarea esta disponible para una población en particular");
+        this.repo.stopMessage();
+        this.repo.presentAlert("Esta tarea esta disponible para una población en particular", [Message_rpt.RTP_ACCEPT], 'cls-accept');
       }
     })
 

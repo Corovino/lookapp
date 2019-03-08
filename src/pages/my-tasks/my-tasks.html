@@ -43,14 +43,18 @@
         </ion-list>
 
         <div *ngIf="lits_task.task_in_process.length == 0" >
-            <ion-card text-center style="padding: 51px 5px;" >
+            <ion-card text-center style="padding: 51px 5px;" (click)="sendListTask()" >
               <img src="assets/imgs/encuesta.png" alt="Tareas en progreso" style="width: 43px; margin-left: 45%">
               <p> Revisa el listado de tareas y gana dinero con LookApp. </p>
             </ion-card>
         </div>
 
         <ion-list *ngIf="lits_task.task_by_review.length > 0">
-          <hr>
+          <div class="cls-enviadas">
+            <span>
+              ENVIADA  <b> ({{lits_task.task_by_review.length}})</b>
+            </span>
+          </div>
           <p padding>Tus tareas serán revisadas en un plazo de 24 horas hábiles</p>
           <ion-item *ngFor="let studio of lits_task.task_by_review ">
             <ion-avatar item-left>
@@ -58,7 +62,10 @@
             </ion-avatar>
             <h2><b>{{studio.name_studie}}</b></h2>
             <p>{{studio.desc_studie}}</p>
-            <button class="btn-look" style="padding: 0 1.6em; margin: 3vw;" ion-button item-end>Enviada</button>
+            <span style="padding: 0 1.6em; margin: 3vw;" item-end>
+              Enviada
+            </span>
+            
           </ion-item>
         </ion-list>
     </div>
@@ -75,8 +82,7 @@
         </ion-list>
 
         <div *ngIf="lits_task.task_approved.length == 0" >
-            <!-- <h3>Apurate a ser reconocido, haz muchas muchas tareas</h3> -->
-            <ion-card text-center style="padding: 51px 5px;" >
+            <ion-card text-center style="padding: 51px 5px;" (click)="sendListTask()">
               <img src="assets/imgs/rechazado.png" alt="Tareas en progreso" style="width: 53px; margin-left: 45%">
               <p>
                 Upps!,No haz realizado tareas aún, te invitamos a tomar alguna. 
@@ -99,7 +105,7 @@
         </ion-list>
 
         <div *ngIf="lits_task.task_rejected.length == 0" >
-          <ion-card text-center style="padding: 51px 5px;">
+          <ion-card text-center style="padding: 51px 5px;" (click)="sendListTask()">
             <img src="assets/imgs/like.png" alt="Tareas en progreso" style="width: 53px; margin-left: 45%">
             <p>
               ¡Muy buen trabajo! <br>

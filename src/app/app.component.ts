@@ -37,9 +37,6 @@ export class MyApp {
     // ESTADO DE LA CONEXION
     // this.stateConnect();
   
-    // console.log("herrtas", "asdf", this.net.type  );
-
-
     this.locationAccuracy.canRequest().then((canRequest: boolean) => {
       if(canRequest) {
         this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
@@ -52,6 +49,11 @@ export class MyApp {
     this.storage.get('xx-app-loap').then((val) => {
       this.rootPage = val ? TabsPage : LoginPage;
     });
+
+  
+
+
+
   }
 
   stateConnect() {
@@ -85,6 +87,16 @@ export class MyApp {
 
       this.splashScreen.hide();
       this.statusBar.styleDefault();
+
+      // var notificationOpenedCallback = function(jsonData) {
+      //   console.log('notificationOpenedCallback: ' + JSON.stringify(jsonData));
+      // };
+  
+  
+      // window["plugins"].OneSignal
+      //   .startInit("9aca3e8c-f53f-4103-b676-5401edfedd7c", "38855676408")
+      //   .handleNotificationOpened(notificationOpenedCallback)
+      //   .endInit();
     
     });
   }

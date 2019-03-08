@@ -30,7 +30,7 @@
     <!-- SWITH CONTROL -->
     <div [ngSwitch]="sesion">
       
-      <div *ngSwitchCase="'inicio'" style="padding: 12vw">
+      <div *ngSwitchCase="'inicio'" style="padding: 5vw 12vw">
 
         <div *ngIf="!recuperacuenta">
           
@@ -48,15 +48,24 @@
             <ion-input type="password" [(ngModel)]="forms.pass" placeholder="Contraseña"></ion-input>
           </ion-item>
 
-          <ion-item>
-            <ion-label>Acepto <br> <a href="http://lookapp.com.co/autorizacion-tratamiento-la-informacion/" target="_blank">términos y condiciones</a></ion-label>
-            <ion-checkbox color="magenta" [(ngModel)]="forms.check1" checked="false" ></ion-checkbox>
-          </ion-item>
-  
-          <ion-item>
-            <ion-label>He leido y aceptado las <br> <a href="http://lookapp.com.co/autorizacion-tratamiento-la-informacion/"> codiciones de tratamiento de datos </a> </ion-label>
-            <ion-checkbox color="magenta" [(ngModel)]="forms.check2" checked="false" ></ion-checkbox>
-          </ion-item>
+          <ion-grid>
+            <ion-row >
+              <ion-col col-2>
+                <ion-checkbox color="magenta" [(ngModel)]="forms.check1" checked="false" ></ion-checkbox>  
+              </ion-col>
+              <ion-col col-10>
+                <ion-label>Acepto <a (click)="terminos()">términos y condiciones</a> </ion-label>    
+              </ion-col>
+            </ion-row>
+            <ion-row >
+              <ion-col col-2>
+                <ion-checkbox color="magenta" [(ngModel)]="forms.check2" checked="false" ></ion-checkbox>  
+              </ion-col>
+              <ion-col col-10>
+                  <ion-label>He leido y aceptado las <a (click)="terminos()" > codiciones de tratamiento de datos </a> </ion-label>  
+              </ion-col>
+            </ion-row>
+          </ion-grid>
   
           <button class="btn-look" ion-button full (click)="saveSession()">Iniciar sesión</button>
 
@@ -90,16 +99,31 @@
           <ion-item>
             <ion-input type="password" placeholder="Repita la contraseña" [(ngModel)]="forms.passed"></ion-input>
           </ion-item>
-          <ion-item>
-            <ion-checkbox color="magenta" [(ngModel)]="forms.check1" checked="false" ></ion-checkbox>  
-          </ion-item>
-          <ion-label>Acepto <a (click)="terminos()">términos y condiciones</a> </ion-label>
-          
+          <ion-grid>
+            <ion-row >
+              <ion-col col-2>
+                <ion-checkbox color="magenta" [(ngModel)]="forms.check1" checked="false" ></ion-checkbox>  
+              </ion-col>
+              <ion-col col-10>
+                <ion-label>Acepto <a (click)="terminos()">términos y condiciones</a> </ion-label>    
+              </ion-col>
+            </ion-row>
+            <ion-row >
+              <ion-col col-2>
+                <ion-checkbox color="magenta" [(ngModel)]="forms.check2" checked="false" ></ion-checkbox>  
+              </ion-col>
+              <ion-col col-10>
+                  <ion-label>He leido y aceptado las <a (click)="terminos()" > codiciones de tratamiento de datos </a> </ion-label>  
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+          <!--           
+            <div>
+              <ion-label>He leido y aceptado las <br> <a (click)="terminos()" > codiciones de tratamiento de datos </a> </ion-label>
+              <ion-checkbox color="magenta" [(ngModel)]="forms.check2" checked="false" ></ion-checkbox>
+            </div>
+          -->
 
-          <ion-item>
-            <ion-label>He leido y aceptado las <br> <a (click)="terminos()" > codiciones de tratamiento de datos </a> </ion-label>
-            <ion-checkbox color="magenta" [(ngModel)]="forms.check2" checked="false" ></ion-checkbox>
-          </ion-item>
 
           <button class="btn-look" ion-button full  (click)="step_one()">Registrarse</button>
           
@@ -108,43 +132,3 @@
       </div>
     </div>
   </ion-content>
-
-
-
-<style>
- 
-  .cls-ion-title {
-    text-align: center !important;
-    padding: 3px;
-    margin: 10px 0px;
-    background: white;
-    font-size: 1.8rem;
-  }
-
-  .btn-facebook {
-    background: white; color: black; border-radius: 50px;
-    border: 1px solid lightgray;
-  }
-
-
-  .toolbar-title-md {
-    padding: 0 12px;
-    font-size: 2.5rem !important;
-    font-weight: 500;
-    color: #424242;
-  }
-
-
-
-  .item.item-md .checkbox-md {
-    position: static;
-    display: block;
-    margin: 9px 6px 9px 4px;
-  }
-
-  small {
-    font-size: 70% !important;
-  }
-
-
-</style>

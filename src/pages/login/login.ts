@@ -1,6 +1,6 @@
 
 import { Component } from '@angular/core';
-import { NavController, NavParams, ToastController, AlertController} from 'ionic-angular';
+import { NavController, NavParams, ToastController, AlertController, LoadingController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { create_acount_interfaces } from '../../models/user.models';
 import { Geolocation } from '@ionic-native/geolocation';
@@ -56,17 +56,14 @@ export class LoginPage {
     public alertCtrl: AlertController,
     public locationAccuracy: LocationAccuracy,
     public splashscreen: SplashScreen,
-    public iab: InAppBrowser
+    public iab: InAppBrowser,
+    public loadingCtrl: LoadingController
     ) {
      
-      let watch = this.geolocation.watchPosition({
-        timeout: 4000 // frecuencia
-      });
-    
-      watch.subscribe((data: any) => {
-          this.register.log = data.coords.longitude;
-          this.register.lat = data.coords.latitude;
-      });
+      this.geolocation.getCurrentPosition().then((resp: any) => {
+        this.register.log = resp.coords.longitude;
+        this.register.lat = resp.coords.latitude;
+      })
   }
 
 
@@ -91,15 +88,15 @@ export class LoginPage {
 
   get_session(){
     if(this.validate(this.forms.email) || this.validate(this.forms.pass ) ){
-      this.presentAlert("Error", "Usuario o contraseña faltante");
+      this.presentAlert("Usuario o contraseña faltante");
     } else {
 
       if(this.forms.pass != this.forms.passed) {
-        this.presentAlert("Alerta", "Las contraseñas no coinciden.");
+        this.presentAlert("Las contraseñas no coinciden.");
       } else if(this.forms.check1 == false){
-        this.presentAlert("Alerta", "Para continuar debe aceptar términos y condiciones.");
+        this.presentAlert("Para continuar debe aceptar términos y condiciones.");
       } else if(this.forms.check2 == false) {
-        this.presentAlert("Alerta", "Para continuar debe aceptar Habbeas Data.");
+        this.presentAlert("Para continuar debe aceptar condiciones de tratamiento de datos.");
       } else {
 
         this.rest.validata_user(this.forms).subscribe( (response: any) => {
@@ -108,7 +105,7 @@ export class LoginPage {
               forms: this.forms
             });
           } else {
-            this.presentAlert("Error", response.message);
+            this.presentAlert(response.message);
           }
         })
       }
@@ -131,7 +128,7 @@ export class LoginPage {
               this.get_session();         
             },
             error => {
-              this.presentAlert("Información", "Es necesario tener la geolocalización activa para realizar el registro");
+              this.presentAlert("Es necesario tener la geolocalización activa para realizar el registro");
               
             }
           );
@@ -159,13 +156,13 @@ export class LoginPage {
   changePass() {
     this.forms.pass = '';
     if(this.reset.code == '' || this.reset.pass == '' || this.reset.repass == '') {
-      this.presentAlert("", "Es necesario que ingreses los datos necesarios");
+      this.presentAlert("Es necesario que ingreses los datos necesarios");
     } else {
       this.rest.changepass(this.reset).subscribe((resp: any) => {
           if(resp.error) {
-            this.presentAlert("", resp.message)
+            this.presentAlert(resp.message)
           } else {
-            this.presentAlert("", "Se ha guardado de forma correcta");
+            this.presentAlert("Se ha guardado de forma correcta");
             this.recuperacuenta = false;
 
           }
@@ -173,37 +170,53 @@ export class LoginPage {
     }
   }
 
+
+  loding: any;
+  startMessage(msm) {
+    this.loding = this.loadingCtrl.create({
+      content: msm,
+      spinner: 'crescent',
+    });
+
+    this.loding.present();  
+  }
+  
+  stopMessage(){
+    this.loding.dismiss() ;
+  }
+
+  
+  public message_internet: string = 'Revisa tu conexión a internet.'
   saveSession(){
     
     if(this.forms.check1 == false){
-      this.presentAlert("Alerta", "Para continuar debe aceptar términos y condiciones.");
+      this.presentAlert("Para continuar debe aceptar términos y condiciones.");
     } else if(this.forms.check2 == false) {
-      this.presentAlert("Alerta", "Para continuar debe aceptar Habbeas Data.");
+      this.presentAlert("Para continuar debe aceptar condiciones de tratamiento de datos.");
     } else {
 
+      this.startMessage("Iniciando sesión.");
       this.rest.login_eyes(this.forms).subscribe((response: any) => {
+        this.stopMessage();
         if(response.error == "mail"){
-
           this.navCtrl.push(InstructivePage, {
             useremail: response.data,
             iduser: response.data.id
           });
-
         } else if(response.error) {
-          this.presentAlert("Error", response.message);
+          this.presentAlert("response.message");
         }else {
           
           this.storage.set('xx-app-loap', JSON.stringify(response));
-          
           setTimeout(() => {
-            // this.splashscreen.show();
             this.navCtrl.setRoot(MyApp);
-            // window.location.reload();
           }, 1000);
-
-
-
         }
+      }, (err: any) => {
+        this.stopMessage();
+        this.presentAlert(this.message_internet);
+      }, () => {
+        this.stopMessage();
       })
     }
   }
@@ -217,9 +230,8 @@ export class LoginPage {
   }
 
 
-  presentAlert(title:string, message: string) {
+  presentAlert(message: string) {
     let alert = this.alertCtrl.create({
-      title: title,
       subTitle: message,
       buttons: ['Aceptar']
     });

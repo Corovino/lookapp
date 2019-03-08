@@ -86,7 +86,7 @@ page-progress-in-task {
         height: 20px;
         width: 20px;
         background-color: rgb(206, 201, 201);
-        border: 1px solid color($colors, primary);
+        border: 1px solid map-get($colors, primary);
         border-radius: 50%;
     }
 
@@ -99,7 +99,7 @@ page-progress-in-task {
         height: 20px;
         width: 20px;
         background-color: rgb(206, 201, 201);
-        border: 1px solid color($colors, primary)
+        border: 1px solid map-get($colors, primary)
     }
     
     /* On mouse-over, add a grey background color */
@@ -109,7 +109,7 @@ page-progress-in-task {
     
     /* When the checkbox is checked, add a blue background */
     .container input:checked ~ .checkmark {
-        background-color: color($colors, primary);
+        background-color: map-get($colors, primary)
 
     }
     
@@ -184,7 +184,7 @@ page-progress-in-task {
     .form-control {
         width: 100%;
         border-radius: 25px;
-        border: 1px solid #e6355b;
+        border: 1px solid map-get($colors, primary);
         height: 12vw;
         float: left;
         z-index: 99999999;

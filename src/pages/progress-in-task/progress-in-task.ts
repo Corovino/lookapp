@@ -1,13 +1,12 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, LoadingController, Toast, ToastController, ModalController, Platform, ViewController, IonicModule } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, ModalController, Platform, ViewController, AlertController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { ServicesProvider } from '../../providers/services/services';
 import { GoogleMaps, GoogleMap, Marker, GoogleMapsEvent, LatLng, CameraPosition, MarkerOptions } from '@ionic-native/google-maps'
-import { FormArray } from '@angular/forms';
-import { CodegenComponentFactoryResolver } from '@angular/core/src/linker/component_factory_resolver';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { modelGroupProvider } from '@angular/forms/src/directives/ng_model_group';
 import { HomePage } from '../home/home';
+import { RepoProvider } from '../../providers/repo/repo';
+import { Message_rpt } from '../../clases/letters';
 
 
 /**
@@ -40,17 +39,14 @@ export class ProgressInTaskPage {
     public navCtrl: NavController, 
     public navParams: NavParams,
     public geolocation: Geolocation,
-    public alertCtrl: AlertController,
     public rest: ServicesProvider,
     private _googleMaps: GoogleMaps,
     private camera: Camera,
-    private loadingCtrl: LoadingController,
-    private toastController: ToastController,
-    private modalCtrl: ModalController
+    public repo: RepoProvider,
+    private modalCtrl: ModalController,
+    private alertCtrl: AlertController
   ) {
-    this.timeOut();
-    
-    
+    // this.timeOut();
   }
 
 
@@ -72,23 +68,13 @@ export class ProgressInTaskPage {
     this.cnttime = setInterval(() => {
       this.timee--;
       this.pg = (this.timee * 100) / 3600;
-
       if(this.timee == 0){
-        this.presentAlert("", "Se hagoto tu tiempo");
         clearInterval(this.cnttime);
       }
     }, 1000);
   }
 
-  // Alert
-  presentAlert(title:string, message: string) {
-    let alert = this.alertCtrl.create({
-      title: title,
-      subTitle: message,
-      buttons: ['Aceptar']
-    });
-    alert.present();
-  }
+
 
   showInstructive: boolean = false ;
   
@@ -164,19 +150,18 @@ export class ProgressInTaskPage {
     this.map.moveCamera(options);
   }
 
-  stateLocation: string = 'false';
+
   getMyLocation() {
     let locd: LatLng;
-    this.stateLocation = 'Buscado...';
     this.geolocation.getCurrentPosition().then((resp) => {
       locd = new LatLng(resp.coords.latitude, resp.coords.longitude);
-      this.stateLocation = 'false';
+
       this.moveCamera(locd);
       this.createMarker(locd, "", this.color ).then((marker: Marker) => {
         this.markers.push(marker); marker.showInfoWindow();
       })
     }).catch(err => {
-      this.stateLocation = 'Activa tu geolocalización';
+      this.repo.presentAlert(Message_rpt.RTP_GEO_LOST, [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT)
     })
   }
 
@@ -189,7 +174,6 @@ export class ProgressInTaskPage {
     mapita.style.height = '60%';
     mapita.style.width = '90vw';
 
-    let controls: any = {compass: true, myLocationButton: false, indoorPicker: false, zoom: true, mapTypeControl: true, streetViewControl: false};
     let element = this.mapElement.nativeElement;
     this.map = this._googleMaps.create(element, {
       zoom: 15,
@@ -327,7 +311,7 @@ export class ProgressInTaskPage {
                 console.log(err);
               })
             }, function(estate){
-              // this.presentAlert()
+              
             }) ;
             
   
@@ -337,10 +321,10 @@ export class ProgressInTaskPage {
           }
   
         }).catch((error) => {
-          this.presentAlert("Error", "No hemos podido tomar tu geolocalización, por favor activa tu GPS");
+          this.repo.presentAlert("No hemos podido tomar tu geolocalización, por favor activa tu GPS", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
         });
       }).catch(err => {
-          this.presentAlert("Error", "El formulario no se ha encontrado");
+          this.repo.presentAlert("El formulario no se ha encontrado", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
         // console.log("ERROR EN EL IO "+ err)
       });
     }
@@ -348,30 +332,12 @@ export class ProgressInTaskPage {
   }
 
   conoce(){
-    this.presentAlert("Error", "El formulario no se ha encontrado");
+    this.repo.presentAlert("El formulario no se ha encontrado", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
   }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  // //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
   public formshow: any = [];
@@ -384,31 +350,6 @@ export class ProgressInTaskPage {
   validate_response(element) {
     return element == undefined || element == '' || element == null;
   }
-
-
-  loding: any;
-  startMessage(msm) {
-    this.loding = this.loadingCtrl.create({
-      content: msm,
-      spinner: 'crescent',
-    });
-
-    this.loding.present();  
-  }
-  
-  stopMessage(){
-    this.loding.dismiss() ;
-  }
-
-  presentToast(msm) {
-    const toast = this.toastController.create({
-      message: msm,
-      duration: 3000,
-      position: 'top'
-    });
-    toast.present();
-  }
-
 
   deleteOption(item, type, label, data) {
 
@@ -425,7 +366,7 @@ export class ProgressInTaskPage {
         {
           text: 'Aceptar',
           handler: () => {
-            this.startMessage("Restaurando pregunta");
+            this.repo.startMessage("Restaurando pregunta");
 
             this.rest.delete_selected({
                 idtask: this.navParams.data.idt,
@@ -442,8 +383,8 @@ export class ProgressInTaskPage {
               data.gs = false;
               data.vs = '';
               data.selected = '';
-              this.stopMessage();
-              this.presentAlert("", "Se ha elimado de forma correcta")
+              this.repo.stopMessage();
+              this.repo.presentAlert("Se ha elimado de forma correcta", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT)
 
             })
             
@@ -479,9 +420,9 @@ export class ProgressInTaskPage {
         {
           text: 'Aceptar',
           handler: () => {
-            this.startMessage("Procesando")
+            this.repo.startMessage("Procesando")
             this.rest.cancel_task(this.navParams.data.idt).subscribe(resp => {
-                this.stopMessage();
+                this.repo.stopMessage();
                 this.navCtrl.setRoot(HomePage)
             }) 
           }
@@ -496,7 +437,7 @@ export class ProgressInTaskPage {
   saveFormToUpdate() {
     if(this.formulario.length > 0) {
       this.rest.save_last_modify_to_task( {form_response: this.formulario}, this.navParams.data.idt).subscribe((resp: any) => {
-          this.presentToast("Edición guardada");
+          this.repo.presentToast("Edición guardada");
       })
     }
   }
@@ -506,7 +447,7 @@ export class ProgressInTaskPage {
 
       
     if(item.concurrence){
-      this.startMessage("Validando disponibilidad.");
+      this.repo.startMessage("Validando disponibilidad.");
       this.rest.know_available({
         idtask: this.navParams.data.idt,
         iduser: this.navParams.data.iduser,
@@ -517,17 +458,17 @@ export class ProgressInTaskPage {
         label: label
       }).subscribe( (resp: any) => {
 
-        this.stopMessage();
+        this.repo.stopMessage();
         if(resp.error){
 
           item.state = false;
 
-          this.presentAlert("", resp.message);
+          this.repo.presentAlert(resp.message, [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
         } else {
           data.gs = true;
           data.vs = item.label;
           data.selected = item.value;
-          this.presentToast("Producto seleccionado");
+          this.repo.presentToast("Producto seleccionado");
         }
 
       })
@@ -590,9 +531,9 @@ export class ProgressInTaskPage {
 
 
           if(resp.error == true) {
-            this.presentAlert("", "No hemos podido guardar tu tarea.");
+            this.repo.presentAlert("No hemos podido guardar tu tarea.", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
           } else {
-            this.presentToast("Se ha guardado de forma correcta.");
+            this.repo.presentToast("Se ha guardado de forma correcta.");
             this.navCtrl.setRoot(HomePage);
           }
         })
@@ -616,12 +557,12 @@ export class ProgressInTaskPage {
       saveToPhotoAlbum: true
     }
     
-    this.startMessage("Obteniendo georeferenciación");
+    this.repo.startMessage("Obteniendo georeferenciación");
     this.geolocation.getCurrentPosition({
       enableHighAccuracy: true, // HABILITAR ALTA PRECISION
     }).then((_coords) => {
       
-      this.stopMessage();
+      this.repo.stopMessage();
       this.camera.getPicture(options)
       .then(data => {
         this.image = `data:image/jpeg;base64,${data}`;
@@ -630,23 +571,23 @@ export class ProgressInTaskPage {
         this.userForm.delete('File');
         this.userForm.append('File', img);
         
-              this.startMessage("Guardando imagen.");
+              this.repo.startMessage("Guardando imagen.");
               this.rest.save_img_get_url(this.userForm).subscribe( (resp:any) => {
                 
                 object.src = resp.img;
                 object.lat = _coords.coords.latitude;
                 object.lng = _coords.coords.longitude;
                 
-                this.stopMessage();
+                this.repo.stopMessage();
               })
 
 
           }).catch(e => {
-            this.stopMessage();
+            this.repo.stopMessage();
           })
           
         }).catch((error) => {
-          this.stopMessage();
+          this.repo.stopMessage();
         });
         
         

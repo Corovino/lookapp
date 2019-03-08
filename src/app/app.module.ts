@@ -41,6 +41,11 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 import { LetterPipe } from '../pipes/letter/letter';
 import { FormPage } from '../pages/form/form';
+import { RepoProvider } from '../providers/repo/repo';
+
+
+// import { OneSignal } from '@ionic-native/onesignal';
+
 
 @NgModule({
   declarations: [
@@ -107,8 +112,10 @@ import { FormPage } from '../pages/form/form';
     HttpClient,
     GoogleMaps,
     // Network,
+    // OneSignal,
     Device,
-    InAppBrowser
+    InAppBrowser,
+    RepoProvider
     
   ]
 })
