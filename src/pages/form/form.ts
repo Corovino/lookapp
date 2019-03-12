@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { FormBuilder, FormGroup, FormArray, FormControl, ValidatorFn } from '@angular/forms';
-import { IfObservable } from 'rxjs/observable/IfObservable';
+import { FormBuilder} from '@angular/forms';
 
 
 /**
@@ -353,10 +352,6 @@ export class FormPage {
     }
   }
 
-  take_photo(data) {
-
-  }
- 
   ionViewDidLoad() {
     console.log('ionViewDidLoad FormPage');
   }

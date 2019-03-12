@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { ServicesProvider } from '../../providers/services/services';
 import { Camera, CameraOptions } from '@ionic-native/camera';
+import { RepoProvider } from '../../providers/repo/repo';
+import { Message_rpt } from '../../clases/letters';
 
 /**
  * Generated class for the EditPerfilPage page.
@@ -25,8 +27,8 @@ export class EditPerfilPage {
     public navParams: NavParams,
     public storage: Storage,
     public rest: ServicesProvider,
-    public alertCtrl: AlertController,
-    public camera: Camera
+    public camera: Camera,
+    public repo: RepoProvider
 
   ) {
 
@@ -42,17 +44,6 @@ export class EditPerfilPage {
     console.log('ionViewDidLoad EditPerfilPage');
   }
   
-
-  presentAlert(title:string, message: string) {
-    let alert = this.alertCtrl.create({
-      title: title,
-      subTitle: message,
-      buttons: ['Aceptar']
-    });
-    alert.present();
-  }
-
-
     
   dataURLtoFile(dataurl, filename) {
     var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
@@ -96,7 +87,7 @@ export class EditPerfilPage {
   save_img(){
     this.rest.save_img_user(this.userForm, this.iduser).subscribe( (data:any) => {    
         if(data.error == true){
-            this.presentAlert("Alert", "La imagen no ha podido ser subida por favor intente de nuevo");
+            this.repo.presentAlert("La imagen no ha podido ser subida por favor intente de nuevo", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
         } else {
           this.info_user.img = data.data.img;
         }
@@ -111,7 +102,7 @@ export class EditPerfilPage {
   updateDate() {
 
     if(this.validate_info(this.info_user.name) || this.validate_info(this.info_user.lname) || this.validate_info(this.info_user.phone) || this.validate_info(this.info_user.cedula)) {
-      this.presentAlert("", "Es necesario que la información este completa para poder realizar la actualización");
+      this.repo.presentAlert("Es necesario que la información este completa para poder realizar la actualización", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
     } else {
       
       this.rest.update_user(this.info_user, this.iduser).subscribe( (resp:any) => {
@@ -121,9 +112,9 @@ export class EditPerfilPage {
           }
           
           if(resp.error) {
-            this.presentAlert("", resp.message)
+            this.repo.presentAlert(resp.message, [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT)
           } else {
-            this.presentAlert("", "Se ha actualizado de forma correcta"); 
+            this.repo.presentAlert("Se ha actualizado de forma correcta", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT); 
           }
 
       })

@@ -6,27 +6,29 @@
 -->
 
 <ion-header>
+    <ion-navbar no-border-bottom>
+      <ion-title style="text-align: center; margin: 2px">
+        <img src="assets/imgs/logo.png" alt="" width="80px">
+      </ion-title>
+    </ion-navbar>
+  
     <ion-navbar>
         <ion-title>RECUPERACIÓN DE CUENTA</ion-title>
     </ion-navbar>
 </ion-header>
-      
-<ion-content >
 
-    <img style="margin: 13vw 40vw;" src="assets/imgs/logo.png" alt="" width="80px">
-    
-    <div *ngIf="!recuperacuenta">
-        <ion-card>
-            <ion-card-content>
-                <p> Ingresa tu correo electrónico </p>
-                <ion-list>
-                    <ion-item>
-                        <ion-input type="text" [(ngModel)]="form.email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" placeholder="Correo electrónico"></ion-input>
-                    </ion-item>
-                </ion-list>
-                <button ion-button class="btn-look cls-width" (click)="send_mail()" >Enviar</button>
-            </ion-card-content>
-        </ion-card>
+
+
+<ion-content>
+
+    <div *ngIf="!recuperacuenta" style="margin: 12vw">
+        <p text-center> Ingresa tu correo electrónico </p>
+        <ion-list>
+            <ion-item>
+                <ion-input type="text" [(ngModel)]="form.email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" placeholder="Correo electrónico"></ion-input>
+            </ion-item>
+        </ion-list>
+        <button ion-button class="btn-look cls-width" (click)="send_mail()" >Enviar</button>
     </div>
 
     <div *ngIf="recuperacuenta">

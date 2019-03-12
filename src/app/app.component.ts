@@ -29,13 +29,9 @@ export class MyApp {
     public storage: Storage,
     public locationAccuracy: LocationAccuracy,
     public alertCtrl: AlertController
-    // ,private net: Network
-
   ) {
 
     this.initializeApp();
-    // ESTADO DE LA CONEXION
-    // this.stateConnect();
   
     this.locationAccuracy.canRequest().then((canRequest: boolean) => {
       if(canRequest) {
@@ -56,18 +52,6 @@ export class MyApp {
 
   }
 
-  stateConnect() {
-    // console.log(this.network.onDisconnect() ,   "THIS IS MY NETWORK");
-
-
-    // //  watch network for a disconnection
-    // this.network.onDisconnect()
-    // .subscribe((info) => {
-    //   console.log(info)
-    //   console.log("ESTADO DESCONEXTAS");
-    //   // this.presentAlert("", "No hay conexión a Internet");
-    // });
- }
 
 
 
@@ -98,6 +82,8 @@ export class MyApp {
       //   .handleNotificationOpened(notificationOpenedCallback)
       //   .endInit();
     
+    }, (err) => {
+      console.log("Informacion ", err, "this in my callback")
     });
   }
 

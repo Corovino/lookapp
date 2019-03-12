@@ -1,6 +1,6 @@
 import { ProgressInTaskPage } from './../progress-in-task/progress-in-task';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ServicesProvider } from '../../providers/services/services';
 import { Storage } from '@ionic/storage';
 import { HomePage } from '../home/home';
@@ -26,8 +26,6 @@ export class MyTasksPage {
     public navParams: NavParams,
     public storage: Storage,
     public rest: ServicesProvider,
-    public alertCtrl: AlertController,
-    public loadingCtrl: LoadingController,
     public repo: RepoProvider
     ) {
   }
@@ -98,7 +96,7 @@ export class MyTasksPage {
   }
 
   razon(data: any) {
-    this.repo.presentAlert("Razón del rechazo", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT)    
+    this.repo.presentAlert("Razón del rechazo", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT)
   }
 
 

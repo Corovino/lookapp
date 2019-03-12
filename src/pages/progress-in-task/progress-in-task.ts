@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController, ModalController, Platform, ViewController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, Platform, ViewController, AlertController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { ServicesProvider } from '../../providers/services/services';
 import { GoogleMaps, GoogleMap, Marker, GoogleMapsEvent, LatLng, CameraPosition, MarkerOptions } from '@ionic-native/google-maps'
@@ -435,11 +435,12 @@ export class ProgressInTaskPage {
     
   }
   saveFormToUpdate() {
-    if(this.formulario.length > 0) {
-      this.rest.save_last_modify_to_task( {form_response: this.formulario}, this.navParams.data.idt).subscribe((resp: any) => {
-          this.repo.presentToast("Edición guardada");
-      })
-    }
+    // if(this.formulario.length > 0) {
+    //   this.rest.save_last_modify_to_task( {form_response: this.formulario}, this.navParams.data.idt).subscribe((resp: any) => {
+    //       this.repo.presentToast("Edición guardada");
+    //   })
+    // }
+    
   }
 
 

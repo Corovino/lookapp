@@ -14,11 +14,12 @@ page-home {
         font-weight: bold;
         color: #0e0d0d;
         text-transform: uppercase;
+        
+
     }
 
 
     .item-md ion-avatar img {
-
         border-radius: 0%;
         overflow: hidden;
         width: 77px !important;
@@ -34,7 +35,7 @@ page-home {
     }
 
     .cls-list-img .cls-img {
-        width: 31vw;
+        width: 28vw;
         height: auto;
         float: left;
     }
@@ -42,21 +43,22 @@ page-home {
     .cls-list-img .cls-img img {
         height: 22vw;
         width: 22vw;
-        margin: 3px 16px;
+        margin: 1vw 2vw;
     }
 
     .cls-list-img .cls-desc {
-        width: 56vw;
+        width: 58vw;
         height: auto;
         float: left;
     }
 
     .cls-list-img .cls-view  {
-        width: 7%;
+        width: 10%;
         float: left;
         position: relative;
         margin-top: 8vw;
         margin-left: 3vw;
+        font-weight: bold;
     }
     
     .cls-list-img .cls-view a {

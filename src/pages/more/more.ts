@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { RepoProvider } from '../../providers/repo/repo';
+import { Message_rpt } from '../../clases/letters';
 
 /**
  * Generated class for the MorePage page.
@@ -22,7 +24,7 @@ export class MorePage {
     public navCtrl: NavController, 
     public navParams: NavParams,
     public storage: Storage,
-    public alertCtrl: AlertController,
+    public repo: RepoProvider,
     public splashscreen: SplashScreen,
     public iab: InAppBrowser) {
   }
@@ -45,7 +47,7 @@ export class MorePage {
         break;
 
       case 4:
-          this.presentAlert("Alerta", "No se ha programado esta funcionalidad");
+          this.repo.presentAlert("No se ha programado esta funcionalidad",[Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
       break
 
       case 3:
@@ -67,14 +69,7 @@ export class MorePage {
     
   }
 
-  presentAlert(title:string, message: string) {
-    let alert = this.alertCtrl.create({
-      title: title,
-      subTitle: message,
-      buttons: ['Aceptar']
-    });
-    alert.present();
-  }
+
 
   
   terminos(){

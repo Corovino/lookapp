@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Loading, LoadingController, AlertController, ToastController } from 'ionic-angular';
+import { LoadingController, AlertController, ToastController } from 'ionic-angular';
 
 /*
   Generated class for the RepoProvider provider.
@@ -21,8 +21,9 @@ export class RepoProvider {
   }
 
   // START MESSAGE TO LOADING
-  loding: any;
+  loding: any = '';
   startMessage(msm: string) {
+    
     this.loding = this.loadingCtrl.create({
       content: msm,
       spinner: 'crescent',
@@ -33,12 +34,12 @@ export class RepoProvider {
 
   // STOP MESSAGE TO LOADING
   stopMessage(){
-    this.loding.dismiss() ;
+    if(typeof(this.loding) == 'object') {
+      this.loding.dismiss();
+    }
   }
 
   // PRESENT ALERT WITH STYLES
-  
-  // Alert
   presentAlert(message: string, buttons: Array<any>, btnClass: string ) {
     let alert = this.alertCtrl.create({
       subTitle: message,
@@ -49,9 +50,8 @@ export class RepoProvider {
   }
 
   // TOASTER
-  
   presentToast(msm) {
-    const toast = this.toastController.create({
+    let toast = this.toastController.create({
       message: msm,
       duration: 3000,
       position: 'top'

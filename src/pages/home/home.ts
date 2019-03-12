@@ -3,7 +3,7 @@ import { RepoProvider } from './../../providers/repo/repo';
 
 import { ProgressInTaskPage } from './../progress-in-task/progress-in-task';
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage'
 import { GoogleMaps, GoogleMap, Marker, GoogleMapsEvent, ILatLng, Poly, Spherical, LatLng, CameraPosition, MarkerOptions } from '@ionic-native/google-maps'
 import { ServicesProvider } from '../../providers/services/services';
@@ -36,6 +36,7 @@ export class HomePage {
     public device: Device,
     public repo: RepoProvider
     ) {
+      this.repo.startMessage(Message_rpt.RTP_CHARGIN);
       this.get_studies();
     }
   
@@ -99,7 +100,7 @@ export class HomePage {
 
   get_studies(){
     
-    this.repo.startMessage(Message_rpt.RTP_CHARGIN);
+    
     this.rest.get_studies_available()
     .subscribe((response : any) => {
       this.repo.stopMessage();

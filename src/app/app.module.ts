@@ -111,12 +111,10 @@ import { RepoProvider } from '../providers/repo/repo';
     LocationAccuracy,
     HttpClient,
     GoogleMaps,
-    // Network,
     // OneSignal,
     Device,
     InAppBrowser,
-    RepoProvider
-    
+    RepoProvider,
   ]
 })
 export class AppModule {}
