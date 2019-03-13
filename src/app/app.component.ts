@@ -11,6 +11,10 @@ import { LocationAccuracy } from '@ionic-native/location-accuracy';
 
 // import { Network } from '@ionic-native/network/ngx';
 
+// import { Globalization } from '@ionic-native/globalization/ngx';
+import { Globalization } from '@ionic-native/globalization';
+
+
 
 @Component({
   templateUrl: 'app.html'
@@ -28,8 +32,12 @@ export class MyApp {
     public splashScreen: SplashScreen, 
     public storage: Storage,
     public locationAccuracy: LocationAccuracy,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
+    private globalization: Globalization
   ) {
+
+    
+
 
     this.initializeApp();
   
@@ -81,6 +89,11 @@ export class MyApp {
       //   .startInit("9aca3e8c-f53f-4103-b676-5401edfedd7c", "38855676408")
       //   .handleNotificationOpened(notificationOpenedCallback)
       //   .endInit();
+
+      // this.globalization.getPreferredLanguage()
+      this.globalization.getDatePattern({formatLength:'short', selector:'date and time'})
+      .then(res => console.log("GLOBALIZACION JERRY LAGOS", res))
+      .catch(e => console.log(e));
     
     }, (err) => {
       console.log("Informacion ", err, "this in my callback")
