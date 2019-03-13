@@ -11,7 +11,7 @@ import { LocationAccuracy } from '@ionic-native/location-accuracy';
 
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { MyApp } from '../../app/app.component';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { RepoProvider } from '../../providers/repo/repo';
 import { Message_rpt } from '../../clases/letters';
 

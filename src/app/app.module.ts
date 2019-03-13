@@ -36,13 +36,14 @@ import { EditPerfilPage } from '../pages/edit-perfil/edit-perfil'
 
 
 // import { Network } from '@ionic-native/network/ngx';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+// import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 
 import { LetterPipe } from '../pipes/letter/letter';
 import { FormPage } from '../pages/form/form';
+import { Globalization } from '@ionic-native/globalization';
 import { RepoProvider } from '../providers/repo/repo';
-
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 // import { OneSignal } from '@ionic-native/onesignal';
 
@@ -112,6 +113,7 @@ import { RepoProvider } from '../providers/repo/repo';
     HttpClient,
     GoogleMaps,
     // OneSignal,
+    Globalization,
     Device,
     InAppBrowser,
     RepoProvider,
