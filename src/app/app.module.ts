@@ -72,7 +72,9 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp, {
+      mode:'md'
+    }),
     IonicStorageModule.forRoot(),
     HttpClientModule,
   ],
