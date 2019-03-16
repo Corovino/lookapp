@@ -246,10 +246,17 @@ createPolilyne(element) {
 MyP:  LatLng;
 
 // BUTTON PARA QUE LA CAMARA PONGA MY GEOLOCALIZACION EN EL PUNTO QUE ES
+public _coords_goobals: any = {lat: '', lng: ''}
 getMyLocation() {
   let locd: LatLng;
   this.repo.startMessage(Message_rpt.RTP_SEARCH_GEO);
   this.geolocation.getCurrentPosition().then((resp) => {
+    
+    this._coords_goobals.lat = resp.coords.latitude;
+    this._coords_goobals.lng = resp.coords.longitude;
+
+    
+
     locd = new LatLng(resp.coords.latitude, resp.coords.longitude);
     this.repo.stopMessage();
     this.MyP = locd;

@@ -19,7 +19,6 @@ import { LoginPage, ResetPage } from '../pages/login/login';
 import { ServicesProvider } from '../providers/services/services';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Camera } from '@ionic-native/camera';
-import { UserComponent } from '../components/user/user';
 
 import { Geolocation } from '@ionic-native/geolocation';
 import { Device } from '@ionic-native/device';
@@ -60,7 +59,6 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
     WalletPage,
     PerfilPage,
     EditPerfilPage,
-    UserComponent,
     ProgressInTaskPage,
     DetailTaskPage,
     MyTasksPage,
@@ -89,7 +87,6 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
     LoginPage,
     ResetPage,
     InstructivePage,
-    UserComponent,
     TabsPage,
     WalletPage,
     PerfilPage,

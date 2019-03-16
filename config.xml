@@ -3,7 +3,7 @@
     <name>LookApp</name>
     <description>Ganar haciendo tareas nunca fue tan facil.</description>
     <author email="info@lookapp.com.co" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content original-src="index.html" src="http://192.168.1.105:8100" />
+    <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
