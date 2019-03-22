@@ -99,8 +99,6 @@ export class MyTasksPage {
     this.repo.presentAlert("Razón del rechazo", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT)
   }
 
-
-
   doRefresh(element){
     this.get_task();
     setTimeout(() => {
