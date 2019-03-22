@@ -52,27 +52,27 @@
       <!-- 
         MOC PARA LOS CASOS CUANDO SON SOLECTS
        -->
-      <div class="cls-content" *ngIf="data.type == 'select'" [ngClass]="{'cls-alfa-romeo': data.error}" >
-        <label> <i></i> {{data.label}}</label>
-
+      <div class="cls-content" *ngIf="data.type == 'select'" [ngClass]="{'cls-alfa-romeo': data.error}">
+        <div  [hidden]="getValid(data, formulario)" >
+          <label> <i></i> {{data.label}}</label>
           <ion-select name="infoSelecct" id="" [(ngModel)]="data.response" required="true" class="form-control" disabled="{{data.gs}}">
             <ion-option *ngFor="let item of data.data" value="{{item.value}}"
-              (ionSelect)="comproveOption(item, data.type, data.label, data)" disabled="{{!item.state}}" >
-                {{item.label}}
+            (ionSelect)="comproveOption(item, data.type, data.label, data)" disabled="{{!item.state}}" >
+            {{item.label}}
             </ion-option>
           </ion-select>
-
-
+          
           <div *ngIf="data.gs" class="cls-option-select">
             <span> {{data.vs}} </span>
             <button class="cls-btn-delete" (click)="deleteOption(data.selected,  data.type, data.label, data)">Eliminar</button>
           </div>
-
-
-        <div *ngIf="data.error" class="col-90">
-          <span class="cls-error">
-            Este campo es obligatorio
-          </span> 
+          
+          
+          <div *ngIf="data.error" class="col-90">
+            <span class="cls-error">
+              Este campo es obligatorio
+            </span> 
+          </div>
         </div>
       </div>
 
@@ -80,47 +80,43 @@
         MOC CUANDO ES CASO ES UN RADIO BUTTON
       -->
       <div class="cls-content" *ngIf="data.type == 'radio'" [ngClass]="{'cls-alfa-romeo': data.error}" >
-        <label for=""> <i></i>  {{data.label}}</label>
-
-        <div *ngFor="let item of data.data; let e = index">
-
+        <div [hidden]="getValid(data, formulario)">
+          <label for=""> <i></i>  {{data.label}}</label>
+          <div *ngFor="let item of data.data; let e = index">
             <label for="{{e + '_' + i}}" class="container">{{item.label}}
-                <input id="{{e + '_' + i}}" name="{{i}}" type="radio" value="{{item.value}}" [(ngModel)]="data.response">
-                <span class="checkmark"></span>
+              <input id="{{e + '_' + i}}" name="{{i}}" type="radio" value="{{item.value}}" [(ngModel)]="data.response">
+              <span class="checkmark"></span>
             </label>
-
-        </div>
-
-
-        <div *ngIf="data.error" class="col-90">
-          <span class="cls-error" >
-            Este campo es obligatorio
-          </span>
+          </div>
+          <div *ngIf="data.error" class="col-90">
+            <span class="cls-error" >
+              Este campo es obligatorio
+            </span>
+          </div>
         </div>
       </div>
       
       
-      <!-- 
+      <!--  
           MOC CUANDO ES EL CASO DE BOXES O CHECKBOXES
        -->
-      <div class="cls-content" *ngIf="data.type == 'boxes'" [ngClass]="{'cls-alfa-romeo': data.error}">
-        <label for=""> <i></i>   {{data.label}} </label>
-        <div *ngFor="let item of data.data; let e = index">
-          <!-- <input type="checkbox" id="{{e + '_' + i}}" name="{{data[i]}}" [(ngModel)]="item.response">
-          <label for="{{e + '_' + i}}" >{{item.label}}</label> -->
-
-          <label for="{{e + '_' + i}}" class="container">{{item.label}}
+      <div class="cls-content" *ngIf="data.type == 'boxes'" [ngClass]="{'cls-alfa-romeo': data.error}" >
+        <div [hidden]="getValid(data, formulario)">
+          <label for=""> <i></i>   {{data.label}} </label>
+          <div *ngFor="let item of data.data; let e = index">
+            
+            <label for="{{e + '_' + i}}" class="container">{{item.label}}
               <input type="checkbox" id="{{e + '_' + i}}" name="{{data[i]}}" [(ngModel)]="item.response">
               <span class="checkmark"></span>
-          </label>
-
+            </label>
+            
+          </div>
           
-        </div>
-
-        <div *ngIf="data.error" class="col-90">
-          <span class="cls-error" >
-            Este campo es obligatorio
-          </span> 
+          <div *ngIf="data.error" class="col-90">
+            <span class="cls-error" >
+              Este campo es obligatorio
+            </span> 
+          </div>
         </div>
       </div>
 
@@ -128,13 +124,15 @@
       <!-- 
         MOC CUANDO ESL TIPO DE DATO ES UN IMPUT
        -->
-      <div class="cls-content" *ngIf="data.type == 'input'" [ngClass]="{'cls-alfa-romeo': data.error}">
-        <label for=""><i></i> {{data.label}}</label>
-        <input type="text" [(ngModel)]="data.response" required="true" class="form-control" >
-        <div *ngIf="data.error" class="col-90">
-          <span class="cls-error" >
-            Este campo es obligatorio
-          </span> 
+      <div class="cls-content" *ngIf="data.type == 'input'" [ngClass]="{'cls-alfa-romeo': data.error}" >
+        <div [hidden]="getValid(data, formulario)">
+          <label for=""><i></i> {{data.label}}</label>
+          <input type="text" [(ngModel)]="data.response" required="true" class="form-control" >
+          <div *ngIf="data.error" class="col-90">
+            <span class="cls-error" >
+              Este campo es obligatorio
+            </span> 
+          </div>
         </div>
       </div>
 
@@ -142,34 +140,112 @@
       <!-- 
         MOC CUANDO EL TIMPO DE CONTENIDO ES TITULOS
        -->
-      <div class="cls-content" *ngIf="data.type == 'title'" [ngClass]="{'cls-alfa-romeo': data.error}">
-        <p [innerHTML]="data.label" ></p>
+      <div class="cls-content" *ngIf="data.type == 'title'" [ngClass]="{'cls-alfa-romeo': data.error}" >
+        <p [hidden]="getValid(data, formulario)" [innerHTML]="data.label" ></p>
       </div>
 
 
       <!-- 
         MOC CUANDO EL TIPO DE CONTENIDO SOLICITA UNA PHOTO 
        -->
-      <div class="cls-content" *ngIf="data.type == 'photo'" [ngClass]="{'cls-alfa-romeo': data.error}">
-        <label for=""> <i></i>  {{data.label}}</label> <br>
-        
-        <div text-center>
-          <button class="cls-button-photo" (click)="take_photo(data)">Tomar foto</button>
-        </div>
+      <div class="cls-content" *ngIf="data.type == 'photo'" [ngClass]="{'cls-alfa-romeo': data.error}" >
+        <div [hidden]="getValid(data, formulario)">
 
-
-        <div class="img-form">
-          <ion-icon name="trash" (click)="data.src = ''" ></ion-icon>
-          <img src="{{data.src}}" alt="" class="">
-        </div>
-
-        <div *ngIf="data.error" class="col-90">
-          <span class="cls-error" >
-            Este campo es obligatorio
-          </span> 
+          <label for=""> <i></i>  {{data.label}}</label> <br>
+          
+          <div text-center>
+            <button class="cls-button-photo" (click)="take_photo(data)">Tomar foto</button>
+          </div>
+          
+          <div class="img-form">
+            <ion-icon name="trash" (click)="data.src = ''" ></ion-icon>
+            <img src="{{data.src}}" alt="" class="">
+          </div>
+          
+          <div *ngIf="data.error" class="col-90">
+            <span class="cls-error" >
+              Este campo es obligatorio
+            </span> 
+          </div>
         </div>
       </div>
+        
+      <!-- MOC CUANDO EL TIPO DE CONTENIDO ES DE SECCIN -->
+      <div *ngIf="data.type == 'section'" class='expand-wrapper'>
+        <div [hidden]="getValid(data, formulario)">
+          
+          <h3>{{data.label}}</h3>
 
+          <div *ngFor="let daty of data.types" >
+            <h4 (click)="daty.showList = true" >
+              {{daty.label}}
+              <ion-icon end-right *ngIf="daty.showList == true" (click)="daty.showList = false"  name="arrow-dropup"></ion-icon>
+              <!-- <ion-icon name="arrow-dropdown"></ion-icon> -->
+            </h4>
+            <div *ngIf="daty.showList == true">
+              <div *ngFor="let item of daty.data" >
+                  <div *ngIf="item.type == 'bottoncond'" class="cls-section">
+                      <h6>{{item.label}}</h6>
+                      
+                      <ion-grid>
+                        <ion-row>
+                          <ion-col>
+                            <button ion-button color="secondary" (click)="item.select = 'y'" >{{item.y.label}}</button>
+                          </ion-col>
+                          <ion-col>
+                            <button ion-button color="danger" (click)="item.select = 'n'" >{{item.n.label}}</button>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+    
+    
+                      <div *ngIf="item.select == 'y'">
+                          <div *ngFor="let itemd of item.y.data" >
+                              
+                              <div class="cls-content" *ngIf="itemd.type == 'input'" >
+                                <label for=""> {{itemd.label}}</label>
+                                <input type="number" [(ngModel)]="itemd.response" required="true" class="form-control" >
+                              </div>
+                              
+                              <div class="cls-content" *ngIf="itemd.type == 'select'">
+                                <label> <i></i> {{itemd.label}}</label>
+                                <ion-select name="infoSelecct" id="" [(ngModel)]="itemd.response"  class="form-control">
+                                  <ion-option *ngFor="let itm of itemd.data" value="{{itm.value}}">
+                                      {{itm.label}}
+                                  </ion-option>
+                                </ion-select>
+                              </div>
+    
+                          </div>
+                      </div>
+    
+                      <div *ngIf="item.select == 'n'">
+                          <div *ngFor="let itemd of item.n.data" >
+                              
+                              <div class="cls-content" *ngIf="itemd.type == 'input'" >
+                                <label for=""> {{itemd.label}}</label>
+                                <input type="number" [(ngModel)]="itemd.response" required="true" class="form-control" >
+                              </div>
+                              
+                              <div class="cls-content" *ngIf="itemd.type == 'select'">
+                                <label> <i></i> {{itemd.label}}</label>
+                                <ion-select name="infoSelecct" id="" [(ngModel)]="itemd.response" class="form-control" >
+                                  <ion-option *ngFor="let itm of itemd.data" value="{{itm.value}}">
+                                      {{itm.label}}
+                                  </ion-option>
+                                </ion-select>
+                              </div>
+    
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            </div>
+            <hr>
+          </div>
+        
+        </div> 
+      </div>
 
     </div>
     <div style="width: 100%; float: left; position: relative;">

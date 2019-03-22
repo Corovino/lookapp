@@ -50,17 +50,17 @@ export class MyApp {
       }
     });
 
+
     this.storage.get('xx-app-loap').then((val) => {
       this.rootPage = val ? TabsPage : LoginPage;
     });
 
-  
-
-
-
   }
 
 
+
+
+  
 
 
   presentAlert(title:string, message: string) {
@@ -84,16 +84,18 @@ export class MyApp {
       //   console.log('notificationOpenedCallback: ' + JSON.stringify(jsonData));
       // };
   
-  
+
       // window["plugins"].OneSignal
       //   .startInit("9aca3e8c-f53f-4103-b676-5401edfedd7c", "38855676408")
       //   .handleNotificationOpened(notificationOpenedCallback)
       //   .endInit();
 
+
       // this.globalization.getPreferredLanguage()
-      this.globalization.getDatePattern({formatLength:'short', selector:'date and time'})
+      this.globalization.getDatePattern({formatLength:'full', selector:'date and time'})
       .then(res => console.log("GLOBALIZACION JERRY LAGOS", res))
       .catch(e => console.log(e));
+
     
     }, (err) => {
       console.log("Informacion ", err, "this in my callback")
@@ -103,6 +105,7 @@ export class MyApp {
   openPage(page) {
     this.nav.setRoot(page.component);
   }
+  
 
 
 }

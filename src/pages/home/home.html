@@ -34,7 +34,7 @@
   
 <!-- <button ion-button full (click)="showForm()">Ver más</button> -->
 <div *ngIf="!list_studies_test.error">
-  <h2>Estudios para comunidad cerrada</h2>
+  <h2>Estudios comunidad cerrada</h2>
   <div class="cls-list-img" *ngFor="let studie of list_studies_test.data" (click)="take_taks(studie)">
     <!-- contenedor imagen 30% -->
     <div class="cls-img">
@@ -47,7 +47,7 @@
         </ion-title>
         <b style="font-size: 1rem;">Pago:</b> <span class="cls-alert-red">$ {{studie.price_by_task | number}} COP </span> <br>
         <p class="cls-history">
-          {{studie.history | letter:70 }}
+          {{studie.history | letter:90 }}
         </p>
     </div>
     <!-- contendor para  ver imagen 10% -->

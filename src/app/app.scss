@@ -20,6 +20,13 @@
     border-radius: 13px !important;
 }
 
+.alert-wrapper {
+    border-radius: 2px;
+    max-width: 97% !important;
+    background-color: #fafafa;
+    -webkit-box-shadow: 0 16px 20px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 16px 20px rgba(0, 0, 0, 0.4);
+}
 
 .alert-button-group {
     justify-content: space-evenly !important;
