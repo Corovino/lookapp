@@ -53,49 +53,53 @@
         MOC PARA LOS CASOS CUANDO SON SOLECTS
        -->
       <div class="cls-content" *ngIf="data.type == 'select'" [ngClass]="{'cls-alfa-romeo': data.error}" >
-        <label> <i></i> {{data.label}}</label>
-
+        <div [hidden]="getValid(data, formulario)">
+          <label> <i></i> {{data.label}}</label>
+  
           <ion-select name="infoSelecct" id="" [(ngModel)]="data.response" required="true" class="form-control" disabled="{{data.gs}}">
             <ion-option *ngFor="let item of data.data" value="{{item.value}}"
               (ionSelect)="comproveOption(item, data.type, data.label, data)" disabled="{{!item.state}}" >
                 {{item.label}}
             </ion-option>
           </ion-select>
-
-
+  
+  
           <div *ngIf="data.gs" class="cls-option-select">
             <span> {{data.vs}} </span>
             <button class="cls-btn-delete" (click)="deleteOption(data.selected,  data.type, data.label, data)">Eliminar</button>
           </div>
-
-
-        <div *ngIf="data.error" class="col-90">
-          <span class="cls-error">
-            Este campo es obligatorio
-          </span> 
+  
+  
+          <div *ngIf="data.error" class="col-90">
+            <span class="cls-error">
+              Este campo es obligatorio
+            </span> 
+          </div>
         </div>
+
       </div>
 
       <!-- 
         MOC CUANDO ES CASO ES UN RADIO BUTTON
       -->
       <div class="cls-content" *ngIf="data.type == 'radio'" [ngClass]="{'cls-alfa-romeo': data.error}" >
-        <label for=""> <i></i>  {{data.label}}</label>
-
-        <div *ngFor="let item of data.data; let e = index">
-
-            <label for="{{e + '_' + i}}" class="container">{{item.label}}
+        <div [hidden]="getValid(data, formulario)">
+          <label for=""> <i></i>  {{data.label}}</label>    
+          <div *ngFor="let item of data.data; let e = index">
+            
+              <label for="{{e + '_' + i}}" class="container">{{item.label}}
                 <input id="{{e + '_' + i}}" name="{{i}}" type="radio" value="{{item.value}}" [(ngModel)]="data.response">
                 <span class="checkmark"></span>
-            </label>
-
-        </div>
-
-
-        <div *ngIf="data.error" class="col-90">
-          <span class="cls-error" >
-            Este campo es obligatorio
-          </span>
+              </label>
+              
+          </div>
+          
+          
+          <div *ngIf="data.error" class="col-90">
+            <span class="cls-error" >
+              Este campo es obligatorio
+            </span>
+          </div>
         </div>
       </div>
       
@@ -104,24 +108,26 @@
           MOC CUANDO ES EL CASO DE BOXES O CHECKBOXES
        -->
       <div class="cls-content" *ngIf="data.type == 'boxes'" [ngClass]="{'cls-alfa-romeo': data.error}">
-        <label for=""> <i></i>   {{data.label}} </label>
-        <div *ngFor="let item of data.data; let e = index">
-          <!-- <input type="checkbox" id="{{e + '_' + i}}" name="{{data[i]}}" [(ngModel)]="item.response">
-          <label for="{{e + '_' + i}}" >{{item.label}}</label> -->
-
-          <label for="{{e + '_' + i}}" class="container">{{item.label}}
-              <input type="checkbox" id="{{e + '_' + i}}" name="{{data[i]}}" [(ngModel)]="item.response">
-              <span class="checkmark"></span>
-          </label>
-
-          
-        </div>
-
-        <div *ngIf="data.error" class="col-90">
-          <span class="cls-error" >
-            Este campo es obligatorio
-          </span> 
-        </div>
+          <div [hidden]="getValid(data, formulario)">
+            <label for=""> <i></i>   {{data.label}} </label>
+            <div *ngFor="let item of data.data; let e = index">
+              <!-- <input type="checkbox" id="{{e + '_' + i}}" name="{{data[i]}}" [(ngModel)]="item.response">
+              <label for="{{e + '_' + i}}" >{{item.label}}</label> -->
+    
+              <label for="{{e + '_' + i}}" class="container">{{item.label}}
+                  <input type="checkbox" id="{{e + '_' + i}}" name="{{data[i]}}" [(ngModel)]="item.response">
+                  <span class="checkmark"></span>
+              </label>
+    
+              
+            </div>
+    
+            <div *ngIf="data.error" class="col-90">
+              <span class="cls-error" >
+                Este campo es obligatorio
+              </span> 
+            </div>
+          </div>
       </div>
 
 
@@ -129,12 +135,14 @@
         MOC CUANDO ESL TIPO DE DATO ES UN IMPUT
        -->
       <div class="cls-content" *ngIf="data.type == 'input'" [ngClass]="{'cls-alfa-romeo': data.error}">
-        <label for=""><i></i> {{data.label}}</label>
-        <input type="text" [(ngModel)]="data.response" required="true" class="form-control" >
-        <div *ngIf="data.error" class="col-90">
-          <span class="cls-error" >
-            Este campo es obligatorio
-          </span> 
+        <div [hidden]="getValid(data, formulario)">
+          <label for=""><i></i> {{data.label}}</label>
+          <input type="text" [(ngModel)]="data.response" required="true" class="form-control" >
+          <div *ngIf="data.error" class="col-90">
+            <span class="cls-error" >
+              Este campo es obligatorio
+            </span> 
+          </div>
         </div>
       </div>
 
@@ -143,7 +151,9 @@
         MOC CUANDO EL TIMPO DE CONTENIDO ES TITULOS
        -->
       <div class="cls-content" *ngIf="data.type == 'title'" [ngClass]="{'cls-alfa-romeo': data.error}">
-        <p [innerHTML]="data.label" ></p>
+          <div [hidden]="getValid(data, formulario)">
+            <p [innerHTML]="data.label" ></p>
+          </div>
       </div>
 
 
@@ -151,22 +161,24 @@
         MOC CUANDO EL TIPO DE CONTENIDO SOLICITA UNA PHOTO 
        -->
       <div class="cls-content" *ngIf="data.type == 'photo'" [ngClass]="{'cls-alfa-romeo': data.error}">
-        <label for=""> <i></i>  {{data.label}}</label> <br>
-        
-        <div text-center>
-          <button class="cls-button-photo" (click)="take_photo(data)">Tomar foto</button>
-        </div>
-
-
-        <div class="img-form">
-          <ion-icon name="trash" (click)="data.src = ''" ></ion-icon>
-          <img src="{{data.src}}" alt="" class="">
-        </div>
-
-        <div *ngIf="data.error" class="col-90">
-          <span class="cls-error" >
-            Este campo es obligatorio
-          </span> 
+        <div [hidden]="getValid(data, formulario)">
+          <label for=""> <i></i>  {{data.label}}</label> <br>
+          
+          <div text-center>
+            <button class="cls-button-photo" (click)="take_photo(data)">Tomar foto</button>
+          </div>
+  
+  
+          <div class="img-form">
+            <ion-icon name="trash" (click)="data.src = ''" ></ion-icon>
+            <img src="{{data.src}}" alt="" class="">
+          </div>
+  
+          <div *ngIf="data.error" class="col-90">
+            <span class="cls-error" >
+              Este campo es obligatorio
+            </span> 
+          </div>
         </div>
       </div>
 
