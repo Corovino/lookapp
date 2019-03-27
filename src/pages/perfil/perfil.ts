@@ -1,9 +1,11 @@
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ServicesProvider } from '../../providers/services/services';
 import { Storage } from '@ionic/storage';
 import { EditPerfilPage } from '../edit-perfil/edit-perfil';
+import { Message_rpt } from '../../clases/letters';
+import { RepoProvider } from '../../providers/repo/repo';
 
 /**
  * Generated class for the PerfilPage page.
@@ -27,7 +29,7 @@ export class PerfilPage {
     public rest: ServicesProvider,
     public storate: Storage,
     public camera: Camera,
-    public alertCtrl: AlertController) {
+    public repo: RepoProvider) {
   }
   info_user: any;
   iduser: number;
@@ -110,10 +112,9 @@ getPicture(){
 }
 
 save_img(){
-
   this.rest.save_img_user(this.userForm, this.iduser).subscribe( (data:any) => {    
       if(data.error == true){
-          this.presentAlert("Alert", "La imagen no ha podido ser subida por favor intente de nuevo");
+          this.repo.presentAlert("La imagen no ha podido ser subida por favor intente de nuevo", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
       } else {
         this.image = data.data.img;
         
@@ -121,17 +122,6 @@ save_img(){
   })
 }
 
-
-
-    
-  presentAlert(title:string, message: string) {
-    let alert = this.alertCtrl.create({
-      title: title,
-      subTitle: message,
-      buttons: ['Aceptar']
-    });
-    alert.present();
-  }
 
 }
 

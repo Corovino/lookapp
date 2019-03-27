@@ -15,6 +15,17 @@
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
 
+
+.alert-wrapper {
+    border-radius: 13px !important;
+}
+
+
+.alert-button-group {
+    justify-content: space-evenly !important;
+}
+
+
 .label {
     display: inline;
     padding: .2em .6em .3em;

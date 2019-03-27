@@ -21,14 +21,14 @@
         <ion-title>
           {{studie.name | letter:20}}
         </ion-title>
-        <b>Pago:</b> <span class="cls-alert-red">$ {{studie.price_by_task | number}} COP </span> <br>
+        <b style="font-size: 1rem;">Pago:</b> <span class="cls-alert-red">$ {{studie.price_by_task | number}} COP </span> <br>
         <p class="cls-history">
-          {{studie.history | letter:80 }}
+          {{studie.history | letter:70 }}
         </p>
     </div>
     <!-- contendor para  ver imagen 10% -->
     <div class="cls-view">
-      <a clear item-end >Ver</a>
+      <a clear item-end >VER</a>
     </div>
   </div>
   
@@ -36,9 +36,9 @@
   
   <ion-list *ngIf="!list_studies_test.error">
     <p>Estudios para comunidad cerrada</p>
-    <ion-item *ngFor="let studie of list_studies_test.data"  >
+    <ion-item *ngFor="let studie of list_studies_test.data" (click)="take_taks(studie)" >
       <ion-avatar item-left style="margin: 4px 2px 4px 0;">
-        <img [src]="studie.img" (click)="take_taks(studie)" />
+        <img [src]="studie.img"  />
       </ion-avatar>
         <ion-title>
           {{studie.name}}
@@ -48,7 +48,7 @@
           {{studie.description}}
         </p>
 
-        <button ion-button clear item-end (click)="take_taks(studie)">Ver</button>
+        <button ion-button clear item-end >VER</button>
     </ion-item>
   </ion-list>
 
@@ -67,7 +67,7 @@
           {{studie.description}}
         </p>
 
-        <button ion-button clear item-end (click)="take_taks(studie)">Ver</button>
+        <button ion-button clear item-end (click)="take_taks(studie)">VER</button>
     </ion-item>
   </ion-list>
   

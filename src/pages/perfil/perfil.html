@@ -1,31 +1,36 @@
-<ion-header>
+<!-- <ion-header>
   <ion-navbar>
     <ion-title>PERFIL</ion-title>
   </ion-navbar>
-</ion-header>
+</ion-header> -->
 
 
 <ion-content >
 
+  <div class="cls-title-perfil">
+
+    <span>MI PERFIL</span>
+
+  </div>
+
   <ion-refresher (ionRefresh)="doRefresh($event)">
-      <ion-refresher-content 
-      pullingIcon="arrow-dropdown"
-      pullingText="Pull to refresh"
-      refreshingSpinner="circles"></ion-refresher-content>
-    </ion-refresher>
+    <ion-refresher-content 
+    pullingIcon="arrow-dropdown"
+    pullingText="Pull to refresh"
+    refreshingSpinner="circles"></ion-refresher-content>
+  </ion-refresher>
 
 
-  <div *ngIf="info_user">
+  <div *ngIf="info_user" class="cls-content-perfil">
 
     <img [src]="info_user.img"  class="avatar-img3" (click)="getPicture()"/>
     
     <div class="card-title" style="text-align: center">
       <h1>{{info_user.name}}</h1>
     </div>
+  
     
-    <ion-item-divider>
-      <h1> <ion-icon name="person"></ion-icon> Mis datos básicos</h1>
-    </ion-item-divider>
+    <h3> <ion-icon style="font-size: 7vw; padding: 2vw;" name="person"></ion-icon> Mis datos básicos</h3>
     
     <ion-list>
       <ion-item>
@@ -42,6 +47,7 @@
       </ion-item>  
         <button class="btn-look cls-width" ion-button full (click)="edit_perfil()">EDITAR MI PERFIL</button>
       </ion-list>
+
 
   </div>
 </ion-content>

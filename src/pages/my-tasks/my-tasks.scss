@@ -20,6 +20,19 @@ page-my-tasks {
     }
 
     
+    .cls-enviadas {
+        width: 34vw;
+        border-bottom: 2px solid map-get($colors, primary);
+        padding-bottom: 3vw;
+        margin-top: 15px;
+        font-size: 1.3rem
+        
+    }
+
+    .cls-enviadas span  {
+        margin-left: 7vw;
+        font-weight: 500;
+    }
 
 
 }

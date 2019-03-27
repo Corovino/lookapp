@@ -1,11 +1,12 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, Platform, ViewController, AlertController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { ServicesProvider } from '../../providers/services/services';
 import { GoogleMaps, GoogleMap, Marker, GoogleMapsEvent, LatLng, CameraPosition, MarkerOptions } from '@ionic-native/google-maps'
-import { FormArray } from '@angular/forms';
-import { CodegenComponentFactoryResolver } from '@angular/core/src/linker/component_factory_resolver';
 import { Camera, CameraOptions } from '@ionic-native/camera';
+import { HomePage } from '../home/home';
+import { RepoProvider } from '../../providers/repo/repo';
+import { Message_rpt } from '../../clases/letters';
 
 
 /**
@@ -31,22 +32,46 @@ export class ProgressInTaskPage {
   @ViewChild('map') mapElement: ElementRef;
   map: GoogleMap;
   value_heigth: number = 1;
+
   public formulario: any = [];
   
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
     public geolocation: Geolocation,
-    public alertCtrl: AlertController,
     public rest: ServicesProvider,
     private _googleMaps: GoogleMaps,
     private camera: Camera,
-    private loadingCtrl: LoadingController
+    public repo: RepoProvider,
+    private modalCtrl: ModalController,
+    private alertCtrl: AlertController
   ) {
-    this.timeOut();
-    
-    
+    // this.timeOut();
   }
+
+  getValid(data: any , form: any) {
+    
+    if(data.condicional.label != '') {
+
+      let c = 0, state = true;
+      for (let i = 0; i < form.length; i++) {
+        c++;
+        if(form[i].label == data.condicional.label){
+          if(form[i].response == data.condicional.value_conditional){
+            state = false;
+          }
+        }
+      }
+
+      if(c == form.length) {
+        return state;
+      }
+
+    } else {
+      return false;
+    }
+  }
+
 
   
   showLocation: any;
@@ -66,23 +91,13 @@ export class ProgressInTaskPage {
     this.cnttime = setInterval(() => {
       this.timee--;
       this.pg = (this.timee * 100) / 3600;
-
       if(this.timee == 0){
-        this.presentAlert("", "Se hagoto tu tiempo");
         clearInterval(this.cnttime);
       }
     }, 1000);
   }
 
-  // Alert
-  presentAlert(title:string, message: string) {
-    let alert = this.alertCtrl.create({
-      title: title,
-      subTitle: message,
-      buttons: ['Aceptar']
-    });
-    alert.present();
-  }
+
 
   showInstructive: boolean = false ;
   
@@ -105,13 +120,17 @@ export class ProgressInTaskPage {
 
 
 
+  showModalInstructions() {
+    let modal = this.modalCtrl.create(ModalInstructions, this.navParams.data.data.loap_instructives);
+    modal.present();
+  }
 
 
   name_studie: string;
   loap_instructives: string;
   pointesCreate: any;
 
-  list_points: any;
+  list_points: any = [];
   ionViewDidLoad() {
 
     this.loap_instructives = this.navParams.data.data.loap_instructives;
@@ -154,30 +173,30 @@ export class ProgressInTaskPage {
     this.map.moveCamera(options);
   }
 
-  stateLocation: string = 'false';
+
   getMyLocation() {
     let locd: LatLng;
-    this.stateLocation = 'Buscado...';
     this.geolocation.getCurrentPosition().then((resp) => {
       locd = new LatLng(resp.coords.latitude, resp.coords.longitude);
-      this.stateLocation = 'false';
+
       this.moveCamera(locd);
       this.createMarker(locd, "", this.color ).then((marker: Marker) => {
         this.markers.push(marker); marker.showInfoWindow();
       })
     }).catch(err => {
-      this.stateLocation = 'Activa tu geolocalización';
+      this.repo.presentAlert(Message_rpt.RTP_GEO_LOST, [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT)
     })
   }
 
-
+  public showGeo: boolean = false;
   initMap(){
     
+
+    this.showGeo = true; 
     var mapita = document.getElementById('map');
     mapita.style.height = '60%';
     mapita.style.width = '90vw';
 
-    let controls: any = {compass: true, myLocationButton: false, indoorPicker: false, zoom: true, mapTypeControl: true, streetViewControl: false};
     let element = this.mapElement.nativeElement;
     this.map = this._googleMaps.create(element, {
       zoom: 15,
@@ -199,7 +218,8 @@ export class ProgressInTaskPage {
     this.initMap();
     
     this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
-    
+
+      if(this.list_points.length > 0) {
         this.list_points.forEach(element => {
           loc = new LatLng(element.latitude, element.longitude);
           this.createMarker(loc, '', 'assets/imgs/notomar.png').then((marker: Marker) => {
@@ -208,6 +228,7 @@ export class ProgressInTaskPage {
           })
     
         });
+      }
     
     });
 
@@ -216,18 +237,30 @@ export class ProgressInTaskPage {
   
   ionViewDidLeave(){
     clearInterval(this.pointesCreate);
+    this.saveFormToUpdate();
   }
 
-
+  public formSaved: any;
   loadForm(form_studie: any, iduser: number, idtask: number, price: any, id: any, form: any ){
 
+    this.showModalInstructions();
+    
+    this.formSaved = form;
+    this.rest.get_form_to_task(id).subscribe((resp:any) =>  {
 
-    console.log("INFORMACION DE TODO LO QUE PUEDE PASAR", form);
+      if(form){
+        if(resp.data.form_response == null) {
+          this.formulario = form;
+        } else {
+          this.formulario = resp.data.form_response;
+        }
+      }
 
-    this.formulario = form;
+    })
 
     let type_studie = this.navParams.data.data.load_types_studie_id;
     // console.log(type_studie, "asdfadsf");
+    
     if(type_studie == 1) {
       
       this.getPoints();
@@ -240,112 +273,94 @@ export class ProgressInTaskPage {
       this.loadMap();
       this.getMyLocation();
 
-    }   
+    }
     
-    form_studie.owner = '5c4a1e846faee6135dc859a3';
-    Formio.icons = 'fontawesome';
+    
+    if(form_studie == null || form_studie == ''  ) {
 
-    // document.getElementById('formio')
-    Formio.createForm( this.idform.nativeElement,
-    form_studie
-    ).then(form => {
-
-      form.nosubmit = true;
+    
       
-      this.geolocation.getCurrentPosition().then((resp) => {
-        let state: any;
-        form.on('submit', function(submission) {
-            
-            let response = [];
-            form_studie.components.forEach(element => {
-              response.push({
-                type: element.type,
-                key: element.key,
-                value: submission.data[element.key],
-                label: element.label
-              });
-            });
-
-            submission.response = response;
-            
-            fetch('http://node-express-env.eifgkdzath.us-west-2.elasticbeanstalk.com/api/v1/update_form_response_to_task', {
-              body: JSON.stringify({
-                "idtask": idtask,
-                "iduser": iduser,
-                "form_response": submission,
-                "price": price,
-                "longitude": resp.coords.longitude,
-                "latitude": resp.coords.latitude,
-                "id": id
-              }),
-              headers: {
-                'content-type': 'application/json'
-              },
-              method: 'POST',
-              mode: 'cors',
-            })
-            .then( function(response) {
-
-              window.location.reload();
-              form.emit('submitDone', submission);
+    } else {
+      
+      form_studie.owner = '5c4a1e846faee6135dc859a3';
+      Formio.icons = 'fontawesome';
+  
+      // document.getElementById('formio')
+      Formio.createForm( this.idform.nativeElement,
+      form_studie
+      ).then(form => {
+  
+        form.nosubmit = true;
+        
+        this.geolocation.getCurrentPosition().then((resp) => {
+          let state: any;
+          form.on('submit', function(submission) {
               
-              return response.json();
-            }).catch(function(err) {
-              console.log(err);
-            })
-          }, function(estate){
-            // this.presentAlert()
-          }) ;
-          
+              let response = [];
+              form_studie.components.forEach(element => {
+                response.push({
+                  type: element.type,
+                  key: element.key,
+                  value: submission.data[element.key],
+                  label: element.label
+                });
+              });
+  
+              submission.response = response;
+              
+              fetch('http://node-express-env.eifgkdzath.us-west-2.elasticbeanstalk.com/api/v1/update_form_response_to_task', {
+                body: JSON.stringify({
+                  "idtask": idtask,
+                  "iduser": iduser,
+                  "form_response": submission,
+                  "price": price,
+                  "longitude": resp.coords.longitude,
+                  "latitude": resp.coords.latitude,
+                  "id": id
+                }),
+                headers: {
+                  'content-type': 'application/json'
+                },
+                method: 'POST',
+                mode: 'cors',
+              })
+              .then( function(response) {
+  
+                window.location.reload();
+                form.emit('submitDone', submission);
+                
+                return response.json();
+              }).catch(function(err) {
+                console.log(err);
+              })
+            }, function(estate){
+              
+            }) ;
+            
+  
+            
+          if(state){
 
-          
-        if(state){
-          console.log("we can procees", state, state.data);
-        }
-
-      }).catch((error) => {
-        this.presentAlert("Error", "No hemos podido tomar tu geolocalización, por favor activa tu GPS");
+          }
+  
+        }).catch((error) => {
+          this.repo.presentAlert("No hemos podido tomar tu geolocalización, por favor activa tu GPS", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
+        });
+      }).catch(err => {
+          this.repo.presentAlert("El formulario no se ha encontrado", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
+        // console.log("ERROR EN EL IO "+ err)
       });
-    }).catch(err => {
-        this.presentAlert("Error", "El formulario no se ha encontrado");
-      // console.log("ERROR EN EL IO "+ err)
-    });
+    }
+
   }
 
   conoce(){
-    this.presentAlert("Error", "El formulario no se ha encontrado");
+    this.repo.presentAlert("El formulario no se ha encontrado", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
   }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  // //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
   public formshow: any = [];
@@ -359,22 +374,131 @@ export class ProgressInTaskPage {
     return element == undefined || element == '' || element == null;
   }
 
+  deleteOption(item, type, label, data) {
 
-  loding: any;
-  startMessage(msm) {
-    this.loding = this.loadingCtrl.create({
-      content: msm,
-      spinner: 'crescent',
+    let alert = this.alertCtrl.create({
+      title: "Confirmación",
+      subTitle: "¿Estás seguro de querer eliminar esta selección?, es posible que no la puedas volver a tomar y debas realizar la encuesta de nuevo.",
+      buttons: [
+        {
+          text: 'Cancelar',
+          handler: () => {
+            console.log('Disagree clicked');
+          }
+        },
+        {
+          text: 'Aceptar',
+          handler: () => {
+            this.repo.startMessage("Restaurando pregunta");
+
+            this.rest.delete_selected({
+                idtask: this.navParams.data.idt,
+                iduser: this.navParams.data.iduser,
+                idstudie: this.navParams.data.data.id,
+                type_column: type,
+                value_column: item,
+                concurrence_value: item.concurrence_value,
+                label: label
+            }).subscribe((resp: any) => {
+
+              this.formulario = this.formSaved;
+
+              data.gs = false;
+              data.vs = '';
+              data.selected = '';
+              this.repo.stopMessage();
+              this.repo.presentAlert("Se ha elimado de forma correcta", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT)
+
+            })
+            
+          }
+        }
+      ]
     });
+    alert.present();
 
-    this.loding.present();  
+
+
+    
+
+
+
   }
-  
-  stopMessage(){
-    this.loding.dismiss() ;
+
+
+
+  cancelTask() {
+
+
+    let alert = this.alertCtrl.create({
+      title: "Confirmación",
+      subTitle: "¿Estás seguro de querer cancelar esta tarea?, No podrás volver acceder a ella.",
+      buttons: [
+        {
+          text: 'Cancelar',
+          handler: () => {
+            console.log('Disagree clicked');
+          }
+        },
+        {
+          text: 'Aceptar',
+          handler: () => {
+            this.repo.startMessage("Procesando")
+            this.rest.cancel_task(this.navParams.data.idt).subscribe(resp => {
+                this.repo.stopMessage();
+                this.navCtrl.setRoot(HomePage)
+            }) 
+          }
+        }
+      ]
+    });
+    alert.present();
+
+    
+    
+  }
+  saveFormToUpdate() {
+    // if(this.formulario.length > 0) {
+    //   this.rest.save_last_modify_to_task( {form_response: this.formulario}, this.navParams.data.idt).subscribe((resp: any) => {
+    //       this.repo.presentToast("Edición guardada");
+    //   })
+    // }
+    
   }
 
 
+  comproveOption(item, type, label, data) {
+
+      
+    if(item.concurrence){
+      this.repo.startMessage("Validando disponibilidad.");
+      this.rest.know_available({
+        idtask: this.navParams.data.idt,
+        iduser: this.navParams.data.iduser,
+        idstudie: this.navParams.data.data.id,
+        type_column: type,
+        value_column: item.value,
+        concurrence_value: item.concurrence_value,
+        label: label
+      }).subscribe( (resp: any) => {
+
+        this.repo.stopMessage();
+        if(resp.error){
+
+          item.state = false;
+
+          this.repo.presentAlert(resp.message, [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
+        } else {
+          data.gs = true;
+          data.vs = item.label;
+          data.selected = item.value;
+          this.repo.presentToast("Producto seleccionado");
+        }
+
+      })
+    }
+    
+  }
 
   sendForm() {
 
@@ -431,9 +555,10 @@ export class ProgressInTaskPage {
 
 
           if(resp.error == true) {
-            this.presentAlert("", "No hemos podido guardar tu tarea.");
+            this.repo.presentAlert("No hemos podido guardar tu tarea.", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
           } else {
-            this.presentAlert("", "Se ha guardado de forma correcta.")
+            this.repo.presentToast("Se ha guardado de forma correcta.");
+            this.navCtrl.setRoot(HomePage);
           }
         })
       })
@@ -456,12 +581,12 @@ export class ProgressInTaskPage {
       saveToPhotoAlbum: true
     }
     
-    this.startMessage("Obteniendo georeferenciación");
+    this.repo.startMessage("Obteniendo georeferenciación");
     this.geolocation.getCurrentPosition({
       enableHighAccuracy: true, // HABILITAR ALTA PRECISION
     }).then((_coords) => {
       
-      this.stopMessage();
+      this.repo.stopMessage();
       this.camera.getPicture(options)
       .then(data => {
         this.image = `data:image/jpeg;base64,${data}`;
@@ -470,23 +595,23 @@ export class ProgressInTaskPage {
         this.userForm.delete('File');
         this.userForm.append('File', img);
         
-              this.startMessage("Guardando imagen.");
+              this.repo.startMessage("Guardando imagen.");
               this.rest.save_img_get_url(this.userForm).subscribe( (resp:any) => {
                 
                 object.src = resp.img;
                 object.lat = _coords.coords.latitude;
                 object.lng = _coords.coords.longitude;
                 
-                this.stopMessage();
+                this.repo.stopMessage();
               })
 
 
           }).catch(e => {
-            this.stopMessage();
+            this.repo.stopMessage();
           })
           
         }).catch((error) => {
-          this.stopMessage();
+          this.repo.stopMessage();
         });
         
         
@@ -505,4 +630,26 @@ export class ProgressInTaskPage {
     return new File([u8arr], filename, {type:mime});
   }
 
+}
+
+
+
+@Component({
+  templateUrl: 'modal-instructions.html'
+})
+export class ModalInstructions {
+
+  public loap_instructives: any;
+  constructor( 
+    public platform: Platform,
+    public params: NavParams,
+    public viewCtrl: ViewController){
+
+    this.loap_instructives = this.params.data;
+
+  }
+
+  dismiss() {
+      this.viewCtrl.dismiss();
+  }
 }

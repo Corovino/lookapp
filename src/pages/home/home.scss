@@ -8,8 +8,25 @@ page-home {
         margin: 0px !important;
     }
 
-    .item-md ion-avatar img {
+    .cls-desc .toolbar-title-md {
+        padding: 0 0px;
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: #0e0d0d;
+        text-transform: uppercase;
+        
 
+    }
+
+    .map-ios{
+        
+        height:70vw; 
+        width: 87vw;
+        border:2px solid green;
+    }
+
+
+    .item-md ion-avatar img {
         border-radius: 0%;
         overflow: hidden;
         width: 77px !important;
@@ -25,32 +42,35 @@ page-home {
     }
 
     .cls-list-img .cls-img {
-        width: 25vw;
+        width: 28vw;
         height: auto;
         float: left;
     }
-
-
+    
     .cls-list-img .cls-img img {
-        height: 21vw;
-        width: 23vw;
-        margin: 1px 4px;
+        height: 22vw;
+        width: 22vw;
+        margin: 1vw 2vw;
     }
 
     .cls-list-img .cls-desc {
-        width: 62vw;
+        width: 58vw;
         height: auto;
         float: left;
     }
 
-    .cls-list-img .cls-view {
-        width: 7%;
+    .cls-list-img .cls-view  {
+        width: 10%;
         float: left;
         position: relative;
         margin-top: 8vw;
+        margin-left: 3vw;
+        font-weight: bold;
     }
-
-
+    
+    .cls-list-img .cls-view a {
+        text-decoration: underline;
+    }
 
     
 
@@ -118,7 +138,8 @@ page-home {
     .ion-content-card {
         padding: 15px 25px !important;
         margin: 0px 9px;
-        box-shadow: 0px 2px 2px #000000b3;
+        box-shadow: 0px 2px 2px map-get($colors, primary);
+        // box-shadow: 0px 2px 2px #000000b3;
     }
 
     [item-left] {
@@ -132,7 +153,8 @@ page-home {
     }
 
     .cls-alert-red {
-        color: red;
+        color: map-get($colors, primary);
+        font-size: 1rem;
     }
 
     

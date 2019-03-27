@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { RepoProvider } from '../../providers/repo/repo';
+import { Message_rpt } from '../../clases/letters';
 
 /**
  * Generated class for the MorePage page.
@@ -21,8 +24,9 @@ export class MorePage {
     public navCtrl: NavController, 
     public navParams: NavParams,
     public storage: Storage,
-    public alertCtrl: AlertController,
-    public splashscreen: SplashScreen) {
+    public repo: RepoProvider,
+    public splashscreen: SplashScreen,
+    public iab: InAppBrowser) {
   }
 
   ionViewDidLoad() {
@@ -43,23 +47,49 @@ export class MorePage {
         break;
 
       case 4:
-          this.presentAlert("Alerta", "No se ha programado esta funcionalidad");
+          this.repo.presentAlert("No se ha programado esta funcionalidad",[Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
       break
+
+      case 3:
+          this.terminos();
+      break
+
+      case 1:
+          this.faq();
+      break
+
     
       default:
         break;
     }
   }
 
-  presentAlert(title:string, message: string) {
-    let alert = this.alertCtrl.create({
-      title: title,
-      subTitle: message,
-      buttons: ['Aceptar']
-    });
-    alert.present();
+
+  send_feedback() {
+    
   }
 
+
+
+  
+  terminos(){
+    let browser = this.iab.create('http://lookapp.com.co/politicas-tratamiento-de-la-informacion/');
+
+    browser.on('loadstop').subscribe(event => {
+      browser.insertCSS({ code: "body{color: red;" });
+    });
+
+    browser.close();
+  }
+
+  faq() {
+    let browser = this.iab.create('http://lookapp.com.co/faq/');
+    browser.on('loadstop').subscribe(evet => {
+      browser.insertCSS({ code: "body{color: red}"})
+    })
+
+    browser.close();
+  }
 
 
   list_config: any = [

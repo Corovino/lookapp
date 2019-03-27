@@ -1,6 +1,6 @@
 
 import { Component } from '@angular/core';
-import { NavController, NavParams, ToastController, AlertController} from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { create_acount_interfaces } from '../../models/user.models';
 import { Geolocation } from '@ionic-native/geolocation';
@@ -11,7 +11,9 @@ import { LocationAccuracy } from '@ionic-native/location-accuracy';
 
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { MyApp } from '../../app/app.component';
-
+import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { RepoProvider } from '../../providers/repo/repo';
+import { Message_rpt } from '../../clases/letters';
 
 
 
@@ -52,20 +54,16 @@ export class LoginPage {
     public geolocation: Geolocation,
     public rest: ServicesProvider,
     public device: Device,
-    public toastCtrl: ToastController,
-    public alertCtrl: AlertController,
     public locationAccuracy: LocationAccuracy,
     public splashscreen: SplashScreen,
+    public iab: InAppBrowser,
+    public repo: RepoProvider
     ) {
      
-      let watch = this.geolocation.watchPosition({
-        timeout: 4000 // frecuencia
-      });
-    
-      watch.subscribe((data: any) => {
-          this.register.log = data.coords.longitude;
-          this.register.lat = data.coords.latitude;
-      });
+      this.geolocation.getCurrentPosition().then((resp: any) => {
+        this.register.log = resp.coords.longitude;
+        this.register.lat = resp.coords.latitude;
+      })
   }
 
 
@@ -74,6 +72,15 @@ export class LoginPage {
      this.navCtrl.push(InstructivePage);
   }
 
+  terminos(){
+    const browser = this.iab.create('http://lookapp.com.co/politicas-tratamiento-de-la-informacion/');
+
+    browser.on('loadstop').subscribe(event => {
+      browser.insertCSS({ code: "body{color: red;" });
+    });
+
+    browser.close();
+  }
 
   validate(data){
     return !data || data == '';
@@ -81,15 +88,15 @@ export class LoginPage {
 
   get_session(){
     if(this.validate(this.forms.email) || this.validate(this.forms.pass ) ){
-      this.presentAlert("Error", "Usuario o contraseña faltante");
+      this.repo.presentAlert("Usuario o contraseña faltante", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
     } else {
 
       if(this.forms.pass != this.forms.passed) {
-        this.presentAlert("Alerta", "Las contraseñas no coinciden.");
+        this.repo.presentAlert( "Las contraseñas no coinciden.", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
       } else if(this.forms.check1 == false){
-        this.presentAlert("Alerta", "Para continuar debe aceptar términos y condiciones.");
+        this.repo.presentAlert("Para continuar debe aceptar términos y condiciones.", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
       } else if(this.forms.check2 == false) {
-        this.presentAlert("Alerta", "Para continuar debe aceptar Habbeas Data.");
+        this.repo.presentAlert("Para continuar debe aceptar condiciones de tratamiento de datos.", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
       } else {
 
         this.rest.validata_user(this.forms).subscribe( (response: any) => {
@@ -98,7 +105,7 @@ export class LoginPage {
               forms: this.forms
             });
           } else {
-            this.presentAlert("Error", response.message);
+            this.repo.presentAlert(response.message, [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
           }
         })
       }
@@ -121,7 +128,7 @@ export class LoginPage {
               this.get_session();         
             },
             error => {
-              this.presentAlert("Información", "Es necesario tener la geolocalización activa para realizar el registro");
+              this.repo.presentAlert("Es necesario tener la geolocalización activa para realizar el registro", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
               
             }
           );
@@ -149,13 +156,13 @@ export class LoginPage {
   changePass() {
     this.forms.pass = '';
     if(this.reset.code == '' || this.reset.pass == '' || this.reset.repass == '') {
-      this.presentAlert("", "Es necesario que ingreses los datos necesarios");
+      this.repo.presentAlert("Es necesario que ingreses los datos necesarios", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
     } else {
       this.rest.changepass(this.reset).subscribe((resp: any) => {
           if(resp.error) {
-            this.presentAlert("", resp.message)
+            this.repo.presentAlert(resp.message, [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
           } else {
-            this.presentAlert("", "Se ha guardado de forma correcta");
+            this.repo.presentAlert("Se ha guardado de forma correcta", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
             this.recuperacuenta = false;
 
           }
@@ -163,59 +170,43 @@ export class LoginPage {
     }
   }
 
+
+
+  
+  public message_internet: string = 'Revisa tu conexión a internet.'
   saveSession(){
     
     if(this.forms.check1 == false){
-      this.presentAlert("Alerta", "Para continuar debe aceptar términos y condiciones.");
+      this.repo.presentAlert("Para continuar debe aceptar términos y condiciones.", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
     } else if(this.forms.check2 == false) {
-      this.presentAlert("Alerta", "Para continuar debe aceptar Habbeas Data.");
+      this.repo.presentAlert("Para continuar debe aceptar condiciones de tratamiento de datos.", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
     } else {
 
+      this.repo.startMessage("Iniciando sesión.");
       this.rest.login_eyes(this.forms).subscribe((response: any) => {
+        this.repo.stopMessage();
         if(response.error == "mail"){
-
           this.navCtrl.push(InstructivePage, {
             useremail: response.data,
             iduser: response.data.id
           });
-
         } else if(response.error) {
-          this.presentAlert("Error", response.message);
+          this.repo.presentAlert(response.message, [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
         }else {
           
           this.storage.set('xx-app-loap', JSON.stringify(response));
-          
           setTimeout(() => {
-            // this.splashscreen.show();
             this.navCtrl.setRoot(MyApp);
-            // window.location.reload();
           }, 1000);
-
-
-
         }
+      }, (err: any) => {
+        this.repo.stopMessage();
+        this.repo.presentAlert(this.message_internet, [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
+      }, () => {
+        this.repo.stopMessage();
       })
     }
   }
-
-  presentToast(message: string) {
-    const toast = this.toastCtrl.create({
-      message: message,
-      duration: 3000
-    });
-    toast.present();
-  }
-
-
-  presentAlert(title:string, message: string) {
-    let alert = this.alertCtrl.create({
-      title: title,
-      subTitle: message,
-      buttons: ['Aceptar']
-    });
-    alert.present();
-  }
-
 
   resetPass(){
     this.navCtrl.push(ResetPage);
@@ -250,23 +241,20 @@ export class ResetPage {
       public geolocation: Geolocation,
       public rest: ServicesProvider,
       public device: Device,
-      public toastCtrl: ToastController,
-      public alertCtrl: AlertController,
       public locationAccuracy: LocationAccuracy,
       public splashscreen: SplashScreen,
-    ){
-      
+      public repo: RepoProvider
+    ){ 
     }
 
 
     send_mail() {
       if(this.form.email == '' ) {
-        this.presentAlert("Por favor ingrese el correo electrónico");
+        this.repo.presentAlert("Por favor ingrese el correo electrónico", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
       } else {
         this.rest.rend_mail_to_reset({email: this.form.email }).subscribe((resp :any)=> {
-
           if(resp.error == true) {            
-            this.presentAlert(resp.message);      
+            this.repo.presentAlert(resp.message, [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);      
           } else if(resp.error == "mail") {
 
             this.navCtrl.push(InstructivePage, {
@@ -281,38 +269,22 @@ export class ResetPage {
       }
     }
 
-
-
     changePass() {
       if(this.form.code == '' || this.form.pass == '' || this.form.repass == '') {
-        this.presentAlert("Es necesario que ingreses los datos necesarios");
+        this.repo.presentAlert("Es necesario que ingreses los datos necesarios", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
       } else if(this.form.pass != this.form.repass) {
-        this.presentAlert("Las contraseñas no son iguales");
+        this.repo.presentAlert("Las contraseñas no son iguales", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
       } else  {
         this.rest.changepass(this.form).subscribe((resp: any) => {
 
             if(resp.error == false){
-              this.presentAlert("Se ha guardado de forma correcta");
+              this.repo.presentAlert("Se ha guardado de forma correcta", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
               this.navCtrl.push(LoginPage);         
             } else if(resp.error == true) {
-              this.presentAlert(resp.message)
+              this.repo.presentAlert(resp.message, [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT)
             }
         })
       }
     }
-
-    
-
-
-    presentAlert(message: string) {
-      let alert = this.alertCtrl.create({
-        subTitle: message,
-        buttons: ['Aceptar']
-      });
-      alert.present();
-    }
-
-
-
 }
 

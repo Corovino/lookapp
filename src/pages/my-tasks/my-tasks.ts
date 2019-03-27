@@ -1,8 +1,11 @@
 import { ProgressInTaskPage } from './../progress-in-task/progress-in-task';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ServicesProvider } from '../../providers/services/services';
 import { Storage } from '@ionic/storage';
+import { HomePage } from '../home/home';
+import { RepoProvider } from '../../providers/repo/repo';
+import { Message_rpt } from '../../clases/letters';
 
 /**
  * Generated class for the MyTasksPage page.
@@ -23,7 +26,7 @@ export class MyTasksPage {
     public navParams: NavParams,
     public storage: Storage,
     public rest: ServicesProvider,
-    public alertCtrl: AlertController
+    public repo: RepoProvider
     ) {
   }
 
@@ -50,6 +53,11 @@ export class MyTasksPage {
     clearInterval(this.get_my_task);
   }
 
+
+  sendListTask(){
+    this.navCtrl.setRoot(HomePage);
+  }
+
   get_task(){
     this.storage.get('xx-app-loap').then( (loap: any) => {
       let user = JSON.parse(loap);
@@ -74,19 +82,22 @@ export class MyTasksPage {
 
 
 
-  continue_task(data: any) {    
+
+  continue_task(data: any) {
+
+    this.repo.startMessage(Message_rpt.RTP_RETURN_TASK);
     this.storage.get('xx-app-loap').then( (loap: any) => {
       let user = JSON.parse(loap);
       this.rest.get_studie(data.id_studie).subscribe((resp: any) => {
+        this.repo.stopMessage();
         this.navCtrl.push(ProgressInTaskPage, {data: resp.data, iduser: user.data.user._id, idt: data.id});
       })
     })
   }
 
   razon(data: any) {
-    this.presentAlert("Razón del rechazo", data.comments.observations)    
+      this.repo.presentAlert(data.comments.observations, [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT)
   }
-
 
   doRefresh(element){
     this.get_task();
@@ -95,15 +106,6 @@ export class MyTasksPage {
     }, 2500);
   }
   
-  presentAlert(title:string, message: string) {
-    let alert = this.alertCtrl.create({
-      title: title,
-      subTitle: message,
-      buttons: ['Aceptar']
-    });
-    alert.present();
-  }
-
   view_datail(data: any){
 
   }

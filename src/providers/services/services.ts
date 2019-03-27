@@ -54,6 +54,13 @@ export class ServicesProvider {
     return this.http.get(`${this.endApi}/studies_test/${id}`);
   }
 
+  save_last_modify_to_task(data, id) {
+    return this.http.put(`${this.endApi}/save_last_modify_to_task/${id}`, data);
+  }
+
+  get_form_to_task(id) {
+    return this.http.get(`${this.endApi}/get_form_to_task/${id}`);
+  }
   get_studies_prueba(id) {
     return this.http.get(`${this.endApi}/studies_prueba/${id}`);
   }
@@ -62,15 +69,16 @@ export class ServicesProvider {
     return this.http.get(`${this.endApi}/get_dept_to_userpayment/${id}`);
   }
   //Proceso para quitar un punto del mapa que no ha sido equitado 
-  hide_point(id) {
-    return this.http.get(`${this.endApi}/hide_point/${id}`);
+  hide_point(id, iduser) {
+    return this.http.get(`${this.endApi}/hide_point/${id}/${iduser}`);
   }
 
   // METHOD TO UPUDATE INFO TO USER
   update_user(data: any, id: number) {
     return this.http.put(`${this.endApi}/update_user/${id}`, data);
   }
-  // Proceso para consultar la existencia de un usuari 
+
+  // Proceso para consultar la existencia de un usuario
   validata_user(data: any) {
     return this.http.post(`${this.endApi}/validata_user`, data);
   }
@@ -81,7 +89,6 @@ export class ServicesProvider {
   }
 
   create_user_step_two(data:any, id: number) {
-    // return this.http.put(`http://localhost:8080/api/v1/create_user_step_two/${id}`, data);
     return this.http.put(`${this.endApi}/create_user_step_two/${id}`, data);
   }
 
@@ -91,7 +98,6 @@ export class ServicesProvider {
   }
 
   save_img_user(data:any, id: number) {
-    // return this.http.put(`http://localhost:8080/api/v1/update_img_to_user/${id}`, data);
     return this.http.put(`${this.endApi}/update_img_to_user/${id}`, data);
   }
 
@@ -105,6 +111,7 @@ export class ServicesProvider {
   login_eyes(data) {
     return this.http.post(`${this.endApi}/login_eyes`, data);
   }
+  
   // CONECTAR CON FACEBOKK
   connect_facebook(data) {
     return this.http.post(`${this.endApi}/connect_facebook`, data);
@@ -112,6 +119,15 @@ export class ServicesProvider {
   //  METHOD TO UPDATE INFO TO USER THAT INSIDE WITH FACEBOOKK
   upload_data_to_facebook(data){
     return this.http.post( `${this.endApi}/upload_data_to_facebook`, data);
+  }
+
+
+  know_available(data) {
+    return this.http.post(`${this.endApi}/know_available`, data);
+  }
+
+  delete_selected(data) {
+    return this.http.post(`${this.endApi}/delete_selected`, data)
   }
 
   //  METHOD TO UPDATE INFO TO USER THAT INSIDE WITH EMAIL AND ALREADY REGISTER IN SYSTEM
@@ -150,7 +166,10 @@ export class ServicesProvider {
     return this.http.post(`${this.endApi}/update_form_response_to_task`, data);
   }
 
-
+  // CANCELAR UNA TAREA
+  cancel_task(id: number) {
+    return this.http.get(`${this.endApi}/cancel_task/${id}`);
+  }
 
   //  FUNCIONES QUE NO TEINENE RELACION 
   private getHeader() {

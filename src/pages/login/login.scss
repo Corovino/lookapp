@@ -1,3 +1,58 @@
 page-login {
-
+    .label {
+        display: grid;
+        margin: 6px 0px;
+        padding: 0px;
+    }
+  
+    .grid {
+      padding: 0px 32px;
+    }
+  
+    ion-grid ion-row [col-2] {
+      text-align: center;
+    }
+    ion-grid ion-row [col-8] {
+      text-align: left;
+      padding: 0px 5px;
+      font-size: 1.5rem;
+    }
+    
+    .cls-terms {
+      width: 100%;
+      float: left;
+      /* padding: 12px; */
+    }
+   
+    .cls-ion-title {
+      text-align: center !important;
+      padding: 3px;
+      margin: 10px 0px;
+      background: white;
+      font-size: 1.8rem;
+    }
+  
+    .btn-facebook {
+      background: white; color: black; border-radius: 50px;
+      border: 1px solid lightgray;
+    }
+  
+  
+    .toolbar-title-md {
+      padding: 0 12px;
+      font-size: 2.5rem !important;
+      font-weight: 500;
+      color: #424242;
+    }
+  
+    .item.item-md .checkbox-md {
+      position: static;
+      display: block;
+      margin: 9px 6px 9px 4px;
+    }
+  
+    small {
+      font-size: 70% !important;
+    }
+  
 }

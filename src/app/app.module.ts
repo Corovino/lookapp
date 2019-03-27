@@ -29,18 +29,24 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { WalletPage } from '../pages/wallet/wallet';
 import { PerfilPage, } from '../pages/perfil/perfil';
 import { MyTasksPage } from '../pages/my-tasks/my-tasks';
-import { ProgressInTaskPage } from '../pages/progress-in-task/progress-in-task';
+import { ProgressInTaskPage, ModalInstructions } from '../pages/progress-in-task/progress-in-task';
 import { MorePage } from '../pages/more/more';
 import { SkipsPage } from '../pages/skips/skips';
 import { EditPerfilPage } from '../pages/edit-perfil/edit-perfil'
 
 
-import { Network } from '@ionic-native/network/ngx';
-
+// import { Network } from '@ionic-native/network/ngx';
+// import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 
 import { LetterPipe } from '../pipes/letter/letter';
 import { FormPage } from '../pages/form/form';
+import { Globalization } from '@ionic-native/globalization';
+import { RepoProvider } from '../providers/repo/repo';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
+
+// import { OneSignal } from '@ionic-native/onesignal';
+
 
 @NgModule({
   declarations: [
@@ -59,6 +65,7 @@ import { FormPage } from '../pages/form/form';
     DetailTaskPage,
     MyTasksPage,
     MorePage,
+    ModalInstructions,
     SkipsPage,
     FormPage,
     LetterPipe
@@ -90,6 +97,7 @@ import { FormPage } from '../pages/form/form';
     ProgressInTaskPage,
     MorePage,
     FormPage,
+    ModalInstructions,
     SkipsPage
   ],
   providers: [
@@ -104,8 +112,11 @@ import { FormPage } from '../pages/form/form';
     LocationAccuracy,
     HttpClient,
     GoogleMaps,
-    Network,
-    Device
+    // OneSignal,
+    Globalization,
+    Device,
+    InAppBrowser,
+    RepoProvider,
   ]
 })
 export class AppModule {}

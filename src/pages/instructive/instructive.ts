@@ -7,6 +7,8 @@ import { ServicesProvider } from '../../providers/services/services';
 import { Geolocation } from '@ionic-native/geolocation';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Camera, CameraOptions } from '@ionic-native/camera';
+import { RepoProvider } from '../../providers/repo/repo';
+import { Message_rpt } from '../../clases/letters';
 
 /**
  * Generated class for the InstructivePage page.
@@ -69,6 +71,7 @@ export class InstructivePage {
     public geolocation: Geolocation,
     public camera: Camera,
     public splashscreen: SplashScreen,
+    public repo: RepoProvider
   
     ) {
 
@@ -106,42 +109,23 @@ export class InstructivePage {
 
       this.get_gelocalitation();
     }
+
   
   valid_first_step_email(){
-
-    // if(this.register.code == '') {
-    //   this.presentAlert("", "Ingrese el código de verificación");
-    // }else 
+ 
     if(this.register.name == '' || this.register.lname == '') {
-      this.presentAlert("", "Por favor ingrese todos los campos")
+      this.repo.presentAlert("Por favor ingrese todos los campos", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
     } else {
       this.step_two = true; 
       this.step_one = false
-      // this.rest.valid_code(this.register).subscribe((data:any)=> {
-      //   if(data.error){
-      //     this.presentAlert("", data.message)
-      //   }else {
-      //   }
-      // })
     }
+
   }
 
-
-  valid_first_step_facebook() {
-    if(this.register.pass == '' || this.register.repass == '' || this.register.email == '' || this.register.name == '' || this.register.lname == '' ) {
-      this.presentAlert("", "Por favor ingrese todos los campos")
-    } else if(this.register.pass != this.register.repass) {
-      this.presentAlert("", "las constraseñas no coinciden");
-    } else {
-      
-          this.step_two = true; 
-          this.step_one = false
-    }
-  }
 
   valid_second_step() {
     if(this.register.birth_day == '' || this.register.sex == '' || this.register.strate == '' || this.register.level_studie == '' ) {
-      this.presentAlert("", "Es necesario que completes todos los datos")
+      this.repo.presentAlert("Es necesario que completes todos los datos", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
     } else {
       this.step_three = true; 
       this.step_two = false
@@ -151,20 +135,28 @@ export class InstructivePage {
   // VALIDAR CODIGO CUANDO ESTE ES ENVIADO AL CORREO
   valid_code(){
     if(this.register.code == '') {
-      this.presentAlert("", "Ingrese el código de verificación");
+      this.repo.presentAlert("Ingrese el código de verificación", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
     } else if(this.register.pass != this.register.repass) {
-      this.presentAlert("", "las contraseñas no coinciden");
+      this.repo.presentAlert("las contraseñas no coinciden", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
     } else if(this.register.pass == '' || this.register.repass == '' || this.register.email == '' || this.register.name == '' || this.register.lname == '' ) {
-      this.presentAlert("", "Por favor ingrese todos los campos")
+      this.repo.presentAlert("Por favor ingrese todos los campos", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT)
     } else {
+
+      this.repo.startMessage("Validando información");
       this.rest.valid_code(this.register).subscribe((data:any)=> {
+        this.repo.stopMessage();
         if(data.error){
-          this.presentAlert("", data.message)
+          this.repo.presentAlert(data.message, [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT)
         }else {
           this.step_two = true; 
           this.step_one = false
         }
-      })
+      }, (err: any) => {
+        this.repo.stopMessage();
+        this.repo.presentAlert("Revisa tu conexión a internet.", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
+      }, () => {
+        this.repo.stopMessage();
+      })  
     }
   }
  
@@ -182,6 +174,7 @@ export class InstructivePage {
 
   
   getPicture(){
+    
     let options: CameraOptions = {
       destinationType: this.camera.DestinationType.DATA_URL,
       targetHeight: 500,
@@ -201,12 +194,7 @@ export class InstructivePage {
       }).catch(e => {
         console.error(e);
       })
-
-
   }
-
-
-
 
 
   get_gelocalitation(){
@@ -260,8 +248,7 @@ export class InstructivePage {
       
       alert.present();
 
-      // this.presentAlert("Alert", "Es necesario activar tu geolocalización para el registro");
-    } else if(
+    } else if (
       this.validate(this.register.tcedula) ||
       this.validate(this.register.name) ||
       this.validate(this.register.lname) ||
@@ -276,63 +263,70 @@ export class InstructivePage {
       this.validate(this.register.lat) ||
       this.validate(this.register.log)
     ) {
-      this.presentAlert("Alert", "No se pueden tener datos incompletos")
+      this.repo.presentAlert("No se pueden tener datos incompletos", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT)
     } else {
       if(this.image == 'assets/imgs/icon.png'){
-        this.presentAlert('', 'Es necesario tomar tu imagen de portada')
+        this.repo.presentAlert('Es necesario tomar tu imagen de portada', [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT)
       } else {
         if(this.forms != undefined){
           if(this.iduser == 0){
+            
+            this.repo.startMessage("Validando información de usuario.");
             this.rest.create_user_step_one(this.forms).subscribe((response: any ) => {
+              this.repo.stopMessage();
               if(!response.error) {
                 this.iduser = response.data.id;
                 this.continue_register_with_email();
               } else {
-                this.presentAlert("Error", response.message);
+                this.repo.presentAlert(response.message, [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
               }
+            }, (error: any) => {
+              this.repo.presentAlert("Revisa tu conexión a internet.", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
+              this.repo.stopMessage();
+            }, () => {
+              this.repo.stopMessage();
             })
           } else {
             this.continue_register_with_email();
           }
-        } else if(this.userfacebook != undefined) {
-          this.continue_register_with_facebook();
         } else if(this.useremail != undefined) {
           this.continue_session_with_email();
         }
       }
     }
   }
-
+  
+  message: string = 'Revisa tu conexión a internet.';
   continue_register_with_email() {
+    this.repo.startMessage("Validando información");
     this.rest.create_user_step_two(this.register, this.iduser).subscribe((response: any) => {
+      this.repo.stopMessage();
       if(response.error) {
-        this.presentAlert("Alerta", response.message);
+        this.repo.presentAlert(response.message, [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
       }else {
         this.save_img_in_server(this.iduser);
       }
+    }, (err) => {
+      this.repo.presentAlert(this.message, [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
+      this.repo.stopMessage();
+    }, () => {
+      this.repo.stopMessage();
     })
-  }
-
-
-  // METHOD TO NEXT WITH FACEBOOK
-  iFacebook: any;
-  continue_register_with_facebook(){
-    // when connect is with facebook, in back, the process is diferente, because need take idto facebook and email to genereate changes
-    // In this proccess dosent neceesary send email to reset password
-    this.rest.upload_data_to_facebook(this.register).subscribe((data: any) => {
-      this.iFacebook = data;
-      this.save_img_in_server(this.register.userid);
-    })
-  
   }
 
   // METODO TO NEXT WITH EMAIL TO SESSION 
   iEmail: any;
   continue_session_with_email(){
-    
+    this.repo.startMessage("Validando información de usuario");
     this.rest.upload_data_to_email(this.register).subscribe((data: any) => {
+        this.repo.stopMessage();
         this.iEmail = data;
         this.save_img_in_server(this.register.userid);
+    }, (err) => {
+      this.repo.presentAlert(this.message, [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
+      this.repo.stopMessage();
+    }, () => {
+      this.repo.stopMessage();
     })
 
   }
@@ -345,47 +339,46 @@ export class InstructivePage {
       window.location.reload();
     }, 1000)
   }
-  // when a user is registeer with facebook
-  ok_facebook(){
-    this.storage.set('xx-app-loap', JSON.stringify(this.iFacebook));
-    setTimeout(() => {
-      this.splashscreen.show();
-      window.location.reload();
-    }, 1000)
-  }
+
+
   // when a user is newe
   ok_session(){
+    this.repo.startMessage("Revisando información de usuario.");
     this.rest.login_eyes({
       email: this.forms.email,
       pass: this.forms.pass
     }).subscribe( (rp:any) => {
+      this.repo.stopMessage();
       this.storage.set('xx-app-loap', JSON.stringify(rp));
       setTimeout(() => {
         this.splashscreen.show();
         window.location.reload();
       }, 1000)
+    },(err: any) => {
+      this.repo.presentAlert(this.message, [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
+      this.repo.stopMessage();
+    }, () => {
+      this.repo.stopMessage();
     })
   }
   
   // save imagen
   save_img_in_server(id){
+    this.repo.startMessage("Subiendo imagen...");
     this.rest.save_img_user(this.userForm, id).subscribe( (data:any) => {
+      this.repo.stopMessage();
       this.step_four = true; 
       this.step_three = false;
         if(!data.error){
           this.image = data.data.img;  
         } 
+    }, (err) => {
+      this.repo.stopMessage();
+    }, () => {
+      this.repo.stopMessage();
     })
   }
 
-  presentAlert(title:string, message: string) {
-    let alert = this.alertCtrl.create({
-      title: title,
-      subTitle: message,
-      buttons: ['Aceptar']
-    });
-    alert.present();
-  }
 
 
 

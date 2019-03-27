@@ -7,28 +7,138 @@ page-progress-in-task {
         margin: 10px 14vw;
         font-size: 8vw;
     }
+
+
+    .cls-hiden-none {
+        display: none;
+    }
+
+
+    .cls-btn-delete {
+        height: 25px;
+        text-transform: inherit;
+        position: relative;
+        float: right;
+        padding: 2px 10px;
+        background: #d33154;
+        color: white;
+    }
+
+
+    .cls-tt-s {
+        margin: 10px 10px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.44);;
+    }
+
+    .cls-option-select  {
+        width: 100%;
+        float: left;
+        position: relative;
+        margin: 5px 0px;
+        padding: 5px 10px;
+        background: rgba(84, 255, 0, 0.19);
+        border-radius: 12px;
+    }
+    
+    .cls-option-select span  {
+        margin: 10px;
+        top: 3px;
+        position: relative;
+    }
+
+    .cls-hiden-block {
+        display: block
+    }
+
     
     .cls-hide {
         display: block !important;
     }
 
-    input[type="checkbox"], input[type="radio"] {
-        /* margin: 4px 0 0; */
-        /* margin-top: 1px\9; */
-        line-height: normal;
-        background: blue !important;
-        box-shadow: 0px 0px 0px 1px #e5355b;
-        border: 1px solid red !important;
+    /* The container */
+.container {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 15px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+    /* Hide the browser's default checkbox */
+    .container input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
     }
     
-    input[type="checkbox"] + span,
-    input[type="checkbox"] + span::before
-    {
-        display: flex;
-        vertical-align: middle;
-        
+    /* Create a custom checkbox */
+    input[type="radio"] + .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 20px;
+        width: 20px;
+        background-color: rgb(206, 201, 201);
+        border: 1px solid map-get($colors, primary);
+        border-radius: 50%;
     }
 
+    
+    /* Create a custom checkbox */
+    input[type="checkbox"] + .checkmark  {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 20px;
+        width: 20px;
+        background-color: rgb(206, 201, 201);
+        border: 1px solid map-get($colors, primary)
+    }
+    
+    /* On mouse-over, add a grey background color */
+    .container:hover input ~ .checkmark {
+        background-color: #ccc;
+    }
+    
+    /* When the checkbox is checked, add a blue background */
+    .container input:checked ~ .checkmark {
+        background-color: map-get($colors, primary)
+
+    }
+    
+    /* Create the checkmark/indicator (hidden when not checked) */
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+  
+    /* Show the checkmark when checked */
+    .container input:checked ~ .checkmark:after {
+        display: block;
+    }
+    
+    /* Style the checkmark/indicator */
+    .container .checkmark:after {
+        left: 9px;
+        top: 5px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+
+    
     label i {
         height: 8px;
         width: 8px;
@@ -39,13 +149,10 @@ page-progress-in-task {
         border-radius: 14px;
     }
 
-    input[type="radio"]:checked + span::before,
-    input[type="checkbox"]:checked + span::before
-    {
-        color: #666;
+
+    .img-form {
+        margin: 10px;
     }
-
-
 
     .img-form img {
         width: 50%;
@@ -77,9 +184,12 @@ page-progress-in-task {
     .form-control {
         width: 100%;
         border-radius: 25px;
-        border: 1px solid #e6355b;
+        border: 1px solid map-get($colors, primary);
         height: 12vw;
         float: left;
+        z-index: 99999999;
+        display: block;
+        position: relative;
     }
 
     .cls-content {
@@ -127,8 +237,34 @@ page-progress-in-task {
     }
 
     .cls-i {
-        margin:11px 0px 22px;
+        margin:06px 0px 22px;
     }
+
+    .cls-5 {
+        width: 45%;
+        padding: 10px;
+        position: relative;
+        float: left;
+    }
+
+    .cls-btn-state {
+        width: 100%;
+        margin: 3px;
+        font-size: 4vw;
+        padding: 10px 15px;
+        color: white;
+        border-radius: 27px;
+    }
+    
+    [send-f] {
+        background: green;
+    }
+    
+    [cancel-f] {
+        background: #e5355b;
+    }
+
+
     /* 
       #map {
           height: 60vw;

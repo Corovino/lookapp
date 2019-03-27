@@ -7,7 +7,14 @@ import { LoginPage } from '../pages/login/login';
 import { Storage } from '@ionic/storage';
 import { TabsPage } from '../pages/tabs/tabs';
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
-import { Network } from '@ionic-native/network/ngx';
+
+
+// import { Network } from '@ionic-native/network/ngx';
+
+// import { Globalization } from '@ionic-native/globalization/ngx';
+import { Globalization } from '@ionic-native/globalization';
+
+
 
 @Component({
   templateUrl: 'app.html'
@@ -26,16 +33,14 @@ export class MyApp {
     public storage: Storage,
     public locationAccuracy: LocationAccuracy,
     public alertCtrl: AlertController,
-    private network: Network
-
+    private globalization: Globalization
   ) {
 
+    
+
+
     this.initializeApp();
-    // ESTADO DE LA CONEXION
-    this.stateConnect();
-   
-
-
+  
     this.locationAccuracy.canRequest().then((canRequest: boolean) => {
       if(canRequest) {
         this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
@@ -48,20 +53,13 @@ export class MyApp {
     this.storage.get('xx-app-loap').then((val) => {
       this.rootPage = val ? TabsPage : LoginPage;
     });
+
+  
+
+
+
   }
 
-  stateConnect() {
-    // console.log(this.network.onDisconnect() ,   "THIS IS MY NETWORK");
-
-
-    // //  watch network for a disconnection
-    // this.network.onDisconnect()
-    // .subscribe((info) => {
-    //   console.log(info)
-    //   console.log("ESTADO DESCONEXTAS");
-    //   // this.presentAlert("", "No hay conexión a Internet");
-    // });
- }
 
 
 
@@ -78,8 +76,27 @@ export class MyApp {
 
   initializeApp() {
     this.platform.ready().then(() => {
+
       this.splashScreen.hide();
       this.statusBar.styleDefault();
+
+      // var notificationOpenedCallback = function(jsonData) {
+      //   console.log('notificationOpenedCallback: ' + JSON.stringify(jsonData));
+      // };
+  
+  
+      // window["plugins"].OneSignal
+      //   .startInit("9aca3e8c-f53f-4103-b676-5401edfedd7c", "38855676408")
+      //   .handleNotificationOpened(notificationOpenedCallback)
+      //   .endInit();
+
+      // this.globalization.getPreferredLanguage()
+      this.globalization.getDatePattern({formatLength:'short', selector:'date and time'})
+      .then(res => console.log("GLOBALIZACION JERRY LAGOS", res))
+      .catch(e => console.log(e));
+    
+    }, (err) => {
+      console.log("Informacion ", err, "this in my callback")
     });
   }
 

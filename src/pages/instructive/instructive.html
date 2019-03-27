@@ -64,10 +64,6 @@
               <ion-col class="cls-next" *ngIf="this.forms">
                 <button class="btn-look btn-width-look" ion-button full (click)="valid_first_step_email()"  >Siguiente</button>
               </ion-col>
-              <!-- CUANDO ES UN REGISTRO POR FACEBOOK -->
-              <ion-col class="cls-next" *ngIf="this.userfacebook">
-                <button class="btn-look btn-width-look" ion-button full (click)="valid_first_step_facebook()"  >Siguiente</button>
-              </ion-col>
               <!-- CUANDO ES CORREO REGISTRADO -->
               <ion-col class="cls-next" *ngIf="this.useremail">
                 <button class="btn-look btn-width-look" ion-button full (click)="valid_code();"  >Siguiente</button>
@@ -185,9 +181,6 @@
               <button  class="btn-look btn-width-look" ion-button full (click)="ok_email();"> Listo </button>
             </ion-col>
 
-            <ion-col class="cls-next" *ngIf="this.userfacebook">
-              <button  class="btn-look btn-width-look" ion-button full (click)="ok_facebook();"> Listo </button>
-            </ion-col>
   
           </ion-row>
         </ion-grid>
