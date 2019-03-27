@@ -7,6 +7,7 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 import { HomePage } from '../home/home';
 import { RepoProvider } from '../../providers/repo/repo';
 import { Message_rpt } from '../../clases/letters';
+import { isUndefined } from 'util';
 
 
 /**
@@ -51,29 +52,64 @@ export class ProgressInTaskPage {
 
   getValid(data: any , form: any) {
      
-     if(data.condicional === undefined ){
-         data.condicional ={
-           label:"",
-           state:false,
-           value_conditional : ""
-         }
-     }
- 
-    if(data.condicional.label != '') {
+     //console.log(data);
 
-      let c = 0, state = true;
-      for (let i = 0; i < form.length; i++) {
-        c++;
-        if(form[i].label == data.condicional.label){
-          if(form[i].response == data.condicional.value_conditional){
-            state = false;
+     if(data.condicional === undefined  || data.condicional.label == 'null' ){
+         data.condicional.label = "";
+     }
+     
+     
+    if(data.condicional.label != '' ) {
+      console.log("entro uno", data.type);
+      
+      if(data.type != 'boxes') {
+        console.log("entro dos");
+        let c = 0, state = true;
+        for (let i = 0; i < form.length; i++) {
+          c++;
+          if(form[i].label == data.condicional.label){
+  
+            form[i].data.forEach(obj => {
+
+              console.log("ADASADAD", obj)
+              if(obj.value == data.condicional.value_conditional){
+
+                if(obj.response == undefined){
+                  obj.response = false;
+                }
+
+                if(obj.response == true ) {
+                  state = false;
+                }
+              }
+            })
+  
           }
         }
+  
+        if(c == form.length) {
+          return state;
+        }
+      } else {
+        console.log('entro else');
+        let c = 0, state = true;
+        for (let i = 0; i < form.length; i++) {
+          c++;
+          if(form[i].label == data.condicional.label){
+            if(form[i].response == data.condicional.value_conditional){
+              state = false;
+            }
+          }
+        }
+  
+        if(c == form.length) {
+          return state;
+        }
+
       }
 
-      if(c == form.length) {
-        return state;
-      }
+
+
 
     } else {
       return false;
