@@ -50,7 +50,15 @@ export class ProgressInTaskPage {
   }
 
   getValid(data: any , form: any) {
-    
+     
+     if(data.condicional === undefined ){
+         data.condicional ={
+           label:"",
+           state:false,
+           value_conditional : ""
+         }
+     }
+ 
     if(data.condicional.label != '') {
 
       let c = 0, state = true;
@@ -70,6 +78,8 @@ export class ProgressInTaskPage {
     } else {
       return false;
     }
+     
+
   }
 
 
@@ -468,7 +478,7 @@ export class ProgressInTaskPage {
 
 
   comproveOption(item, type, label, data) {
-
+    
       
     if(item.concurrence){
       this.repo.startMessage("Validando disponibilidad.");
