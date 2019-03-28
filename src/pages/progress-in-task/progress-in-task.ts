@@ -52,64 +52,25 @@ export class ProgressInTaskPage {
 
   getValid(data: any , form: any) {
      
-     //console.log(data);
-
-     if(data.condicional === undefined  || data.condicional.label == 'null' ){
-         data.condicional.label = "";
-     }
-     
+    if(!data.condicional === undefined ){
+      return false;
+    }
      
     if(data.condicional.label != '' ) {
-      console.log("entro uno", data.type);
       
-      if(data.type != 'boxes') {
-        console.log("entro dos");
-        let c = 0, state = true;
-        for (let i = 0; i < form.length; i++) {
-          c++;
-          if(form[i].label == data.condicional.label){
-  
-            form[i].data.forEach(obj => {
-
-              console.log("ADASADAD", obj)
-              if(obj.value == data.condicional.value_conditional){
-
-                if(obj.response == undefined){
-                  obj.response = false;
-                }
-
-                if(obj.response == true ) {
-                  state = false;
-                }
-              }
-            })
-  
+      let c = 0, state = true;
+      for (let i = 0; i < form.length; i++) {
+        c++;
+        if(form[i].label == data.condicional.label){
+          if(form[i].response == data.condicional.value_conditional){
+            state = false;
           }
         }
-  
-        if(c == form.length) {
-          return state;
-        }
-      } else {
-        console.log('entro else');
-        let c = 0, state = true;
-        for (let i = 0; i < form.length; i++) {
-          c++;
-          if(form[i].label == data.condicional.label){
-            if(form[i].response == data.condicional.value_conditional){
-              state = false;
-            }
-          }
-        }
-  
-        if(c == form.length) {
-          return state;
-        }
-
       }
 
-
-
+      if(c == form.length) {
+        return state;
+      }
 
     } else {
       return false;
