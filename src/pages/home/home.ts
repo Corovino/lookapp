@@ -174,7 +174,7 @@ export class DetailTaskPage {
     public rest: ServicesProvider,
     public geolocation: Geolocation,
     public camera: Camera,
-    private _googleMaps: GoogleMaps,
+    private GoogleMaps: GoogleMaps,
     public device: Device,
     public repo: RepoProvider
   ) { 
@@ -370,7 +370,7 @@ loadMap() {
 
   // let controls: any = {compass: true, myLocationButton: false, indoorPicker: false, zoom: true, mapTypeControl: true, streetViewControl: false};
   // let element = this.mapElement.nativeElement;
-  this.map = this._googleMaps.create('map_canva', {
+  this.map = GoogleMaps.create('map_canva', {
     zoom: 13,
     center: {lat: 4.6097538, lng: -83.3920573},
     gestureHandling: 'cooperative'

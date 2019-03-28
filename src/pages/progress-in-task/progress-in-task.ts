@@ -244,7 +244,7 @@ export class ProgressInTaskPage {
     mapita.style.width = '90vw';
 
     let element = this.mapElement.nativeElement;
-    this.map = this._googleMaps.create(element, {
+    this.map = GoogleMaps.create(element, {
       zoom: 15,
       center: {lat: 4.6097538, lng: -83.3920573},
       // gestureHandling: 'cooperative'
