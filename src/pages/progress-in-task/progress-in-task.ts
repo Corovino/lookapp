@@ -7,6 +7,7 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 import { HomePage } from '../home/home';
 import { RepoProvider } from '../../providers/repo/repo';
 import { Message_rpt } from '../../clases/letters';
+import { isUndefined } from 'util';
 
 
 /**
@@ -47,6 +48,35 @@ export class ProgressInTaskPage {
     private alertCtrl: AlertController
   ) {
     // this.timeOut();
+  }
+
+  getValid(data: any , form: any) {
+     
+    if(!data.condicional === undefined ){
+      return false;
+    }
+     
+    if(data.condicional.label != '' ) {
+      
+      let c = 0, state = true;
+      for (let i = 0; i < form.length; i++) {
+        c++;
+        if(form[i].label == data.condicional.label){
+          if(form[i].response == data.condicional.value_conditional){
+            state = false;
+          }
+        }
+      }
+
+      if(c == form.length) {
+        return state;
+      }
+
+    } else {
+      return false;
+    }
+     
+
   }
 
 
@@ -175,7 +205,7 @@ export class ProgressInTaskPage {
     mapita.style.width = '90vw';
 
     let element = this.mapElement.nativeElement;
-    this.map = this._googleMaps.create(element, {
+    this.map = GoogleMaps.create(element, {
       zoom: 15,
       center: {lat: 4.6097538, lng: -83.3920573},
       // gestureHandling: 'cooperative'
@@ -445,7 +475,7 @@ export class ProgressInTaskPage {
 
 
   comproveOption(item, type, label, data) {
-
+    
       
     if(item.concurrence){
       this.repo.startMessage("Validando disponibilidad.");

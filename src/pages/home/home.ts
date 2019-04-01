@@ -174,7 +174,7 @@ export class DetailTaskPage {
     public rest: ServicesProvider,
     public geolocation: Geolocation,
     public camera: Camera,
-    private _googleMaps: GoogleMaps,
+    private GoogleMaps: GoogleMaps,
     public device: Device,
     public repo: RepoProvider
   ) { 

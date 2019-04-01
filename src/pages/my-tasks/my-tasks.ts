@@ -96,10 +96,8 @@ export class MyTasksPage {
   }
 
   razon(data: any) {
-    this.repo.presentAlert("Razón del rechazo", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT)
+      this.repo.presentAlert(data.comments.observations, [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT)
   }
-
-
 
   doRefresh(element){
     this.get_task();
