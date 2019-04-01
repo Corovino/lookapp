@@ -372,10 +372,6 @@ export class InstructivePage {
         if(!data.error){
           this.image = data.data.img;  
         } 
-    }, (err) => {
-      this.repo.stopMessage();
-    }, () => {
-      this.repo.stopMessage();
     })
   }
 

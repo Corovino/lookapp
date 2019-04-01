@@ -1,0 +1,13 @@
+> cordova plugin add cordova-plugin-googlemaps API_KEY_FOR_ANDROID=(AIzaSyDbixyDtxAwVQdIU4_CCM5HTdkD2NLrbA0) API_KEY_FOR_IOS=(AIzaSyDbixyDtxAwVQdIU4_CCM5HTdkD2NLrbA0) --save
+Installing "cordova-plugin-googlemaps" for android
+Failed to install 'cordova-plugin-googlemaps': Error: Variable(s) missing: API_KEY_FOR_ANDROID
+    at Object.mergeVariables (/usr/local/lib/node_modules/cordova/node_modules/cordova-lib/src/plugman/variable-merge.js:58:15)
+    at /usr/local/lib/node_modules/cordova/node_modules/cordova-lib/src/plugman/install.js:315:44
+    at _fulfilled (/usr/local/lib/node_modules/cordova/node_modules/q/q.js:854:54)
+    at /usr/local/lib/node_modules/cordova/node_modules/q/q.js:883:30
+    at Promise.promise.promiseDispatch (/usr/local/lib/node_modules/cordova/node_modules/q/q.js:816:13)
+    at /usr/local/lib/node_modules/cordova/node_modules/q/q.js:624:44
+    at runSingle (/usr/local/lib/node_modules/cordova/node_modules/q/q.js:137:13)
+    at flush (/usr/local/lib/node_modules/cordova/node_modules/q/q.js:125:13)
+    at process._tickCallback (internal/process/next_tick.js:61:11)
+Variable(s) missing: API_KEY_FOR_ANDROID

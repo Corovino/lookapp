@@ -1,0 +1,5 @@
+use_frameworks!
+target 'LookApp' do
+    project '/Users/personal/Documents/Projects/mobile/front/platforms/ios/LookApp.xcodeproj'	
+    pod 'GoogleMaps'
+end	

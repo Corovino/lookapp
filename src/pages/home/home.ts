@@ -246,10 +246,17 @@ createPolilyne(element) {
 MyP:  LatLng;
 
 // BUTTON PARA QUE LA CAMARA PONGA MY GEOLOCALIZACION EN EL PUNTO QUE ES
+public _coords_goobals: any = {lat: '', lng: ''}
 getMyLocation() {
   let locd: LatLng;
   this.repo.startMessage(Message_rpt.RTP_SEARCH_GEO);
   this.geolocation.getCurrentPosition().then((resp) => {
+    
+    this._coords_goobals.lat = resp.coords.latitude;
+    this._coords_goobals.lng = resp.coords.longitude;
+
+    
+
     locd = new LatLng(resp.coords.latitude, resp.coords.longitude);
     this.repo.stopMessage();
     this.MyP = locd;
@@ -370,7 +377,7 @@ loadMap() {
 
   // let controls: any = {compass: true, myLocationButton: false, indoorPicker: false, zoom: true, mapTypeControl: true, streetViewControl: false};
   // let element = this.mapElement.nativeElement;
-  this.map = this._googleMaps.create('map_canva', {
+  this.map = GoogleMaps.create('map_canva', {
     zoom: 13,
     center: {lat: 4.6097538, lng: -83.3920573},
     gestureHandling: 'cooperative'
