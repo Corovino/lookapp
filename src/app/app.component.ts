@@ -13,6 +13,7 @@ import { LocationAccuracy } from '@ionic-native/location-accuracy';
 
 // import { Globalization } from '@ionic-native/globalization/ngx';
 import { Globalization } from '@ionic-native/globalization';
+import { PushnotificationProvider } from '../providers/pushnotification/pushnotification';
 
 
 

@@ -19,6 +19,7 @@ import { LoginPage, ResetPage } from '../pages/login/login';
 import { ServicesProvider } from '../providers/services/services';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Camera } from '@ionic-native/camera';
+import { OneSignal } from '@ionic-native/onesignal/ngx';
 
 import { Geolocation } from '@ionic-native/geolocation';
 import { Device } from '@ionic-native/device';
@@ -33,7 +34,7 @@ import { MorePage } from '../pages/more/more';
 import { SkipsPage } from '../pages/skips/skips';
 import { EditPerfilPage } from '../pages/edit-perfil/edit-perfil'
 
-
+import { PushnotificationProvider } from '../providers/pushnotification/pushnotification';
 // import { Network } from '@ionic-native/network/ngx';
 // import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
@@ -111,7 +112,8 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
     LocationAccuracy,
     HttpClient,
     GoogleMaps,
-    // OneSignal,
+    OneSignal,
+    PushnotificationProvider,
     Globalization,
     Device,
     InAppBrowser,
