@@ -33,7 +33,8 @@ export class MyApp {
     public storage: Storage,
     public locationAccuracy: LocationAccuracy,
     public alertCtrl: AlertController,
-    private globalization: Globalization
+    private globalization: Globalization,
+    public pushNotification: PushnotificationProvider
   ) {
 
     
@@ -79,7 +80,8 @@ export class MyApp {
 
       this.splashScreen.hide();
       this.statusBar.styleDefault();
-
+      console.log("im ready");
+      this.pushNotification.init_notifications();
       // var notificationOpenedCallback = function(jsonData) {
       //   console.log('notificationOpenedCallback: ' + JSON.stringify(jsonData));
       // };
