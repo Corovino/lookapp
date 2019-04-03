@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
+<<<<<<< HEAD
 <widget id="com.lookapp.user" version="2.2.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+=======
+<widget id="com.lookapp.user" version="2.3.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+>>>>>>> f71371f3fd10a634c4f797c4106a11969506d4c5
     <name>LookApp</name>
     <description>Ganar haciendo tareas nunca fue tan facil.</description>
     <author email="info@lookapp.com.co" href="http://ionicframework.com/">Ionic Framework Team</author>
@@ -111,7 +115,8 @@
         <variable name="ANDROID_SUPPORT_ANNOTATIONS_VERSION" value="27.+" />
     </plugin>
     <allow-navigation href="http://192.168.1.105:8100" sessionid="22cf6201" />
+    <plugin name="onesignal-cordova-plugin" spec="~2.4.6" />
     <engine name="browser" spec="5.0.4" />
     <engine name="android" spec="6.3.0" />
-    <engine name="ios" spec="^4.5.5" />
+    <engine name="ios" spec="4.5.5" />
 </widget>

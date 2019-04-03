@@ -174,11 +174,12 @@ export class DetailTaskPage {
     public rest: ServicesProvider,
     public geolocation: Geolocation,
     public camera: Camera,
-    private _googleMaps: GoogleMaps,
+    private GoogleMaps: GoogleMaps,
     public device: Device,
     public repo: RepoProvider
   ) { 
     this.estudio = this.params.data.data;
+    console.log( "fff",this.estudio );
   }
 
 
@@ -491,7 +492,7 @@ onMarkerAdd(marker: Marker) {
                     }
                   })
                 } else {
-                  this.repo.presentAlert("Estas a " + parseInt(distance_more_near) + " metros del punto más cercano. debes estar a menos de 60 metros", [Message_rpt.RTP_ACCEPT], 'cls-accept');
+                  this.repo.presentAlert("Estas a " + parseInt(this.estudio.radio) + " metros del punto más cercano. debes estar a menos de 60 metros", [Message_rpt.RTP_ACCEPT], 'cls-accept');
                 }
               }
   
