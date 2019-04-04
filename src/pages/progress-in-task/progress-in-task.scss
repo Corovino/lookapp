@@ -227,7 +227,16 @@ page-progress-in-task {
 
 
 
-
+    .cls-section {
+        border: 1px solid rgba(228, 182, 186, 0.27);
+        padding: 10px;
+        margin: 5px 0px;
+        background: rgba(228, 182, 186, 0.27);
+        height: auto;
+        position: relative;
+        float: left;
+        width: 100%;
+    }
 
     .cls-progress {
         background: rgb(229, 53, 91) none repeat scroll 0% 0%;

@@ -55,6 +55,33 @@
     <a clear item-end >VER</a>
   </div>
 </div>
+<<<<<<< HEAD
+  
+<!-- <button ion-button full (click)="showForm()">Ver más</button> -->
+<div *ngIf="!list_studies_test.error">
+  <h2>Estudios comunidad cerrada</h2>
+  <div class="cls-list-img" *ngFor="let studie of list_studies_test.data" (click)="take_taks(studie)">
+    <!-- contenedor imagen 30% -->
+    <div class="cls-img">
+      <img [src]="studie.img" alt="{{studie.name}}">
+    </div>
+    <!-- contendor la descripcion 60 %-->
+    <div class="cls-desc">
+        <ion-title>
+          {{studie.name | letter:20}}
+        </ion-title>
+        <b style="font-size: 1rem;">Pago:</b> <span class="cls-alert-red">$ {{studie.price_by_task | number}} COP </span> <br>
+        <p class="cls-history">
+          {{studie.history | letter:90 }}
+        </p>
+    </div>
+    <!-- contendor para  ver imagen 10% -->
+    <div class="cls-view">
+      <a clear item-end >VER</a>
+    </div>
+  </div>
+=======
+>>>>>>> f71371f3fd10a634c4f797c4106a11969506d4c5
 </div>
 
 

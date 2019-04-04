@@ -423,13 +423,6 @@ export class ProgressInTaskPage {
       ]
     });
     alert.present();
-
-
-
-    
-
-
-
   }
 
 
@@ -636,6 +629,32 @@ export class ProgressInTaskPage {
     }
     return new File([u8arr], filename, {type:mime});
   }
+
+
+  getValid(data: any , form: any) {
+
+    if(data.condicional.label != '') {
+
+      let c = 0, state = true;
+      for (let i = 0; i < form.length; i++) {
+        c++;
+        if(form[i].label == data.condicional.label){
+          if(form[i].response == data.condicional.value_conditional){
+            state = false;
+          }
+        }
+      }
+
+      if(c == form.length) {
+        return state;
+      }
+
+    } else {
+      return false;
+    }
+  }
+
+
 
 }
 
