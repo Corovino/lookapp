@@ -631,7 +631,7 @@ export class ProgressInTaskPage {
   }
 
 
-  getValid(data: any , form: any) {
+  /*getValid(data: any , form: any) {
 
     if(data.condicional.label != '') {
 
@@ -652,7 +652,7 @@ export class ProgressInTaskPage {
     } else {
       return false;
     }
-  }
+  }*/
 
 
 
