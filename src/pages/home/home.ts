@@ -179,7 +179,7 @@ export class DetailTaskPage {
     public repo: RepoProvider
   ) { 
     this.estudio = this.params.data.data;
-    console.log( "fff",this.estudio );
+    
   }
 
 
