@@ -91,12 +91,10 @@
           <div [hidden]="getValid(data, formulario)">
             <label for=""> <i></i>  {{data.label}}</label>    
             <div *ngFor="let item of data.data; let e = index">
-              
                 <label for="{{e + '_' + i}}" class="container">{{item.label}}
                   <input id="{{e + '_' + i}}" name="{{i}}" type="radio" value="{{item.value}}" [(ngModel)]="data.response">
                   <span class="checkmark"></span>
                 </label>
-                
             </div>
             
             

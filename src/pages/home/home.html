@@ -11,76 +11,82 @@
   refreshingSpinner="circles"></ion-refresher-content>
 </ion-refresher>
 <!-- Contendor 100% -->
-<div class="cls-list-img" *ngFor="let studie of list_studies" (click)="take_taks(studie)">
-<!-- contenedor imagen 30% -->
-<div class="cls-img">
-  <img [src]="studie.img" alt="{{studie.name}}">
-</div>
-<!-- contendor la descripcion 60 %-->
-<div class="cls-desc">
-    <ion-title>
-      {{studie.name | letter:20}}
-    </ion-title>
-    <b style="font-size: 1rem;">Pago:</b> <span class="cls-alert-red">$ {{studie.price_by_task | number}} COP </span> <br>
-    <p class="cls-history">
-      {{studie.history | letter:70 }}
-    </p>
-</div>
-<!-- contendor para  ver imagen 10% -->
-<div class="cls-view">
-  <a clear item-end >VER</a>
-</div>
-</div>
+<div *ngFor="let studie of list_studies">
+  <div class="cls-list-img"   *ngIf="studie.form"  (click)="take_taks(studie)">
+          <!-- contenedor imagen 30% -->
+          <div class="cls-img">
+            <img [src]="studie.img" alt="{{studie.name}}">
+          </div>
+          <!-- contendor la descripcion 60 %-->
+          <div class="cls-desc">
+              <ion-title>
+                {{studie.name | letter:20}}
+              </ion-title>
+              <b style="font-size: 1rem;">Pago:</b> <span class="cls-alert-red">$ {{studie.price_by_task | number}} COP </span> <br>
+              <p class="cls-history">
+                {{studie.history | letter:70 }}
+              </p>
+          </div>
+          <!-- contendor para  ver imagen 10% -->
+          <div class="cls-view">
+            <a clear item-end >VER</a>
+          </div>
+    </div>
+</div>        
 
 <!-- <button ion-button full (click)="showForm()">Ver más</button> -->
 <div *ngIf="!list_studies_test.error">
-<h2>Estudios comunidad cerrada</h2>
-<div class="cls-list-img" *ngFor="let studie of list_studies_test.data" (click)="take_taks(studie)">
-  <!-- contenedor imagen 30% -->
-  <div class="cls-img">
-    <img [src]="studie.img" alt="{{studie.name}}">
-  </div>
-  <!-- contendor la descripcion 60 %-->
-  <div class="cls-desc">
-      <ion-title>
-        {{studie.name | letter:20}}
-      </ion-title>
-      <b style="font-size: 1rem;">Pago:</b> <span class="cls-alert-red">$ {{studie.price_by_task | number}} COP </span> <br>
-      <p class="cls-history">
-        {{studie.history | letter:90 }}
-      </p>
-  </div>
-  <!-- contendor para  ver imagen 10% -->
-  <div class="cls-view">
-    <a clear item-end >VER</a>
-  </div>
-</div>
+    <h2>Estudios comunidad cerrada</h2>
+     <div *ngFor="let studie of list_studies_test.data">
+       <div class="cls-list-img" *ngIf="studie.form" (click)="take_taks(studie)">
+               <!-- contenedor imagen 30% -->
+               <div class="cls-img">
+                   <img [src]="studie.img" alt="{{studie.name}}">
+               </div>
+               <!-- contendor la descripcion 60 %-->
+               <div class="cls-desc">
+                   <ion-title>
+   
+                   {{studie.name | letter:20}}
+                   </ion-title>
+                   <b style="font-size: 1rem;">Pago:</b> <span class="cls-alert-red">$ {{studie.price_by_task | number}} COP </span> <br>
+                   <p class="cls-history">
+                   {{studie.history | letter:90 }}
+                   </p>
+               </div>
+               <!-- contendor para  ver imagen 10% -->
+               <div class="cls-view">
+                   <a clear item-end >VER</a>
+               </div>
+       </div>
+     </div>
 </div>
 
 
 <div *ngIf="!list_studies_prueba.error">
-
-<h2>Estudios de prueba</h2>
-<div class="cls-list-img" *ngFor="let studie of list_studies_prueba.data" (click)="take_taks(studie)">
-  <!-- contenedor imagen 30% -->
-  <div class="cls-img">
-    <img [src]="studie.img" alt="{{studie.name}}">
+  <h2>Estudios de prueba</h2>
+  <div *ngFor="let studie of list_studies_prueba.data">
+    <div class="cls-list-img"  *ngIf="studie.form"  (click)="take_taks(studie)">
+      <!-- contenedor imagen 30% -->
+      <div class="cls-img">
+        <img [src]="studie.img" alt="{{studie.name}}">
+      </div>
+      <!-- contendor la descripcion 60 %-->
+      <div class="cls-desc">
+          <ion-title>
+            {{studie.name | letter:20}}
+          </ion-title>
+          <b style="font-size: 1rem;">Pago:</b> <span class="cls-alert-red">$ {{studie.price_by_task | number}} COP </span> <br>
+          <p class="cls-history">
+            {{studie.history | letter:70 }}
+          </p>
+      </div>
+      <!-- contendor para  ver imagen 10% -->
+      <div class="cls-view">
+        <a clear item-end >VER</a>
+      </div>
+    </div>
   </div>
-  <!-- contendor la descripcion 60 %-->
-  <div class="cls-desc">
-      <ion-title>
-        {{studie.name | letter:20}}
-      </ion-title>
-      <b style="font-size: 1rem;">Pago:</b> <span class="cls-alert-red">$ {{studie.price_by_task | number}} COP </span> <br>
-      <p class="cls-history">
-        {{studie.history | letter:70 }}
-      </p>
-  </div>
-  <!-- contendor para  ver imagen 10% -->
-  <div class="cls-view">
-    <a clear item-end >VER</a>
-  </div>
-</div>
 </div>
 
 

@@ -47,7 +47,7 @@ export class MorePage {
         break;
 
       case 4:
-          this.repo.presentAlert("No se ha programado esta funcionalidad",[Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
+          this.repo.presentAlert("Pronto estará disponible  esta funcionalidad ",[Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
       break
 
       case 3:
@@ -79,7 +79,7 @@ export class MorePage {
       browser.insertCSS({ code: "body{color: red;" });
     });
 
-    browser.close();
+    //browser.close();
   }
 
   faq() {
@@ -88,7 +88,7 @@ export class MorePage {
       browser.insertCSS({ code: "body{color: red}"})
     })
 
-    browser.close();
+    //browser.close();
   }
 
 

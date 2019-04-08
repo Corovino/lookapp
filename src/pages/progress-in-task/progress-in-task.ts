@@ -48,10 +48,12 @@ export class ProgressInTaskPage {
     private alertCtrl: AlertController
   ) {
     // this.timeOut();
+    
   }
 
   getValid(data: any , form: any) {
      
+    
     if(!data.condicional === undefined ){
       return false;
     }

@@ -22,6 +22,10 @@ import { Message_rpt } from '../../clases/letters';
 })
 
 
+
+
+
+
 export class HomePage {
   
   rootPage:any = 'ionic-pipes-home';
@@ -259,7 +263,7 @@ getMyLocation() {
     
 
     locd = new LatLng(resp.coords.latitude, resp.coords.longitude);
-    this.repo.stopMessage();
+    //this.repo.stopMessage();
     this.MyP = locd;
     this.moveCamera(locd);
     this.manageData();
@@ -290,7 +294,7 @@ manageData() {
             enableHighAccuracy: true, // HABILITAR ALTA PRECISION
           }).then((resp) => {
             loc = new LatLng(resp.coords.latitude, resp.coords.longitude);
-    
+            this.repo.stopMessage();
             this.createMarker(loc, "", this.color ).then((marker: Marker) => {
               this.markers.push(marker); marker.showInfoWindow();
               for (let index = 0; index < this.markers.length; index++) {
@@ -320,6 +324,7 @@ manageData() {
           this.geolocation.getCurrentPosition({
             enableHighAccuracy: true, // HABILITAR ALTA PRECISION
           }).then((resp) => {
+            this.repo.stopMessage();
             loc = new LatLng(resp.coords.latitude, resp.coords.longitude);
             // this.moveCamera(loc);
             this.validPolilyne(polines, loc);

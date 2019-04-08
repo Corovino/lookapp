@@ -312,12 +312,12 @@ export class FormPage {
   ];
 
 
-
   constructor(
       public navCtrl: NavController, 
       public navParams: NavParams,
       public formBuilder: FormBuilder
       ) {
+        console.log("funciono");
   }
 
   validate_response(element) {
