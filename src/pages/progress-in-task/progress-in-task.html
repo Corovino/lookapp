@@ -14,7 +14,7 @@
       <!-- <button class="btn-look cls-i" ion-button full (click)="showInstructive = true">VER INSTRUCTIVO</button> -->
       
       <p *ngIf="value_heigth == 70">
-        Los puntos rojos ya han sido tomados
+        Los puntos rojos ya han sido tomados.
       </p>
       <!--  style="width: 90vw" -->
       <div #map id="map" >
@@ -259,18 +259,20 @@
          </div>
   
       </div>
+      
       <div style="width: 100%; float: left; position: relative;">
-          <div class="cls-5">
+          <div class="cls-10">
             <button class="cls-btn-state" send-f full (click)="sendForm()">Enviar tarea</button>
-          </div>          
-          
-          <div class="cls-5">
-            <button class="cls-btn-state" cancel-f full (click)="cancelTask()">Cancelar tarea</button>
           </div>
-          
       </div>
-          
+              
     </div>
   
+    <!-- INFO -->
+    <div class="cls-10">
+      <button class="cls-btn-state" cancel-f full (click)="cancelTask()">Cancelar tarea</button>
+    </div>
+    
+
     <!-- <button ion-button (click)="conoce()" >Hola como vas</button> -->
   </ion-content>

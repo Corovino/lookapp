@@ -20,8 +20,16 @@ import { Message_rpt } from '../../clases/letters';
 })
 export class EditPerfilPage {
   
-  public info_user: any = {name: '', lname: '', phone: '', cedula: ''};
+  public info_user: any = {name: '', lname: '', phone: '', cedula: '', email: ''};
   public iduser: any;
+
+  
+  public image: any = 'assets/imgs/icon.png';
+  public file: any = false;
+  public userForm: any = new FormData();
+  public avialableToUpdate : boolean = false;
+
+
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -33,12 +41,16 @@ export class EditPerfilPage {
   ) {
 
     this.info_user = this.navParams.data.data;
+
+    this.image = this.info_user.img;
+
     this.storage.get('xx-app-loap').then( (loap: any) => {
       let user = JSON.parse(loap);
       this.iduser = user.data.user._id;
     })
   
   }
+
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad EditPerfilPage');
@@ -55,10 +67,6 @@ export class EditPerfilPage {
   }
 
 
-  public image: any = 'assets/imgs/icon.png';
-  public file: any = false;
-  public userForm: any = new FormData();
-  public avialableToUpdate : boolean = false;
 
   getPicture(){
     let options: CameraOptions = {
@@ -76,7 +84,7 @@ export class EditPerfilPage {
         //Usage example:
         this.info_user.img = this.dataURLtoFile(`data:image/jpeg;base64,${data}`, 'a.png');
         this.userForm.delete('img');
-        this.userForm.append('img', this.file);
+        this.userForm.append('img', this.info_user.img);
         this.avialableToUpdate = true;
 
       }).catch(e => {

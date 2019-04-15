@@ -16,6 +16,84 @@
 // automatically applied to the <body> element in the app.
 
 
+.header-md::after, .tabs-md[tabsPlacement="top"] > .tabbar::after, .footer-md::before, .tabs-md[tabsPlacement="bottom"] > .tabbar::before {
+    background-image: url('') !important;
+}
+
+.back-button.show-back-button {
+    display: inline-block;
+    position: fixed;
+    border-radius: 38px;
+    z-index: 999999999;
+}
+
+
+.tabs-md .tab-button[aria-selected=true] {
+    // color: rgba(60, 60, 60, 0.7);
+    padding: 0;
+}
+
+.tabs-md .tab-button[aria-selected=true] .tab-button-text {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+    -webkit-transition: -webkit-transform 0s ease-in-out !important;
+    transition: -webkit-transform 0s ease-in-out !important;
+    transition: transform 0s ease-in-out !important;
+    transition: transform 0s ease-in-out, -webkit-transform 0s ease-in-out !important;
+}
+
+
+.tabs-md .tab-button[aria-selected=true] .tab-button-icon {
+    // color: rgba(60, 60, 60, 0.7);
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
+.select-icon {
+    position: relative;
+    width: 25px;
+    height: 23px;
+    float: right;
+}
+  
+textarea.text-input {
+    display: block;
+    height: 31vw;
+}
+
+.swiper-pagination-bullet-active {
+    background: #F47721 !important;
+    opacity: 1;
+}
+
+.swiper-container-horizontal > .swiper-pagination-bullets {
+    left: 0;
+    bottom: 60px !important;
+    width: 100%;
+}
+
+
+
+.tabs-md[tabsLayout=icon-top] .has-icon .tab-button-text {
+    margin-top: 1px !important;
+    margin-bottom: 0;
+    font-size: 2.8vw !important;
+}
+
+
+.button-md {
+    box-shadow: 0 0px 0px 0 transparent !important;
+    -webkit-box-shadow: 0 0px 0px 0 transparent !important;
+}
+
+
+.cls-history {
+    color: gray; 
+    font-size: 10px
+}
+
+
+
 .alert-wrapper {
     border-radius: 13px !important;
 }

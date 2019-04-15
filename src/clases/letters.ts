@@ -10,7 +10,7 @@ export class Message_rpt {
     static RTP_CHARGIN = 'Loading...'; //
     static RTP_TASK_RECHAGE = "No puedes realizar la tarea, asegurate de estar en el area permitida"; //
     static RTP_CLS_ACCEPT  = 'cls-accept';
-    static RTP_RETURN_TASK = 'Retomando tarea.'
+    static RTP_RETURN_TASK = 'Loading...'
 
 
 }

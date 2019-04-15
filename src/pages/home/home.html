@@ -12,7 +12,7 @@
 </ion-refresher>
 <!-- Contendor 100% -->
 <div *ngFor="let studie of list_studies">
-  <div class="cls-list-img"   *ngIf="studie.form"  (click)="take_taks(studie)">
+  <div class="cls-list-img"    (click)="take_taks(studie)">
           <!-- contenedor imagen 30% -->
           <div class="cls-img">
             <img [src]="studie.img" alt="{{studie.name}}">
@@ -38,7 +38,7 @@
 <div *ngIf="!list_studies_test.error">
     <h2>Estudios comunidad cerrada</h2>
      <div *ngFor="let studie of list_studies_test.data">
-       <div class="cls-list-img" *ngIf="studie.form" (click)="take_taks(studie)">
+       <div class="cls-list-img" (click)="take_taks(studie)">
                <!-- contenedor imagen 30% -->
                <div class="cls-img">
                    <img [src]="studie.img" alt="{{studie.name}}">
@@ -66,7 +66,7 @@
 <div *ngIf="!list_studies_prueba.error">
   <h2>Estudios de prueba</h2>
   <div *ngFor="let studie of list_studies_prueba.data">
-    <div class="cls-list-img"  *ngIf="studie.form"  (click)="take_taks(studie)">
+    <div class="cls-list-img"   (click)="take_taks(studie)">
       <!-- contenedor imagen 30% -->
       <div class="cls-img">
         <img [src]="studie.img" alt="{{studie.name}}">

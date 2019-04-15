@@ -1,6 +1,6 @@
 import { ProgressInTaskPage } from './../progress-in-task/progress-in-task';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 import { ServicesProvider } from '../../providers/services/services';
 import { Storage } from '@ionic/storage';
 import { HomePage } from '../home/home';
@@ -26,7 +26,8 @@ export class MyTasksPage {
     public navParams: NavParams,
     public storage: Storage,
     public rest: ServicesProvider,
-    public repo: RepoProvider
+    public repo: RepoProvider,
+    public modalCtrl: ModalController
     ) {
   }
 
@@ -90,7 +91,11 @@ export class MyTasksPage {
       let user = JSON.parse(loap);
       this.rest.get_studie(data.id_studie).subscribe((resp: any) => {
         this.repo.stopMessage();
-        this.navCtrl.push(ProgressInTaskPage, {data: resp.data, iduser: user.data.user._id, idt: data.id});
+
+        let modal = this.modalCtrl.create(ProgressInTaskPage, { data: resp.data, iduser: user.data.user._id, idt: data.id });
+        modal.present();
+      
+        // this.navCtrl.push(ProgressInTaskPage, {data: resp.data, iduser: user.data.user._id, idt: data.id});
       })
     })
   }

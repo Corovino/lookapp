@@ -3,7 +3,7 @@ import { RepoProvider } from './../../providers/repo/repo';
 
 import { ProgressInTaskPage } from './../progress-in-task/progress-in-task';
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, ModalController } from 'ionic-angular';
 import { Storage } from '@ionic/storage'
 import { GoogleMaps, GoogleMap, Marker, GoogleMapsEvent, ILatLng, Poly, Spherical, LatLng, CameraPosition, MarkerOptions } from '@ionic-native/google-maps'
 import { ServicesProvider } from '../../providers/services/services';
@@ -20,12 +20,6 @@ import { Message_rpt } from '../../clases/letters';
   selector: 'page-home',
   templateUrl: 'home.html'
 })
-
-
-
-
-
-
 export class HomePage {
   
   rootPage:any = 'ionic-pipes-home';
@@ -83,13 +77,9 @@ export class HomePage {
     })
   }
 
-
-
-
   showForm() {
     this.navCtrl.push(FormPage)
   }
-
 
   doRefresh(element){
     this.get_studies();
@@ -158,6 +148,7 @@ export class HomePage {
 
 @Component({
   templateUrl: 'detail_task.html'
+  // styleUrls: ['home.scss']
 })
 export class DetailTaskPage {
   
@@ -167,7 +158,7 @@ export class DetailTaskPage {
 
   map: GoogleMap;
   showMapa: any = true;
-  idPointToHide: number = 0;
+  idCity: number;
   stateTask: boolean = false; 
 
 
@@ -178,7 +169,7 @@ export class DetailTaskPage {
     public rest: ServicesProvider,
     public geolocation: Geolocation,
     public camera: Camera,
-    private GoogleMaps: GoogleMaps,
+    public modalCtrl: ModalController,
     public device: Device,
     public repo: RepoProvider
   ) { 
@@ -240,10 +231,10 @@ createMarker(loc: LatLng, title: string, color){
 // ADD polylines
 createPolilyne(element) {
   this.map.addPolygon({
-    points: element,
+    points: element.polines,
     clickable: false,
     strokeColor: '#e5355b',
-    fillColor: '#21212166',
+    fillColor: '#21212130',
     strokeWidth: 2
   })
 }
@@ -259,8 +250,6 @@ getMyLocation() {
     
     this._coords_goobals.lat = resp.coords.latitude;
     this._coords_goobals.lng = resp.coords.longitude;
-
-    
 
     locd = new LatLng(resp.coords.latitude, resp.coords.longitude);
     //this.repo.stopMessage();
@@ -313,7 +302,7 @@ manageData() {
         let polines = [];
         this.estudio.ubicaciones.forEach( (element, key) => {
           let pol: ILatLng = element.json_poligono;
-          polines.push(pol);
+          polines.push({polines: pol, id: element.id });
         });
   
         polines.forEach(element => {
@@ -347,22 +336,20 @@ manageData() {
 }
 // know estate my ubication
 validPolilyne(polines, loc) {
+
   let resuls = [];
   // FUNCION QUE HACE PUSHEO DEL RESULTADO DE LA FUNCION
   polines.forEach(element => {
-    resuls.push({state: Poly.containsLocation(loc, element), id: element[0].id});
-  }); 
-
-  
+    resuls.push({state: Poly.containsLocation(loc, element.polines), id: element.id});
+  });
   // SE RETORNA CUANDO UNO DE LOS REUSLTADO ES IGUAL A TRUE
   var resultobj = resuls.filter(obj => {  if(obj.state == true) { return obj; } });
-
   // SE ASEGINA EL COLOR VERDE SI UNO DE LOS LUGARES ESTA TRUE
   if(resultobj[0]){
     // this.color = resultobj[0].state ? 'assets/imgs/tomar.png' : 'assets/imgs/me.png';
     this.color = resultobj[0].state ? 'assets/imgs/me.png' : 'assets/imgs/me.png';
     this.stateTask = true;
-    this.idPointToHide = resultobj[0].id;
+    this.idCity = resultobj[0].id;
   }
 
 }
@@ -409,7 +396,11 @@ onMarkerAdd(marker: Marker) {
   });
 }
 
-  
+  /**
+   * 
+   * @param data PROCES TO GET INFO
+   * 
+   */
   start_task(data) {
 
 
@@ -445,7 +436,8 @@ onMarkerAdd(marker: Marker) {
         estrata == "Todos" || estrata == segments.estrata &&
         gender == "Todos" || gender == segments.gender
       ) {
-        
+
+        // ESTUDIO TIPO CASA PUNTOS
         if(this.estudio.type_ubication == 3){
 
           let distance_more_near: any = 999999999999999999999999999999999999, 
@@ -477,7 +469,8 @@ onMarkerAdd(marker: Marker) {
 
                   this.rest.take_task({
                     iduser: user.data.user._id,
-                    idstudie: data.id
+                    idstudie: data.id,
+                    idcity: this.idCity
                   }).subscribe( (response: any) => {
                     if(!response.error) {
                         
@@ -511,15 +504,24 @@ onMarkerAdd(marker: Marker) {
           
 
         } else if(this.stateTask == true) {
-
+          /**
+           * ESTUDIO CON AREAS EN LAS QUE LOS USUARIOS DEBEN ESTAR PARA PODER  REALIZAR LA TAREAA
+           */
+          
           this.rest.take_task({
             iduser: user.data.user._id,
-            idstudie: data.id
+            idstudie: data.id,
+            idcity: this.idCity
           }).subscribe( (response: any) => {
             if(!response.error) {
-              // cuando las ubicaciones son por excel
+
+              // this
               this.repo.stopMessage();
-              this.navCtrl.setRoot(ProgressInTaskPage, {data: data, iduser: user.data.user._id, idt:response.data.id }) 
+              let modal = this.modalCtrl.create(ProgressInTaskPage, {data: data, iduser: user.data.user._id, idt:response.data.id });
+              modal.present();
+
+
+              // this.navCtrl.setRoot(ProgressInTaskPage, {data: data, iduser: user.data.user._id, idt:response.data.id }) 
             } else {
               this.repo.presentAlert(response.message, [Message_rpt.RTP_ACCEPT], 'cls-accept');
               this.repo.stopMessage();  
@@ -537,6 +539,8 @@ onMarkerAdd(marker: Marker) {
         this.repo.stopMessage();
         this.repo.presentAlert("Esta tarea esta disponible para una población en particular", [Message_rpt.RTP_ACCEPT], 'cls-accept');
       }
+
+
     })
 
 
@@ -547,4 +551,8 @@ onMarkerAdd(marker: Marker) {
      */
 
   }
+
+
+
+  
 }

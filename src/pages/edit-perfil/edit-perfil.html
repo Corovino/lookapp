@@ -13,7 +13,8 @@
 
 <ion-content padding>
     <!-- (click)="getPicture()" -->
-    <img [src]="info_user.img"  class="avatar-img4" />
+    <img [src]="image"  class="avatar-img4" (click)="getPicture()"  />
+    <ion-icon ios="ios-create-outline" (click)="getPicture()" class="cls-edit-info" name="create"></ion-icon>
 
     <ion-list>
         <!-- MOC PARA NOMBRES -->
@@ -31,6 +32,13 @@
         <ion-item>
           <ion-input type="number" id="cedula" name="cedula" [(ngModel)]="info_user.cedula"></ion-input>
         </ion-item>
+         <!-- MOC PARA NUMERO DE CELULAR -->
+         
+         <!-- <label>Correo electrónico *</label>
+         <ion-item>
+           <ion-input type="email" id="email" name="email" [(ngModel)]="info_user.email"></ion-input>
+         </ion-item> -->
+
         <!-- MOC PARA NUMERO DE CELULAR -->
         <label>Número de celular *</label>
         <ion-item>
@@ -79,26 +87,3 @@
     
 </ion-content>
 
-
-<style>
-
-/* pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" */
-  label {
-    position: relative;
-    left: 21px;
-    color: #0009;
-  }
-
-  ion-label {
-    color: red; margin-left: 16px;
-  }
-
-  .avatar-img4 {
-    border-radius: 50%;
-    margin: 2vw 29.5vw 2vw;
-    width: 38%;
-    border: 3px solid #e5355b;
-  }
-
-  
-</style>

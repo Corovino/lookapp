@@ -1,45 +1,40 @@
-<!-- <ion-header>
-    <ion-navbar>
-        <ion-title>{{name_studie}}</ion-title>
-    </ion-navbar>
-</ion-header> -->
-
-
-<ion-content padding>
-
-    <ion-slides pager >
-        <ion-slide *ngFor="let slide of loap_instructives">
-            <ion-toolbar style="position: fixed; top: 3px;">
-                <h4 text-center style="margin: 10px 0px">Instrucciones</h4>
-                <ion-buttons end >
-                    <button ion-button color="primary" (click)="dismiss()">Saltar</button>
-                </ion-buttons>
-            </ion-toolbar>
-            <img [src]="slide.img" class="slide-image"/>
-            <h2 class="slide-title" [innerHTML]="slide.title"></h2>
-            <p [innerHTML]="slide.description"></p>
-        </ion-slide>
-
-
-        <ion-slide>
-            <ion-toolbar>
-            </ion-toolbar>
-            <img src="assets/imgs/like.png" class="slide-image"/>
-            <h2 class="slide-title">¿Estas listo para empezar?</h2>
-            <button ion-button large clear icon-end color="primary" (click)="dismiss()">
-                Continuar
-            <ion-icon name="arrow-forward"></ion-icon>
-            </button>
-        </ion-slide>
-    </ion-slides>
+<ion-header>
+        <ion-navbar>
+            <ion-title>
+              INSTRUCCIONES
+            </ion-title>
+        </ion-navbar>
+    </ion-header>
+    <ion-content padding>
+        <ion-slides pager >
+            <ion-slide *ngFor="let slide of loap_instructives; let i = index">
+                <img [src]="slide.img" class="slide-image"/>
+                <h2 class="slide-title" [innerHTML]="slide.title"></h2>
+                <p>PASO {{i + 1}}</p>
+                <p style="font-size: 3.8vw;" [innerHTML]="slide.description"></p>
+            </ion-slide>
     
-</ion-content>
-
-
-<style>
-.toolbar-md {
-    padding: 4px;
-    min-height: 56px;
+            <ion-slide text-center>
+                <img src="assets/imgs/like.png" class="slide-image" style="height: 50vw;"/>
+                <button class="btn-continue-look" ion-button large clear icon-end color="primary" (click)="dismiss()">
+                    CONTINUAR
+                </button>
+            </ion-slide>
     
-}
-</style>
+        </ion-slides>
+        
+        <ion-buttons text-center style=" bottom: 55px; position: relative;">
+            <button ion-button color="primary" (click)="dismiss()">SALTAR</button>
+        </ion-buttons>
+    
+    </ion-content>
+    
+    
+    <style>
+    
+        .toolbar-md {
+            padding: 4px;
+            min-height: 56px;   
+        }
+    
+    </style>

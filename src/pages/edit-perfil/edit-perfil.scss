@@ -1,3 +1,34 @@
 page-edit-perfil {
+    label {
+        position: relative;
+        left: 21px;
+        color: #0009;
+      }
+    
+      ion-label {
+        color: red; margin-left: 16px;
+      }
+    
+      .avatar-img4 {
+        border-radius: 50%;
+        margin: 2vw 29.5vw 2vw;
+        width: 38%;
+        border: 3px solid map-get($colors, primary);
+      }
+
+      .cls-edit-info {
+          font-size: 6.5vw;
+          position: relative;
+          left: 54%;
+          background: map-get($colors, primary);
+          padding: 10px;
+          border-radius: 34px;
+          top: -11vw;
+          height: 12vw;
+          width: 12vw;
+          text-align: center;
+          color: #ffffff;
+      }
+
 
 }

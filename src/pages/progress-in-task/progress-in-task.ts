@@ -7,7 +7,7 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 import { HomePage } from '../home/home';
 import { RepoProvider } from '../../providers/repo/repo';
 import { Message_rpt } from '../../clases/letters';
-import { isUndefined } from 'util';
+
 
 
 /**
@@ -41,14 +41,19 @@ export class ProgressInTaskPage {
     public navParams: NavParams,
     public geolocation: Geolocation,
     public rest: ServicesProvider,
-    private _googleMaps: GoogleMaps,
     private camera: Camera,
     public repo: RepoProvider,
     private modalCtrl: ModalController,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    public viewCtrl: ViewController
   ) {
     // this.timeOut();
     
+  }
+
+
+  dismiss() {
+      this.viewCtrl.dismiss();
   }
 
   getValid(data: any , form: any) {
@@ -447,8 +452,9 @@ export class ProgressInTaskPage {
           handler: () => {
             this.repo.startMessage("Procesando")
             this.rest.cancel_task(this.navParams.data.idt).subscribe(resp => {
-                this.repo.stopMessage();
-                this.navCtrl.setRoot(HomePage)
+              this.viewCtrl.dismiss();
+              
+              // this.navCtrl.setRoot(HomePage)
             }) 
           }
         }
@@ -557,10 +563,11 @@ export class ProgressInTaskPage {
 
 
           if(resp.error == true) {
-            this.repo.presentAlert("No hemos podido guardar tu tarea.", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
+            this.repo.presentAlert("No hemos podido guardar tu tarea, inténtalo de nuevo.", [Message_rpt.RTP_ACCEPT], Message_rpt.RTP_CLS_ACCEPT);
           } else {
             this.repo.presentToast("Se ha guardado de forma correcta.");
-            this.navCtrl.setRoot(HomePage);
+            this.viewCtrl.dismiss();
+            // this.navCtrl.setRoot(HomePage);
           }
         })
       })

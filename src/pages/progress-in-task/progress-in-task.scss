@@ -256,6 +256,15 @@ page-progress-in-task {
         float: left;
     }
 
+    .cls-10 {
+        width: 95%;
+        padding: 10px;
+        position: relative;
+        float: left;
+    }
+
+
+
     .cls-btn-state {
         width: 100%;
         margin: 3px;
@@ -266,26 +275,13 @@ page-progress-in-task {
     }
     
     [send-f] {
-        background: green;
+        background: map-get($colors, primary );
     }
     
     [cancel-f] {
-        background: #e5355b;
+        
     }
 
-
-    /* 
-      #map {
-          height: 60vw;
-      }
-       */
-
-
-
-
-    .cls-accordion-seccion {
-
-    }
 
     .cls-content-condition {
         background: green;
@@ -295,6 +291,27 @@ page-progress-in-task {
         margin: 4%;
         height: auto;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     
 }

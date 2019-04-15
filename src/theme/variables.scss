@@ -42,6 +42,11 @@ $colors: (
   dark:       #222
 );
 
+body ion-label, p, h1, h2, h3, h4, h5, h6, label, span, div, hr, br, b, input[type="text"], select, option, select-option {
+  font-family: 'Montserrat', sans-serif;
+}
+
+
 
 // App iOS Variables
 // --------------------------------------------------

@@ -98,11 +98,11 @@ export class MorePage {
       text: 'Ayuda',
       action: 1
     },
-    {
-      icon: 'assets/imgs/escribenos.png',
-      text: 'Escríbenos',
-      action: 2
-    },
+    // {
+    //   icon: 'assets/imgs/escribenos.png',
+    //   text: 'Escríbenos',
+    //   action: 2
+    // },
     {
       icon: 'assets/imgs/tyc.png',
       text: 'Términos y condiciones',
