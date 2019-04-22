@@ -68,10 +68,20 @@ textarea.text-input {
 
 .swiper-container-horizontal > .swiper-pagination-bullets {
     left: 0;
-    bottom: 60px !important;
+    bottom: 0px !important;
     width: 100%;
 }
 
+
+.cls-saltar {
+    position: relative;
+    float: right;
+    padding: 8px;
+    font-size: 2.5vw;
+    background: rgb(208, 205, 205);
+    color: map-get($colors, 'primary');
+    font-weight: bold;
+}
 
 
 .tabs-md[tabsLayout=icon-top] .has-icon .tab-button-text {

@@ -15,6 +15,7 @@ import { LocationAccuracy } from '@ionic-native/location-accuracy';
 import { Globalization } from '@ionic-native/globalization';
 // import { PushnotificationProvider } from '../providers/pushnotification/pushnotification';
 
+import { Network } from '@ionic-native/network';
 
 
 @Component({
@@ -35,34 +36,74 @@ export class MyApp {
     public locationAccuracy: LocationAccuracy,
     public alertCtrl: AlertController,
     private globalization: Globalization,
+    private net: Network
     // public pushNotification: PushnotificationProvider
   ) {
+
 
     
 
 
-    this.initializeApp();
-  
+    Network.prototype.onDisconnect().subscribe(d => {
+      console.log("JERRY LAGOS",  d)
+      d
+    })
+
+
+    
     this.locationAccuracy.canRequest().then((canRequest: boolean) => {
       if(canRequest) {
         this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
           () => console.log('Request successful'),
           error => console.log('Error requesting location permissions', error)
-        );
-      }
-    });
+          );
+        }
+      });
+      
+      
+      this.storage.get('xx-app-loap').then((val) => {
+        this.rootPage = val ? TabsPage : LoginPage;
+      });
+      
+      
+      
+      let disconnectSubscription = this.net.onDisconnect().subscribe(() => {
+        console.log('network was disconnected :-(');
+      });
+      
+      // stop disconnect watch
+      disconnectSubscription.unsubscribe();
+      
+      
+      // watch network for a connection
+      let connectSubscription = this.net.onConnect().subscribe(() => {
+        console.log('network connected! //////////////////////////////////////////////////////////////////////////////////');
+        // We just got a connection but we need to wait briefly
+        // before we determine the connection type. Might need to wait.
+        // prior to doing any api requests as well.
+        setTimeout(() => {
+          if (this.net.type === 'wifi') {
+            console.log('we got a wifi connection, woohoo!');
+          }
+        }, 3000);
+      });
+      
+      // stop connect watch
+      connectSubscription.unsubscribe();
+      
+      
+      
+      
+      this.globalization.getDatePattern({formatLength:'full', selector:'date and time'})
+      .then(res => console.log("GLOBALIZACION JERRY LAGOS", res))
+      .catch(e => console.log(e));
+      
+
+      this.initializeApp();
+      
+    }
 
 
-    this.storage.get('xx-app-loap').then((val) => {
-      this.rootPage = val ? TabsPage : LoginPage;
-    });
-
-  }
-
-
-
-
-  
 
 
   presentAlert(title:string, message: string) {
@@ -97,9 +138,9 @@ export class MyApp {
       // this.globalization.getPreferredLanguage()
 
 
-      this.globalization.getDatePattern({formatLength:'full', selector:'date and time'})
-      .then(res => console.log("GLOBALIZACION JERRY LAGOS", res))
-      .catch(e => console.log(e));
+      
+      
+    // watch network for a disconnection
 
     
     }, (err) => {

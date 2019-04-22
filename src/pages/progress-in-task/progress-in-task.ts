@@ -119,6 +119,8 @@ export class ProgressInTaskPage {
   gtFunction() {
     this.showInstructive = false;
 
+
+    
     this.loadForm(
       this.navParams.data.data.form_studie, 
       this.navParams.data.iduser,
@@ -150,6 +152,8 @@ export class ProgressInTaskPage {
     this.loap_instructives = this.navParams.data.data.loap_instructives;
     this.name_studie = this.navParams.data.data.name;
     
+    console.log(this.navParams.data, "This data inside");
+
     this.loadForm(
       this.navParams.data.data.form_studie, 
       this.navParams.data.iduser,
@@ -260,13 +264,16 @@ export class ProgressInTaskPage {
     this.showModalInstructions();
     
     this.formSaved = form;
+    
+    console.log(form, "JERRY LAGOS THIS IS MY FORM");
+
+    // this.formulario = resp.data.form_response;
     this.rest.get_form_to_task(id).subscribe((resp:any) =>  {
 
       if(form){
         if(resp.data.form_response == null) {
           this.formulario = form;
         } else {
-          this.formulario = resp.data.form_response;
         }
       }
 
@@ -567,7 +574,6 @@ export class ProgressInTaskPage {
           } else {
             this.repo.presentToast("Se ha guardado de forma correcta.");
             this.viewCtrl.dismiss();
-            // this.navCtrl.setRoot(HomePage);
           }
         })
       })

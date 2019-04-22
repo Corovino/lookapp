@@ -47,6 +47,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 // import { OneSignal } from '@ionic-native/onesignal';
 
+import { Network } from '@ionic-native/network';
 
 @NgModule({
   declarations: [
@@ -112,6 +113,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
     LocationAccuracy,
     HttpClient,
     GoogleMaps,
+    Network,
     // OneSignal,
     PushnotificationProvider,
     Globalization,

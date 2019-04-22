@@ -480,7 +480,17 @@ onMarkerAdd(marker: Marker) {
                           this.repo.presentAlert(resp.message, [Message_rpt.RTP_ACCEPT], 'cls-accept');
                           
                         } else {
-                          this.navCtrl.setRoot(ProgressInTaskPage, {data: data, iduser: user.data.user._id, idt:response.data.id })
+
+                          this.repo.stopMessage();
+
+                          let modal = this.modalCtrl.create(ProgressInTaskPage, {data: data, iduser: user.data.user._id, idt:response.data.id });
+
+                          modal.onDidDismiss(data => {
+                            this.navCtrl.setRoot(HomePage);
+                          });
+
+                          modal.present();
+
                         }
 
                       })
@@ -517,7 +527,13 @@ onMarkerAdd(marker: Marker) {
 
               // this
               this.repo.stopMessage();
+
               let modal = this.modalCtrl.create(ProgressInTaskPage, {data: data, iduser: user.data.user._id, idt:response.data.id });
+
+              modal.onDidDismiss(data => {
+                this.navCtrl.setRoot(HomePage);
+              });
+
               modal.present();
 
 

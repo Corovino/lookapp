@@ -1,7 +1,11 @@
 <ion-header>
         <ion-navbar>
             <ion-title>
-              INSTRUCCIONES
+            
+             INSTRUCCIONES
+              
+             <span class="cls-saltar" (click)="dismiss()"> SALTAR </span>
+
             </ion-title>
         </ion-navbar>
     </ion-header>
@@ -16,6 +20,7 @@
     
             <ion-slide text-center>
                 <img src="assets/imgs/like.png" class="slide-image" style="height: 50vw;"/>
+                
                 <button class="btn-continue-look" ion-button large clear icon-end color="primary" (click)="dismiss()">
                     CONTINUAR
                 </button>
@@ -23,10 +28,12 @@
     
         </ion-slides>
         
-        <ion-buttons text-center style=" bottom: 55px; position: relative;">
+        <!-- <ion-buttons text-center style=" bottom: 55px; position: relative;">
             <button ion-button color="primary" (click)="dismiss()">SALTAR</button>
         </ion-buttons>
     
+        -->
+
     </ion-content>
     
     
