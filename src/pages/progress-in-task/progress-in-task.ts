@@ -457,8 +457,9 @@ export class ProgressInTaskPage {
         {
           text: 'Aceptar',
           handler: () => {
-            this.repo.startMessage("Procesando")
+            this.repo.startMessage("Procesando");
             this.rest.cancel_task(this.navParams.data.idt).subscribe(resp => {
+              this.repo.stopMessage();
               this.viewCtrl.dismiss();
               
               // this.navCtrl.setRoot(HomePage)
